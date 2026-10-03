@@ -18,6 +18,12 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Twilio phone call guide and a call server config fix (Ariel)
+
+- **What changed:** added `docs/shared-plans/TrustLine-Twilio-Phone-Call-Guide.md` (Twilio account, number, verified phones, Cloudflare quick tunnel, webhook, `.env` settings, test call script, demo-day hosting options, troubleshooting). Fixed `server/config.ts`: blank `.env` lines such as `PUBLIC_URL=` are now treated as unset, and trailing slashes are removed from `PUBLIC_URL` and `APP_ORIGIN`. Before this, a blank `PUBLIC_URL` produced an empty media stream address.
+- **What the other person needs to do:** pull `main`. Nothing else until we run the guide together; one phone plays the user and one plays the scammer.
+- **Verified:** `npm run check` passes (110 tests, including two new config tests). The guide has not been run against Twilio yet.
+
 ### 2026-10-03: Supabase onboarding guide for Rishon (Ariel)
 
 - **What changed:** added `docs/shared-plans/Supabase-Teammate-Onboarding.md`: what Supabase does in TrustLine, and the steps to accept the invite, install and link the CLI, configure `.env`, check it works, and make database changes.
