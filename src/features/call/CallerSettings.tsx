@@ -16,12 +16,15 @@ export function CallerSettings({
 }: CallerSettingsProps) {
   return (
     <div className="caller-settings">
+      <p className="caller-settings__partner muted small">
+        {user.name} is a member of {PARTNERS.find((p) => p.id === user.partnerId)?.name}.
+      </p>
       <label className="field">
         <span className="field__label">Demo user</span>
         <select value={user.id} onChange={(e) => onUserChange(e.target.value)}>
           {DEMO_USERS.map((u) => (
             <option key={u.id} value={u.id}>
-              {u.name} ({PARTNERS.find((p) => p.id === u.partnerId)?.name})
+              {u.name}
             </option>
           ))}
         </select>

@@ -15,3 +15,9 @@ export function trustLineVCard(phone: string): string {
     "END:VCARD",
   ].join("\r\n");
 }
+
+/** "+16045550123" to "+1 604-555-0123" for North American numbers; other formats unchanged. */
+export function formatPhone(e164: string): string {
+  const match = e164.match(/^\+1(\d{3})(\d{3})(\d{4})$/);
+  return match ? `+1 ${match[1]}-${match[2]}-${match[3]}` : e164;
+}

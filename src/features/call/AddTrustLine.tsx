@@ -1,5 +1,5 @@
 import { Card } from "../../components/Card";
-import { callServer, trustLineVCard } from "../../lib/callServer";
+import { callServer, formatPhone, trustLineVCard } from "../../lib/callServer";
 
 /** How to bring TrustLine into a suspicious call: add it as a third person, then merge. */
 export function AddTrustLine({ connected }: { connected: boolean }) {
@@ -14,7 +14,7 @@ export function AddTrustLine({ connected }: { connected: boolean }) {
           During a call you're unsure about, tap <strong>Add Call</strong>.
         </li>
         <li>
-          Choose <strong>TrustLine</strong> ({callServer.number}).
+          Choose <strong>TrustLine</strong> ({formatPhone(callServer.number)}).
         </li>
         <li>
           Tap <strong>Merge Calls</strong>. TrustLine listens, warns out loud if it hears a scam,
