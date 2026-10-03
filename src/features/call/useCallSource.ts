@@ -1,16 +1,31 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { DemoCall } from "../../data/demoCalls";
+import type { LanguageCode } from "../../lib/types";
 import { useLiveTranscript } from "./useLiveTranscript";
+import { usePhoneCall } from "./usePhoneCall";
 import { useReplayTranscript } from "./useReplayTranscript";
 
-type Mode = "live" | "replay";
+type Mode = "live" | "replay" | "phone";
 
-/** Picks between the live microphone and a scripted replay; whichever started last is active. */
-export function useCallSource() {
+/**
+ * Picks the transcript the screen follows: the microphone, a scripted replay, or a phone call
+ * TrustLine was merged into. A merged phone call takes over the screen as soon as it starts.
+ */
+export function useCallSource(userId: string, language: LanguageCode) {
   const live = useLiveTranscript();
   const replay = useReplayTranscript();
   const [mode, setMode] = useState<Mode>("live");
   const [callNumber, setCallNumber] = useState(0);
+
+  const { stop: stopLive, status: liveStatus } = live;
+  const { stop: stopReplay } = replay;
+  const onPhoneCall = useCallback(() => {
+    if (liveStatus === "listening" || liveStatus === "connecting") stopLive();
+    stopReplay();
+    setMode("phone");
+    setCallNumber((n) => n + 1);
+  }, [liveStatus, stopLive, stopReplay]);
+  const phone = usePhoneCall(userId, language, onPhoneCall);
 
   const startLive = () => {
     replay.stop();
@@ -26,7 +41,7 @@ export function useCallSource() {
     replay.play(call);
   };
 
-  const source = mode === "live" ? live : replay;
+  const source = mode === "live" ? live : mode === "replay" ? replay : phone;
   const stop = mode === "live" ? live.stop : replay.stop;
 
   return {
@@ -36,6 +51,8 @@ export function useCallSource() {
     partial: source.partial,
     error: mode === "live" ? live.error : null,
     demoCall: mode === "replay" ? replay.call : null,
+    phoneConnected: phone.connected,
+    spokenWarning: mode === "phone" ? phone.warning : null,
     /** Increments whenever a new call starts, so per-call state can reset. */
     callNumber,
     startLive,

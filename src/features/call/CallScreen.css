@@ -157,3 +157,25 @@
   text-align: left;
   padding-bottom: var(--space-1);
 }
+
+.add-steps {
+  margin: 0;
+  padding-inline-start: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.add-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.spoken-warning {
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  border-inline-start: 4px solid var(--color-accent);
+  background: var(--color-background);
+}

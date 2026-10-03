@@ -3,6 +3,8 @@ import { Card } from "../../components/Card";
 import { Link } from "../../components/Link";
 import { DEMO_CALLS } from "../../data/demoCalls";
 import { CallerSettings } from "./CallerSettings";
+import { textDirection } from "../../lib/flagText";
+import { AddTrustLine } from "./AddTrustLine";
 import { AdvisoryBanner } from "./AdvisoryBanner";
 import { CallAnalysis } from "./CallAnalysis";
 import { Diagnostics } from "./Diagnostics";
@@ -20,14 +22,16 @@ const STATUS_TEXT = {
 
 export function CallScreen() {
   const { user, language, setUser, setLanguage } = useCaller();
-  const call = useCallSource();
+  const call = useCallSource(user.id, language);
   const active = call.status === "listening" || call.status === "connecting";
 
   return (
     <div className="call-screen stack">
       <header className="call-screen__header">
         <h1>TrustLine</h1>
-        <p className="muted">Put the call on speaker and start listening.</p>
+        <p className="muted">
+          Add TrustLine to a suspicious call, or listen to a speakerphone call on another device.
+        </p>
       </header>
 
       <AdvisoryBanner />
@@ -42,13 +46,23 @@ export function CallScreen() {
       <Card className="stack" aria-labelledby="listen-heading">
         <div className="row call-screen__status">
           <h2 id="listen-heading">
-            {call.demoCall ? `Demo call: ${call.demoCall.title}` : "Call"}
+            {call.mode === "phone"
+              ? "Phone call"
+              : call.demoCall
+                ? `Demo call: ${call.demoCall.title}`
+                : "Call"}
           </h2>
           <span className={`status-pill status-pill--${call.status}`}>
             {STATUS_TEXT[call.status]}
           </span>
         </div>
-        {active ? (
+        {call.mode === "phone" ? (
+          <p className="muted">
+            {active
+              ? "TrustLine is on your call. Hang up on your phone to end it."
+              : "The call ended."}
+          </p>
+        ) : active ? (
           <Button variant="secondary" fullWidth onClick={call.stop}>
             {call.mode === "live" ? "Stop listening" : "Stop demo call"}
           </Button>
@@ -62,6 +76,14 @@ export function CallScreen() {
             {call.error}
           </p>
         )}
+        {call.spokenWarning && (
+          <p className="spoken-warning" lang={language} dir={textDirection(language)}>
+            <strong lang="en" dir="ltr">
+              {call.spokenWarning.spoken ? "TrustLine said on the call: " : "TrustLine warning: "}
+            </strong>
+            {call.spokenWarning.text}
+          </p>
+        )}
         <CallAnalysis
           key={call.callNumber}
           segments={call.segments}
@@ -70,6 +92,8 @@ export function CallScreen() {
           user={user}
         />
       </Card>
+
+      <AddTrustLine connected={call.phoneConnected} />
 
       <Card className="stack" aria-labelledby="demo-heading">
         <div>
