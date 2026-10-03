@@ -14,3 +14,11 @@
   color: var(--color-muted-text);
   font-style: italic;
 }
+
+.transcript mark {
+  background: var(--color-highlight);
+  color: var(--color-text);
+  border-radius: 0.2rem;
+  padding: 0 0.1rem;
+  font-weight: 600;
+}

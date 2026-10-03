@@ -2,7 +2,7 @@ import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
 import { DEMO_CALLS } from "../../data/demoCalls";
 import { CallerSettings } from "./CallerSettings";
-import { TranscriptView } from "./TranscriptView";
+import { CallAnalysis } from "./CallAnalysis";
 import { useCallSource } from "./useCallSource";
 import { useCaller } from "./useCaller";
 import "./CallScreen.css";
@@ -57,7 +57,12 @@ export function CallScreen() {
             {call.error}
           </p>
         )}
-        <TranscriptView segments={call.segments} partial={call.partial} />
+        <CallAnalysis
+          key={call.callNumber}
+          segments={call.segments}
+          partial={call.partial}
+          language={language}
+        />
       </Card>
 
       <Card className="stack" aria-labelledby="demo-heading">

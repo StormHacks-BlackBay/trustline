@@ -1,0 +1,32 @@
+.warning {
+  border-width: 2px;
+}
+
+.warning--medium {
+  border-color: var(--color-medium-text);
+}
+
+.warning--high {
+  border-color: var(--color-high-text);
+}
+
+.warning__reason {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.warning__flags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.warning__flags li {
+  font-size: 0.85rem;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}

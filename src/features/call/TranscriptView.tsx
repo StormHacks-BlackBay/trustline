@@ -1,13 +1,15 @@
 import { useEffect, useRef } from "react";
 import type { Segment } from "../../lib/transcript";
+import { highlight } from "./highlight";
 import "./TranscriptView.css";
 
 interface TranscriptViewProps {
   segments: Segment[];
   partial: string;
+  evidence?: string[];
 }
 
-export function TranscriptView({ segments, partial }: TranscriptViewProps) {
+export function TranscriptView({ segments, partial, evidence = [] }: TranscriptViewProps) {
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,7 +24,9 @@ export function TranscriptView({ segments, partial }: TranscriptViewProps) {
       {empty && <p className="muted">The caller's words will appear here.</p>}
       {segments.map((s) => (
         <p key={s.id} className="transcript__line">
-          {s.text}
+          {highlight(s.text, evidence).map((piece, i) =>
+            piece.marked ? <mark key={i}>{piece.text}</mark> : <span key={i}>{piece.text}</span>,
+          )}
         </p>
       ))}
       {partial && <p className="transcript__line transcript__line--partial">{partial}</p>}
