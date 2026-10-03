@@ -30,7 +30,6 @@ export function useLiveTranscript(): TranscriptSource {
   const [status, setStatus] = useState<SourceStatus>("idle");
   const [error, setError] = useState<string | null>(null);
   const [segments, setSegments] = useState<Segment[]>([]);
-  const startedAt = useRef(0);
   const nextId = useRef(0);
 
   const scribe = useScribe({
@@ -40,7 +39,7 @@ export function useLiveTranscript(): TranscriptSource {
     keyterms: KEYTERMS,
     onCommittedTranscript: ({ text }) => {
       if (!text.trim()) return;
-      const committedAt = performance.now() - startedAt.current;
+      const committedAt = performance.now();
       const id = `live-${nextId.current++}`;
       setSegments((prev) => [...prev, { id, text, committedAt }]);
     },
@@ -55,7 +54,6 @@ export function useLiveTranscript(): TranscriptSource {
     setSegments([]);
     try {
       const token = await fetchScribeToken();
-      startedAt.current = performance.now();
       await scribe.connect({
         token,
         microphone: { echoCancellation: false, noiseSuppression: true, autoGainControl: true },

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ApiError } from "../../lib/api";
 import { fuse } from "../../lib/fusion";
+import { recordLatency } from "../../lib/metrics";
 import { runRules } from "../../lib/rules";
 import type { RiskAssessment } from "../../lib/schemas";
 import { scoreTranscript } from "../../lib/scoring";
@@ -39,9 +40,13 @@ export function useRiskEngine(segments: Segment[], language: LanguageCode) {
     const window = recentWindow(segments);
     const segmentCount = segments.length;
     const coversWholeCall = window.length >= transcript.length;
+    const committedAt = segments[segments.length - 1]?.committedAt ?? performance.now();
 
     scoreTranscript(window, language, controller.signal)
-      .then((assessment) => setLlm({ assessment, segmentCount, coversWholeCall, language }))
+      .then((assessment) => {
+        recordLatency("llm", performance.now() - committedAt);
+        setLlm({ assessment, segmentCount, coversWholeCall, language });
+      })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return;
         if (error instanceof ApiError && error.status === 503) scoringConfigured = false;

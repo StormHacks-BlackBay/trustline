@@ -30,7 +30,6 @@ export function useReplayTranscript() {
     setPartial("");
     setStatus("listening");
 
-    const startedAt = performance.now();
     let elapsed = 400;
     demo.lines.forEach((line, lineIndex) => {
       const words = line.split(" ");
@@ -48,7 +47,7 @@ export function useReplayTranscript() {
             {
               id: `${demo.id}-${lineIndex}`,
               text: line,
-              committedAt: performance.now() - startedAt,
+              committedAt: performance.now(),
             },
           ]);
         }, elapsed),

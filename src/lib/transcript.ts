@@ -1,7 +1,7 @@
 export interface Segment {
   id: string;
   text: string;
-  /** Milliseconds since the call started, used for latency measurement. */
+  /** performance.now() when the segment was committed, used for latency measurement. */
   committedAt: number;
 }
 

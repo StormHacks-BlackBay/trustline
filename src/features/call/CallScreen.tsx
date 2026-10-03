@@ -5,6 +5,7 @@ import { DEMO_CALLS } from "../../data/demoCalls";
 import { CallerSettings } from "./CallerSettings";
 import { AdvisoryBanner } from "./AdvisoryBanner";
 import { CallAnalysis } from "./CallAnalysis";
+import { Diagnostics } from "./Diagnostics";
 import { useCallSource } from "./useCallSource";
 import { useCaller } from "./useCaller";
 import "./CallScreen.css";
@@ -88,6 +89,8 @@ export function CallScreen() {
           ))}
         </ul>
       </Card>
+
+      <Diagnostics />
 
       <footer className="call-screen__footer">
         <Link href="/partner">Partner dashboard</Link>

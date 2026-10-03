@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { findOrganization, reportingEntry } from "../../lib/directory";
 import { ruleReason } from "../../lib/flagText";
+import { recordLatency } from "../../lib/metrics";
 import type { Segment } from "../../lib/transcript";
 import type { DemoUser, LanguageCode } from "../../lib/types";
 import { RiskAnnouncer } from "./RiskAnnouncer";
@@ -20,6 +22,12 @@ interface CallAnalysisProps {
 export function CallAnalysis({ segments, partial, language, user }: CallAnalysisProps) {
   const { assessment, llmStatus, transcript } = useRiskEngine(segments, language);
   const organization = findOrganization(transcript, assessment.claimedOrg);
+
+  // Time from a segment being committed to the rules-based warning being on screen.
+  const lastCommittedAt = segments[segments.length - 1]?.committedAt;
+  useEffect(() => {
+    if (lastCommittedAt !== undefined) recordLatency("rules", performance.now() - lastCommittedAt);
+  }, [lastCommittedAt]);
   const reason = assessment.explanation ?? ruleReason(assessment.flags, language);
 
   return (

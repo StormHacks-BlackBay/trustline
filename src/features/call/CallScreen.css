@@ -127,3 +127,33 @@
   text-align: center;
   padding: var(--space-4) 0;
 }
+
+.diagnostics {
+  font-size: 0.85rem;
+}
+
+.diagnostics summary {
+  cursor: pointer;
+  min-height: var(--touch);
+  display: flex;
+  align-items: center;
+  color: var(--color-muted-text);
+}
+
+.diagnostics table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--space-2);
+}
+
+.diagnostics th,
+.diagnostics td {
+  text-align: left;
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.diagnostics caption {
+  text-align: left;
+  padding-bottom: var(--space-1);
+}
