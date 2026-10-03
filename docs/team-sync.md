@@ -18,6 +18,20 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Design pass, spoken official number, keyboard fixes (Ariel)
+
+- **What changed:**
+  - Spoken warnings now end with the verified official number ("You can hang up and call IRCC yourself at 1 888 242 2100") in all five languages. No text messages: the team decided to leave SMS out. `DirectoryEntry` gained a `shortName` field, with `supabase/migrations/0002_directory_short_name.sql` and a regenerated `supabase/seed.sql`.
+  - Design system: self-hosted Atkinson Hyperlegible Next (`@fontsource-variable/atkinson-hyperlegible-next`, new dependency), warmer palette, full token scale in `src/styles/global.css`, and `DESIGN.md` describing the rules. Component CSS must use tokens only.
+  - New shared components in `src/components`: `AppShell` (header, navigation, skip link, page titles), `Logo`, `Chip`/`ChipList`, `Alert` (with `takeFocus` for confirmations), `Field`/`Select`/`Input`/`TextArea`, `ButtonLink`.
+  - Call screen: two columns from 60rem. `WarningCard` and `VerifiedContact` were replaced by `WarningHero` (the warning with its one primary action, calling the official number, and the share action) and `CallerDetails`. `CallAnalysis` now takes a render function that returns `main` and `side` parts.
+  - Partner dashboard: overview sidebar with summary numbers and published advisories. `useAdvisories` moved to `src/hooks/`.
+  - Accessibility: the transcript no longer uses `scrollIntoView`, which moved Chrome's keyboard starting point past the navigation. Focus now moves to the confirmation after sharing or publishing.
+- **Why:** the app only looked right on phones, looked generic, and the spoken warning promised a text message that would not be sent.
+- **What the other person needs to do:** run `npm install` for the font package. Run the Supabase `0002` migration and the regenerated seed if you set up Supabase before this.
+- **Verified:** `npm run check` passes (108 tests). Browser checks at 320, 390, 1280 and 1440px: no horizontal scrolling. axe-core reports no violations on every screen in light and dark themes. A keyboard-only walkthrough of both flows passes. Phone-call flow rehearsed with `npm run simulate:call` (rules only; no Gemini or ElevenLabs key here).
+- **Open questions:** VoiceOver and TalkBack still need testing on a real phone.
+
 ### 2026-10-03: API setup plan revised for Gemini (Rishon)
 
 - **What changed:** `docs/shared-plans/TrustLine-Secure-API-Setup-Plan.md` now describes Gemini instead of Claude Haiku 4.5: creating a free-tier key in AI Studio with no billing account, restricting it to the Generative Language API, `GEMINI_API_KEY` / `GEMINI_MODEL`, free-tier data use, and $0 cost capped by rate limits.

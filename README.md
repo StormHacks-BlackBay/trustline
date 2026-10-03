@@ -10,12 +10,15 @@ TrustLine helps newcomers to Canada recognize scam tactics during financial phon
 
 <div style="display: flex; justify-content: center; align-items: center;">
     <kbd><img src="docs/screenshots/add-trustline.png" alt="Steps to add TrustLine to a call" width="200"></kbd>
-    <kbd><img src="docs/screenshots/phone-call.png" alt="A merged phone call with TrustLine's spoken warning" width="200"></kbd>
-    <kbd><img src="docs/screenshots/warning.png" alt="Scam warning in Punjabi with an English line" width="200"></kbd>
-    <kbd><img src="docs/screenshots/verified-contact.png" alt="Official contact for the organization the caller claimed" width="200"></kbd>
+    <kbd><img src="docs/screenshots/phone-call.png" alt="A merged phone call with TrustLine's spoken warning in Punjabi" width="200"></kbd>
+    <kbd><img src="docs/screenshots/warning.png" alt="Scam warning with the official number as the next step" width="200"></kbd>
     <kbd><img src="docs/screenshots/consent.png" alt="Consent sheet showing the redacted report" width="200"></kbd>
-    <kbd><img src="docs/screenshots/partner-dashboard.png" alt="Partner dashboard with a reported call" width="200"></kbd>
     <kbd><img src="docs/screenshots/advisory.png" alt="Community advisory shown to a credit union member" width="200"></kbd>
+</div>
+
+<div align="center">
+    <kbd><img src="docs/screenshots/call-desktop.png" alt="Call check on a desktop screen" width="800"></kbd>
+    <kbd><img src="docs/screenshots/partner-dashboard.png" alt="Partner dashboard on a desktop screen" width="800"></kbd>
 </div>
 
 ## Technologies Used 💻
