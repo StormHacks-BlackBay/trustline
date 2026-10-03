@@ -35,7 +35,7 @@ Rules for assistants:
 - Free-tier caveat: Google may use free-tier prompts to improve its products. Use scripted demo calls, not real ones, until the team moves to a paid key. This is stated in `PRIVACY.md`.
 - Free-tier rate limits are per model (see AI Studio). The rules layer must keep working when Gemini is unavailable.
 
-**Verification status:** the Gemini path has not yet been run end to end against the live API (the environment that made the change could not reach Google or npm). First person with a key: run `npm run check` and `npm run eval` with `GEMINI_API_KEY` in `.env`, record the result in `docs/team-sync.md`, and update this line.
+**Verification status:** CI passes on `main`, but the Gemini path has not yet been run end to end against the live API (the environment that made the change could not reach Google). First person with a key: run `npm run check` and `npm run eval` with `GEMINI_API_KEY` in `.env`, record the result in `docs/team-sync.md`, and update this line.
 
 **Superseded:** `docs/shared-plans/TrustLine-Secure-API-Setup-Plan.md` was written for the Claude setup. Its security advice (server-only keys, spending caps, kill switch) still applies; its provider, model and env var names do not.
 

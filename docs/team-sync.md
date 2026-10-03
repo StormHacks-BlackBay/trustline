@@ -23,7 +23,7 @@ Add an entry when a change affects the other person: a new dependency or env var
 - **What changed:** `api/_claude.ts` was replaced by `api/_gemini.ts` (`scoreTranscript()`), which calls Gemini `generateContent` over REST with a response schema and validates the result with Zod. `api/score.ts`, `server/analysingSession.ts`, `server/index.ts` and `eval/run.ts` use it. `@anthropic-ai/sdk` was removed. README, PRIVACY, SUBMISSION and `.env.example` were updated.
 - **Why:** use a free API for the hackathon instead of paid Anthropic credits.
 - **What the other person needs to do:** run `npm install` (the lockfile dropped the Anthropic SDK). Replace `ANTHROPIC_API_KEY` / `ANTHROPIC_MODEL` with `GEMINI_API_KEY` (free from https://aistudio.google.com/apikey) and optionally `GEMINI_MODEL` in `.env`, in Vercel, and on the call server host.
-- **Verified:** code review and a standalone strict TypeScript check of `api/_gemini.ts`. Not yet run against the live Gemini API or through `npm run check` (the environment could not reach Google or npm). CI will run the checks on `main`.
+- **Verified:** code review and a standalone strict TypeScript check of `api/_gemini.ts`. CI on `main` passed (`npm run check`: typecheck, lint, tests, build; plus rules-only `npm run eval`). Not yet run against the live Gemini API (the environment could not reach Google).
 - **Open questions:** run `npm run eval` with a key and record rules + LLM precision, recall and latency here. Decide whether `gemini-3.5-flash-lite` is accurate enough or whether `gemini-3.5-flash` is worth the extra latency.
 
 ### 2026-10-03: Shared context files added (Rishon)
