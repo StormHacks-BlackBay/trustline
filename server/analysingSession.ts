@@ -7,7 +7,6 @@ import { runRules } from "../src/lib/rules";
 import { recentWindow } from "../src/lib/transcript";
 import type { LanguageCode } from "../src/lib/types";
 import { CallSession, type SessionDeps } from "./callSession";
-import type { LanguagePreferences } from "./preferences";
 import type { Speaker } from "./speaker";
 import { markMessage, mediaMessage } from "./twilioProtocol";
 
@@ -18,7 +17,6 @@ export type Scorer = (
 ) => Promise<ScoreOutcome>;
 
 export interface AnalysisDeps extends SessionDeps {
-  languages: LanguagePreferences;
   speaker: Speaker | null;
   score?: Scorer;
 }

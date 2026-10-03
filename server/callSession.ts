@@ -2,12 +2,14 @@ import type { WebSocket } from "ws";
 import type { CallEvent } from "../src/lib/callEvents";
 import { userForCaller, type ServerConfig } from "./config";
 import type { EventHub } from "./hub";
+import type { LanguagePreferences } from "./preferences";
 import type { Transcriber, TranscriberFactory } from "./transcriber";
 import { TwilioMessageSchema } from "./twilioProtocol";
 
 export interface SessionDeps {
   config: ServerConfig;
   hub: EventHub;
+  languages: LanguagePreferences;
   createTranscriber: TranscriberFactory;
 }
 

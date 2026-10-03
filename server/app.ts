@@ -3,6 +3,7 @@ import twilio from "twilio";
 import { WebSocketServer } from "ws";
 import { CallSession, type SessionDeps } from "./callSession";
 import { userForCaller, type ServerConfig } from "./config";
+import { handleEvents } from "./events";
 import { parseForm, readBody, send } from "./http";
 import { connectStreamTwiml, rejectTwiml } from "./twiml";
 
@@ -35,6 +36,7 @@ export function createCallServer<D extends SessionDeps>(
   const server = createServer((req, res) => {
     const path = (req.url ?? "/").split("?")[0];
     if (req.method === "GET" && path === "/health") return send(res, 200, "ok", "text/plain");
+    if (req.method === "GET" && path === "/events") return handleEvents(req, res, deps);
     if (req.method === "POST" && path === "/twilio/voice") {
       handleVoice(req, res, config).catch((error: unknown) => {
         console.error("Voice webhook failed", error);

@@ -5,6 +5,7 @@ import type { CallEvent } from "../src/lib/callEvents";
 import { createCallServer } from "./app";
 import { loadConfig, userForCaller } from "./config";
 import { EventHub } from "./hub";
+import { LanguagePreferences } from "./preferences";
 import { fakeTranscriber, fakeTwilioStream, waitFor } from "./testing";
 import { connectStreamTwiml } from "./twiml";
 
@@ -15,11 +16,17 @@ async function start(env: Record<string, string> = {}) {
   const config = loadConfig({ PORT: "0", ...env });
   const hub = new EventHub();
   const transcriber = fakeTranscriber();
-  const server = createCallServer({ config, hub, createTranscriber: transcriber.factory });
+  const languages = new LanguagePreferences();
+  const server = createCallServer({
+    config,
+    hub,
+    languages,
+    createTranscriber: transcriber.factory,
+  });
   servers.push(server);
   await new Promise<void>((resolve) => server.listen(0, resolve));
   const { port } = server.address() as AddressInfo;
-  return { base: `http://127.0.0.1:${port}`, config, hub, transcriber, server };
+  return { base: `http://127.0.0.1:${port}`, config, hub, languages, transcriber, server };
 }
 
 describe("connectStreamTwiml", () => {
@@ -112,5 +119,36 @@ describe("EventHub", () => {
     const seen: string[] = [];
     hub.subscribe("mei", (e) => seen.push(e.type));
     expect(seen).toEqual(["call_started", "segment"]);
+  });
+});
+
+describe("GET /events", () => {
+  it("streams the user's call events and records their warning language", async () => {
+    const { base, hub, languages } = await start({ APP_ORIGIN: "https://trustline.example.org" });
+    const controller = new AbortController();
+    const response = await fetch(`${base}/events?user=mei&lang=zh`, { signal: controller.signal });
+    expect(response.headers.get("content-type")).toBe("text/event-stream");
+    expect(response.headers.get("access-control-allow-origin")).toBe(
+      "https://trustline.example.org",
+    );
+    await waitFor(() => hub.subscriberCount("mei") === 1);
+    expect(languages.get("mei")).toBe("zh");
+
+    hub.publish("mei", { type: "segment", callId: "c", id: "c-0", text: "Hello" });
+    const reader = response.body!.getReader();
+    let text = "";
+    while (!text.includes("Hello")) {
+      const { value } = await reader.read();
+      text += new TextDecoder().decode(value);
+    }
+    expect(text).toContain('data: {"type":"segment","callId":"c","id":"c-0","text":"Hello"}');
+    controller.abort();
+    await waitFor(() => hub.subscriberCount("mei") === 0);
+  });
+
+  it("rejects unknown users", async () => {
+    const { base } = await start();
+    const response = await fetch(`${base}/events?user=nobody`);
+    expect(response.status).toBe(400);
   });
 });
