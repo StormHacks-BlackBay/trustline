@@ -1,5 +1,7 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import twilio from "twilio";
+import { WebSocketServer } from "ws";
+import { CallSession, type SessionDeps } from "./callSession";
 import { userForCaller, type ServerConfig } from "./config";
 import { parseForm, readBody, send } from "./http";
 import { connectStreamTwiml, rejectTwiml } from "./twiml";
@@ -22,9 +24,18 @@ async function handleVoice(req: IncomingMessage, res: ServerResponse, config: Se
   send(res, 200, connectStreamTwiml(streamUrl, from), "text/xml");
 }
 
-/** HTTP routes for the call server. WebSocket and event routes are attached in later layers. */
-export function createCallServer(config: ServerConfig): Server {
-  return createServer((req, res) => {
+export type SessionFactory = (
+  ws: ConstructorParameters<typeof CallSession>[0],
+  deps: SessionDeps,
+) => unknown;
+
+/** HTTP routes plus the Twilio media WebSocket. */
+export function createCallServer(
+  deps: SessionDeps,
+  createSession: SessionFactory = (ws, d) => new CallSession(ws, d),
+): Server {
+  const { config } = deps;
+  const server = createServer((req, res) => {
     const path = (req.url ?? "/").split("?")[0];
     if (req.method === "GET" && path === "/health") return send(res, 200, "ok", "text/plain");
     if (req.method === "POST" && path === "/twilio/voice") {
@@ -36,4 +47,16 @@ export function createCallServer(config: ServerConfig): Server {
     }
     send(res, 404, "not found", "text/plain");
   });
+
+  const wss = new WebSocketServer({ noServer: true });
+  server.on("upgrade", (req, socket, head) => {
+    if ((req.url ?? "").split("?")[0] !== "/twilio/media") {
+      socket.destroy();
+      return;
+    }
+    wss.handleUpgrade(req, socket, head, (ws) => createSession(ws, deps));
+  });
+  server.on("close", () => wss.close());
+
+  return server;
 }
