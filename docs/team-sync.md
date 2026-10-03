@@ -18,6 +18,14 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Vercel deployment guide added (Ariel)
+
+- **What changed:** added `docs/shared-plans/TrustLine-Vercel-Deployment-Guide.md`. Nothing has been deployed yet.
+- **Why:** the team needs a public HTTPS link for phones, judges and Devpost. Vercel's free Hobby plan cannot deploy from a private repository owned by a GitHub organization, so the guide offers three routes: deploy from the CLI now (repo stays private, only the project owner can deploy), make the repo public and connect GitHub (free, auto-deploys from both of us), or Vercel Pro.
+- **What the other person needs to do:** nothing yet. Agree on when to make the repo public; Devpost judges need to see the code anyway.
+- **Verified:** the secret scan in the guide was run on the full history: no keys found. The deployment steps have not been run.
+- **Open questions:** the `api/` routes import local files without extensions under `"type": "module"`, which may fail on Vercel with `ERR_MODULE_NOT_FOUND`. Check on the first preview deployment (see the guide's Troubleshooting).
+
 ### 2026-10-03: Design pass, spoken official number, keyboard fixes (Ariel)
 
 - **What changed:**
