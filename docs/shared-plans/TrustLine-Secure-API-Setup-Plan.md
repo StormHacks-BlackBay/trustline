@@ -1,5 +1,7 @@
 # TrustLine: secure, cost-conscious API setup for StormHacks
 
+> **Update (2026-10-03):** risk scoring now uses the Google Gemini API (`GEMINI_API_KEY`, `api/_gemini.ts`) instead of Anthropic Claude. The security guidance below still applies; the provider, model and env var names do not. See [`CLAUDE-SHARED.md`](../../CLAUDE-SHARED.md).
+
 Prepared October 3, 2026. Repository reviewed: `StormHacks-BlackBay/trustline`, commit `cc6a4a5b1a10e30934b490418a92fbf75cb1dbd9`.
 
 This is an implementation plan, not a claim that the safeguards below have already been installed. No keys were created, purchased, or changed during this review. Prices and account entitlements must be confirmed in your own dashboard before enabling billing.
@@ -8,13 +10,13 @@ This is an implementation plan, not a claim that the safeguards below have alrea
 
 Use the existing React/Vite application, ElevenLabs Scribe for live transcription, and Claude Haiku 4.5 for contextual scoring. Start with the existing local data store. Add Supabase only if showing collaboration across separate devices is essential. Avoid Twilio, purchased telephone numbers, a Trulioo integration, and additional AI providers for this weekend: the current app does not require them.
 
-| Component | Needed when | Recommended starting choice |
-| --- | --- | --- |
-| ElevenLabs API key | Listening to a microphone live | Free allowance; restricted development and judging keys |
-| Anthropic API key | Contextual scoring and generated translated explanations | Direct API, existing Haiku 4.5 model, small funded balance |
-| ElevenLabs Agents | An AI plays the caller | Optional; use a teammate or existing transcript replay first |
-| Supabase URL and public key | Sharing between separate devices | Optional free project after fixing authorization |
-| Vercel | HTTPS deployment for a phone | Use an eligible free deployment; confirm account/repository eligibility |
+| Component                   | Needed when                                              | Recommended starting choice                                             |
+| --------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------- |
+| ElevenLabs API key          | Listening to a microphone live                           | Free allowance; restricted development and judging keys                 |
+| Anthropic API key           | Contextual scoring and generated translated explanations | Direct API, existing Haiku 4.5 model, small funded balance              |
+| ElevenLabs Agents           | An AI plays the caller                                   | Optional; use a teammate or existing transcript replay first            |
+| Supabase URL and public key | Sharing between separate devices                         | Optional free project after fixing authorization                        |
+| Vercel                      | HTTPS deployment for a phone                             | Use an eligible free deployment; confirm account/repository eligibility |
 
 The zero-provider-cost fallback is already available: scripted transcript replay, rules-based detection, and the local partner dashboard in two tabs of the same browser. It does not provide live transcription or Claude explanations. Preserve it for judging.
 
@@ -142,11 +144,11 @@ If this implementation cannot be completed in time, use replay publicly and prot
 
 Current published reference prices:
 
-| Service | Published reference | Practical interpretation |
-| --- | --- | --- |
+| Service            | Published reference                                           | Practical interpretation                                                                     |
+| ------------------ | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | Scribe v2 Realtime | Free / Pay as you go table lists 2h30 included and $0.39/hour | Check your actual allowance and add-ons; 30 billable minutes at the base rate is about $0.20 |
-| ElevenLabs Agents | Free plan lists 15 call minutes; model usage is additional | Optional; avoid repeated Agent rehearsals |
-| Claude Haiku 4.5 | $1/million input tokens; $5/million output tokens | 100 calls averaging 2,000 input and 300 output tokens would cost about $0.35 |
+| ElevenLabs Agents  | Free plan lists 15 call minutes; model usage is additional    | Optional; avoid repeated Agent rehearsals                                                    |
+| Claude Haiku 4.5   | $1/million input tokens; $5/million output tokens             | 100 calls averaging 2,000 input and 300 output tokens would cost about $0.35                 |
 
 These are illustrations, not measured TrustLine costs or a guaranteed bill. ElevenLabs product allowances may draw on account credits; do not assume every advertised product allowance is additive. Taxes, add-ons, retries, and credit-purchase minimums can change the total. Sources: [ElevenAPI pricing](https://elevenlabs.io/pricing/api), [Agents pricing](https://elevenlabs.io/pricing/agents), [Claude pricing](https://platform.claude.com/docs/en/about-claude/pricing).
 
