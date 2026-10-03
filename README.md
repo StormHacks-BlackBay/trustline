@@ -6,6 +6,16 @@
 
 TrustLine is a mobile web app that helps newcomers to Canada recognize scam tactics during financial phone calls. With the call on speakerphone, TrustLine transcribes the conversation in real time, flags tactics such as gift card payment requests, deportation threats and requests for one-time codes, and explains each warning in the user's chosen language. When the caller claims to represent an institution, TrustLine shows that institution's official contact channel from a verified directory so the user can hang up and check independently. With the user's consent, a redacted incident summary is shared with the user's community organization or credit union, which can publish an advisory that reaches users of every partner organization.
 
+## Screenshots:
+
+<div style="display: flex; justify-content: center; align-items: center;">
+    <kbd><img src="docs/screenshots/warning.png" alt="Scam warning in Punjabi with an English line" width="200"></kbd>
+    <kbd><img src="docs/screenshots/verified-contact.png" alt="Official contact for the organization the caller claimed" width="200"></kbd>
+    <kbd><img src="docs/screenshots/consent.png" alt="Consent sheet showing the redacted report" width="200"></kbd>
+    <kbd><img src="docs/screenshots/partner-dashboard.png" alt="Partner dashboard with a reported call" width="200"></kbd>
+    <kbd><img src="docs/screenshots/advisory.png" alt="Community advisory shown to a credit union member" width="200"></kbd>
+</div>
+
 ## Technologies Used 💻
 
 ### Frameworks
