@@ -1,0 +1,47 @@
+.call-screen {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.call-screen__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.caller-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+@media (max-width: 22rem) {
+  .caller-settings {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.field__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted-text);
+}
+
+.field select,
+.field input,
+.field textarea {
+  min-height: var(--touch);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}

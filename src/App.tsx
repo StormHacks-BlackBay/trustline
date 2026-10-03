@@ -1,7 +1,9 @@
+import { CallScreen } from "./features/call/CallScreen";
+
 export function App() {
   return (
     <main>
-      <h1>TrustLine</h1>
+      <CallScreen />
     </main>
   );
 }
