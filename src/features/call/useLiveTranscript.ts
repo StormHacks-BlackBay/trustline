@@ -1,19 +1,8 @@
 import { CommitStrategy, useScribe } from "@elevenlabs/react";
 import { useRef, useState } from "react";
-import { DIRECTORY } from "../../data/directory";
 import { ApiError, fetchScribeToken } from "../../lib/api";
+import { scribeKeyterms } from "../../lib/keyterms";
 import type { Segment, SourceStatus, TranscriptSource } from "../../lib/transcript";
-
-// Bias recognition toward the names and phrases scam callers use.
-const KEYTERMS = [
-  ...DIRECTORY.flatMap((d) => d.aliases.filter((a) => a.length > 3)).slice(0, 40),
-  "gift card",
-  "Google Play",
-  "bitcoin",
-  "verification code",
-  "deportation",
-  "warrant",
-];
 
 function describeError(error: unknown): string {
   if (error instanceof ApiError && error.code === "transcription_not_configured") {
@@ -36,7 +25,7 @@ export function useLiveTranscript(): TranscriptSource {
     modelId: "scribe_v2_realtime",
     commitStrategy: CommitStrategy.VAD,
     languageCode: "en",
-    keyterms: KEYTERMS,
+    keyterms: scribeKeyterms(),
     onCommittedTranscript: ({ text }) => {
       if (!text.trim()) return;
       const committedAt = performance.now();
