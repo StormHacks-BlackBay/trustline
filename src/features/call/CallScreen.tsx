@@ -1,6 +1,5 @@
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
-import { Link } from "../../components/Link";
 import { DEMO_CALLS } from "../../data/demoCalls";
 import { CallerSettings } from "./CallerSettings";
 import { textDirection } from "../../lib/flagText";
@@ -27,9 +26,9 @@ export function CallScreen() {
 
   return (
     <div className="call-screen stack">
-      <header className="call-screen__header">
-        <h1>TrustLine</h1>
-        <p className="muted">
+      <header className="page-header">
+        <h1>Call check</h1>
+        <p className="page-header__lead">
           Add TrustLine to a suspicious call, or listen to a speakerphone call on another device.
         </p>
       </header>
@@ -115,10 +114,6 @@ export function CallScreen() {
       </Card>
 
       <Diagnostics />
-
-      <footer className="call-screen__footer">
-        <Link href="/partner">Partner dashboard</Link>
-      </footer>
     </div>
   );
 }

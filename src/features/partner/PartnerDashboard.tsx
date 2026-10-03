@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "../../components/Link";
 import { PARTNERS } from "../../data/partners";
 import { readStored, writeStored } from "../../lib/storage";
 import { store } from "../../lib/store";
@@ -25,10 +24,7 @@ export function PartnerDashboard() {
   return (
     <div className="dashboard stack">
       <header className="stack dashboard__header">
-        <div className="row dashboard__title">
-          <h1>Partner dashboard</h1>
-          <Link href="/">Open the app</Link>
-        </div>
+        <h1>Partner dashboard</h1>
         <label className="field">
           <span className="field__label">Organization</span>
           <select value={partnerId} onChange={(e) => choosePartner(e.target.value)}>
