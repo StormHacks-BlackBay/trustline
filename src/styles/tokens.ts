@@ -1,6 +1,8 @@
 export interface Palette {
   background: string;
   surface: string;
+  /** Recessed areas inside a surface, such as the transcript. */
+  surfaceSunken: string;
   border: string;
   text: string;
   mutedText: string;
@@ -16,30 +18,33 @@ export interface Palette {
 }
 
 export const LIGHT: Palette = {
-  background: "#f4f6f5",
+  // Warm paper rather than cool grey: calm, and less like a default dashboard.
+  background: "#f6f4ef",
   surface: "#ffffff",
-  border: "#c5cfcd",
-  text: "#13201f",
-  mutedText: "#475654",
-  accent: "#0f5c5e",
+  surfaceSunken: "#efebe3",
+  border: "#d6d0c4",
+  text: "#1a1f1e",
+  mutedText: "#565c59",
+  accent: "#0d5c5a",
   onAccent: "#ffffff",
-  lowBackground: "#e2f3e8",
+  lowBackground: "#e2f2e7",
   lowText: "#14532d",
-  mediumBackground: "#fff2d1",
+  mediumBackground: "#fdf0cc",
   mediumText: "#6b4500",
-  highBackground: "#fde3df",
+  highBackground: "#fbe2dd",
   highText: "#8a1c12",
-  highlight: "#ffe08a",
+  highlight: "#ffdf80",
 };
 
 export const DARK: Palette = {
-  background: "#0e1514",
-  surface: "#18211f",
-  border: "#34423f",
-  text: "#eef3f2",
-  mutedText: "#a9b7b4",
-  accent: "#5fc4c0",
-  onAccent: "#062625",
+  background: "#121614",
+  surface: "#1a201e",
+  surfaceSunken: "#0e1211",
+  border: "#323b38",
+  text: "#f1efe9",
+  mutedText: "#a9b1ad",
+  accent: "#6fcfc6",
+  onAccent: "#06221f",
   lowBackground: "#12301f",
   lowText: "#a3e3bb",
   mediumBackground: "#3a2c06",
@@ -55,6 +60,9 @@ export const TEXT_PAIRS: [keyof Palette, keyof Palette][] = [
   ["text", "surface"],
   ["mutedText", "background"],
   ["mutedText", "surface"],
+  ["text", "surfaceSunken"],
+  ["mutedText", "surfaceSunken"],
+  ["accent", "background"],
   ["accent", "surface"],
   ["onAccent", "accent"],
   ["lowText", "lowBackground"],

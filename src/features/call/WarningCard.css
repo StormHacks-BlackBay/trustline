@@ -1,5 +1,5 @@
 .warning {
-  border-width: 2px;
+  border-width: var(--border-thick);
 }
 
 .warning--medium {
@@ -11,8 +11,8 @@
 }
 
 .warning__reason {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
 }
 
 .warning__flags {
@@ -25,8 +25,8 @@
 }
 
 .warning__flags li {
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius);
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid var(--color-border);
 }
