@@ -60,7 +60,7 @@ export function ShareIncident({
 
   return (
     <>
-      <Button variant="secondary" fullWidth onClick={() => setOpen(true)}>
+      <Button variant="secondary" onClick={() => setOpen(true)}>
         Share with {partner?.name}
       </Button>
       <Sheet open={open} title={`Share with ${partner?.name}?`} onClose={() => setOpen(false)}>

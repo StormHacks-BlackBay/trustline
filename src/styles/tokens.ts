@@ -68,6 +68,9 @@ export const TEXT_PAIRS: [keyof Palette, keyof Palette][] = [
   ["lowText", "lowBackground"],
   ["mediumText", "mediumBackground"],
   ["highText", "highBackground"],
+  ["text", "mediumBackground"],
+  ["text", "highBackground"],
+  ["accent", "surfaceSunken"],
   ["text", "highlight"],
 ];
 
