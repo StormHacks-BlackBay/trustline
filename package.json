@@ -13,7 +13,8 @@
     "test": "vitest run",
     "eval": "tsx eval/run.ts",
     "db:seed-sql": "tsx scripts/generate-seed.ts",
-    "demo:agents": "tsx scripts/create-demo-agents.ts"
+    "demo:agents": "tsx scripts/create-demo-agents.ts",
+    "check": "npm run typecheck && npm run lint && npm test && vite build"
   },
   "engines": {
     "node": ">=20"
