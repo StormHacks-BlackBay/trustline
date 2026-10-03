@@ -62,6 +62,7 @@ export function CallScreen() {
           segments={call.segments}
           partial={call.partial}
           language={language}
+          user={user}
         />
       </Card>
 
