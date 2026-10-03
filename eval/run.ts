@@ -23,17 +23,34 @@ interface Row {
 
 const RANK: Record<RiskLevel, number> = { low: 0, medium: 1, high: 2 };
 
+// Free-tier keys allow only a few requests per minute, so space the calls out and back off on 429.
+const SPACING_MS = Number(process.env.EVAL_SPACING_MS || 4500);
+const MAX_ATTEMPTS = 5;
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 async function llmFor(transcript: string) {
-  const started = performance.now();
-  const response = await score(
-    new Request("http://local/api/score", {
-      method: "POST",
-      body: JSON.stringify({ transcript, language: "en" }),
-    }),
-  );
-  const ms = performance.now() - started;
-  if (!response.ok) throw new Error(`score returned ${response.status}`);
-  return { assessment: RiskAssessmentSchema.parse(await response.json()), ms };
+  for (let attempt = 1; ; attempt++) {
+    const started = performance.now();
+    const response = await score(
+      new Request("http://local/api/score", {
+        method: "POST",
+        body: JSON.stringify({ transcript, language: "en" }),
+      }),
+    );
+    // Latency covers a single successful request, not the waiting between retries.
+    const ms = performance.now() - started;
+    if (response.ok) {
+      return { assessment: RiskAssessmentSchema.parse(await response.json()), ms };
+    }
+    if (response.status !== 429 || attempt === MAX_ATTEMPTS) {
+      throw new Error(`score returned ${response.status} after ${attempt} attempt(s)`);
+    }
+    const wait = 10_000 * 2 ** (attempt - 1);
+    console.error(
+      `Rate limited; retrying in ${wait / 1000}s (attempt ${attempt + 1}/${MAX_ATTEMPTS})`,
+    );
+    await sleep(wait);
+  }
 }
 
 function metrics(rows: Row[], pick: (r: Row) => RiskLevel | null, threshold: RiskLevel) {
@@ -68,6 +85,7 @@ for (const c of CASES) {
   let combined: RiskLevel | null = null;
   let llmMs: number | null = null;
   if (useLlm) {
+    if (rows.length > 0) await sleep(SPACING_MS);
     const { assessment, ms } = await llmFor(c.transcript);
     combined = fuse({
       transcript: c.transcript,

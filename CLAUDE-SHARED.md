@@ -36,7 +36,7 @@ Rules for assistants:
 - Free-tier caveat: Google may use free-tier prompts to improve its products. Use scripted demo calls, not real ones, until the team moves to a paid key. This is stated in `PRIVACY.md`.
 - Free-tier rate limits are per model (see AI Studio). The rules layer must keep working when Gemini is unavailable.
 
-**Verification status:** CI passes on `main`, but the Gemini path has not yet been run end to end against the live API (the environment that made the change could not reach Google). First person with a key: run `npm run check` and `npm run eval` with `GEMINI_API_KEY` in `.env`, record the result in `docs/team-sync.md`, and update this line.
+**Verification status:** verified end to end against the live Gemini API on 2026-10-03 with `gemini-3.5-flash-lite` (`npm run eval`: rules + LLM precision 100%, recall 100%, 0/6 false positives; median scoring latency 1130 ms, p90 1362 ms). Free-tier keys are rate limited per minute: `npm run eval` spaces its requests (`EVAL_SPACING_MS`, default 4500) and backs off on 429. Note `gemini-2.5-flash-lite` is no longer available to new users.
 
 **Setup plan:** `docs/shared-plans/TrustLine-Secure-API-Setup-Plan.md` has been revised for Gemini (key creation, free-tier limits, env vars, costs).
 

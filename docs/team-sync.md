@@ -18,6 +18,24 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Gemini path verified against the live API (Ariel)
+
+- **What changed:** `eval/run.ts` now spaces Gemini requests (`EVAL_SPACING_MS`, default 4500 ms) and retries on 429 with backoff. Without this, the free tier rate-limited the eval after a few requests and it crashed. Updated the verification line in `CLAUDE-SHARED.md`.
+- **Why:** first live run with a Gemini key, as `CLAUDE-SHARED.md` asked.
+- **What the other person needs to do:** nothing. The Gemini key is in Ariel's local `.env` only; ask Ariel if you need one, or create your own free key in AI Studio.
+- **Verified:** `npm run eval` with `gemini-3.5-flash-lite`:
+
+  | Setup          | Warn at | Precision | Recall | False positives |
+  | -------------- | ------- | --------- | ------ | --------------- |
+  | Rules only     | medium+ | 100%      | 91%    | 0/6             |
+  | Rules only     | high    | 100%      | 73%    | 0/6             |
+  | Rules + Gemini | medium+ | 100%      | 100%   | 0/6             |
+  | Rules + Gemini | high    | 100%      | 100%   | 0/6             |
+
+  Gemini raised `immigration-interac` from low to high (the case the rules miss) and both medium cases to high. Scoring latency: median 1130 ms, p90 1362 ms. A direct request also confirmed `gemini-2.5-flash-lite` is no longer available to new users, so keep `gemini-3.5-flash-lite`.
+
+- **Open questions:** during a live call, the app and the call server each score every phrase, so a long call could hit the free tier's per-minute limit. When that happens the app shows "Basic mode" for that phrase and the rules still warn. The cases were written alongside the rules, so treat these numbers as optimistic.
+
 ### 2026-10-03: Twilio phone call guide and a call server config fix (Ariel)
 
 - **What changed:** added `docs/shared-plans/TrustLine-Twilio-Phone-Call-Guide.md` (Twilio account, number, verified phones, Cloudflare quick tunnel, webhook, `.env` settings, test call script, demo-day hosting options, troubleshooting). Fixed `server/config.ts`: blank `.env` lines such as `PUBLIC_URL=` are now treated as unset, and trailing slashes are removed from `PUBLIC_URL` and `APP_ORIGIN`. Before this, a blank `PUBLIC_URL` produced an empty media stream address.
