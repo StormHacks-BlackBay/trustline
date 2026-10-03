@@ -18,6 +18,11 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Rishon owns the Vercel project (Rishon)
+
+- **What changed:** the Vercel deployment guide and `CLAUDE-SHARED.md` now name Rishon as the Vercel project owner (they previously assumed Ariel). The guide's CLI step now uses `npx vercel@latest` or Homebrew instead of a global npm install.
+- **What the other person needs to do:** ask Rishon for redeploys or environment variable changes. Don't create a second Vercel project.
+
 ### 2026-10-03: Vercel deployment guide added (Ariel)
 
 - **What changed:** added `docs/shared-plans/TrustLine-Vercel-Deployment-Guide.md`. Nothing has been deployed yet.

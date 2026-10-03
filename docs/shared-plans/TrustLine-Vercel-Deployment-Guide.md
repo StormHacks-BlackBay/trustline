@@ -1,6 +1,6 @@
 # TrustLine: deploying the web app to Vercel
 
-Prepared October 3, 2026 for team Black Bay. This guide gets the TrustLine web app onto a public HTTPS URL, then puts that URL in the README and on the GitHub repository page.
+Prepared October 3, 2026 for team Black Bay. **Rishon (`rishon-g`) owns the Vercel project**; Ariel can ask him to redeploy or to add environment variables. This guide gets the TrustLine web app onto a public HTTPS URL, then puts that URL in the README and on the GitHub repository page.
 
 Nothing in this guide has been run yet. Vercel's dashboard labels change from time to time, so if a button name differs slightly, look for the closest match.
 
@@ -51,22 +51,15 @@ Do these once, whichever route you choose.
 
    No output means no key-like strings were found. Placeholder lines such as `GEMINI_API_KEY=YOUR_LOCAL_SECRET` in the older setup plan are filtered out on purpose. If anything else appears, stop. Revoke that key in its provider's dashboard first, then ask before going further, because removing a secret from Git history needs care.
 
-3. **Create a Vercel account** at [vercel.com/signup](https://vercel.com/signup). Choose **Hobby** and **Continue with GitHub**, using the GitHub account that is an admin of `StormHacks-BlackBay` (Ariel's). Signing in with GitHub links the accounts, which Route A needs.
+3. **Create a Vercel account** at [vercel.com/signup](https://vercel.com/signup). Choose **Hobby** and **Continue with GitHub**, using Rishon's GitHub account (`rishon-g`), since Rishon owns the Vercel project. Signing in with GitHub links the accounts, which Route A needs.
 
 4. **Choose the project name.** The default URL is `https://<project-name>.vercel.app`. Use `trustline`. If that name is taken, Vercel adds a suffix (for example `trustline-black-bay.vercel.app`), and you can rename the project later in its settings.
 
 ## Route B: deploy from the CLI (repo stays private)
 
-Use the account from step 1.3. Only the owner of a Hobby project can deploy to it, so one person (Ariel) owns deployments for this route.
+Use the account from step 1.3. Only the owner of a Hobby project can deploy to it, so one person (Rishon) owns deployments for this route.
 
-1. **Update the CLI.** The installed version (31.0.2) is old.
-
-   ```bash
-   brew upgrade vercel-cli
-   vercel --version
-   ```
-
-   If Homebrew says the formula is not installed, use `npm install --global vercel@latest` instead.
+1. **Get the CLI.** `npx vercel@latest` runs it without installing, so prefix the commands below with `npx` (for example `npx vercel login`). To install it instead, use `brew install vercel-cli`. Avoid `npm install --global` if it fails with `EACCES`, and do not fix that with `sudo`.
 
 2. **Log in.**
 
@@ -142,7 +135,7 @@ Do this when the team agrees the code can be public, at the latest before submit
    ```
 
 3. **Give Vercel access to the organization.** In Vercel, choose **Add New**, then **Project**. Under **Import Git Repository**, open the account dropdown and choose **Add GitHub Account** (or **Configure GitHub App**). On GitHub:
-   - Choose the **StormHacks-BlackBay** organization. Only an organization owner can install the app; Ariel is one.
+   - Choose the **StormHacks-BlackBay** organization. Only an organization owner can install the app; Rishon is one.
    - Choose **Only select repositories** and pick `trustline`.
    - Click **Install**.
 

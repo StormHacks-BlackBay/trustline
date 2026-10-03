@@ -23,16 +23,16 @@ Check the [current Free plan](https://supabase.com/pricing) and [billing documen
 
 ## 2. Know what is already implemented
 
-| File | Current purpose |
-| --- | --- |
-| `src/lib/store/index.ts` | Chooses Supabase only when both Supabase environment variables are nonempty |
-| `src/lib/store/supabaseStore.ts` | Inserts and reads incidents/advisories and subscribes to INSERT events |
-| `src/lib/store/localStore.ts` | Same-browser fallback |
-| `supabase/migrations/0001_init.sql` | Creates four tables, initial policies, and Realtime publication membership |
-| `supabase/migrations/0002_directory_short_name.sql` | Adds the directory `short_name` column |
-| `supabase/seed.sql` | Seeds partner and directory records |
-| `scripts/generate-seed.ts` | Regenerates the seed from the TypeScript source data |
-| `src/data/partners.ts` | Defines the two demo organizations and demo personas |
+| File                                                | Current purpose                                                             |
+| --------------------------------------------------- | --------------------------------------------------------------------------- |
+| `src/lib/store/index.ts`                            | Chooses Supabase only when both Supabase environment variables are nonempty |
+| `src/lib/store/supabaseStore.ts`                    | Inserts and reads incidents/advisories and subscribes to INSERT events      |
+| `src/lib/store/localStore.ts`                       | Same-browser fallback                                                       |
+| `supabase/migrations/0001_init.sql`                 | Creates four tables, initial policies, and Realtime publication membership  |
+| `supabase/migrations/0002_directory_short_name.sql` | Adds the directory `short_name` column                                      |
+| `supabase/seed.sql`                                 | Seeds partner and directory records                                         |
+| `scripts/generate-seed.ts`                          | Regenerates the seed from the TypeScript source data                        |
+| `src/data/partners.ts`                              | Defines the two demo organizations and demo personas                        |
 
 Important findings:
 
@@ -303,33 +303,33 @@ Use only fictional reports. Test Supabase with transcript replay first so debugg
 
 Add authorization tests independent of the UI:
 
-| Caller/action | Expected result |
-| --- | --- |
-| Logged-out client reads incidents | No incident access |
-| Logged-out client inserts incident/advisory | Rejected |
-| First account reads/submits its own partner incident | Succeeds |
-| First account reads second partner's incidents | No rows available |
-| First account submits to second partner | Rejected |
-| First account publishes as second partner | Rejected |
-| Either account reads published advisories | Succeeds |
-| Browser client creates/changes memberships | Rejected |
+| Caller/action                                        | Expected result    |
+| ---------------------------------------------------- | ------------------ |
+| Logged-out client reads incidents                    | No incident access |
+| Logged-out client inserts incident/advisory          | Rejected           |
+| First account reads/submits its own partner incident | Succeeds           |
+| First account reads second partner's incidents       | No rows available  |
+| First account submits to second partner              | Rejected           |
+| First account publishes as second partner            | Rejected           |
+| Either account reads published advisories            | Succeeds           |
+| Browser client creates/changes memberships           | Rejected           |
 
 Use the actual publishable-key client and test account sessions for these tests. A successful SQL Editor query runs with administrative privileges and does not demonstrate that browser RLS works. SELECT policies may hide unauthorized rows rather than return an HTTP error; assert that protected data is absent.
 
 ## 13. Troubleshooting
 
-| Symptom | Check first |
-| --- | --- |
-| Works in two tabs but not on a phone | Both environment values; rebuild/restart; ensure store is Supabase |
-| Seed fails mentioning `short_name` | Apply migration 0002 before seed |
-| Relation already exists | Inspect applied schema; do not rerun initial migrations blindly |
-| Insert fails with an RLS error | Auth session, exact partner membership, INSERT policy, and SELECT policy for returned row |
-| Dashboard shows no incidents | Correct partner ID and membership; original policies only granted `anon`, not authenticated users |
-| Record appears after refresh only | Publication membership, authenticated subscription lifecycle, WebSocket connection, SELECT access |
+| Symptom                                       | Check first                                                                                                    |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Works in two tabs but not on a phone          | Both environment values; rebuild/restart; ensure store is Supabase                                             |
+| Seed fails mentioning `short_name`            | Apply migration 0002 before seed                                                                               |
+| Relation already exists                       | Inspect applied schema; do not rerun initial migrations blindly                                                |
+| Insert fails with an RLS error                | Auth session, exact partner membership, INSERT policy, and SELECT policy for returned row                      |
+| Dashboard shows no incidents                  | Correct partner ID and membership; original policies only granted `anon`, not authenticated users              |
+| Record appears after refresh only             | Publication membership, authenticated subscription lifecycle, WebSocket connection, SELECT access              |
 | Publish succeeds but no other-device advisory | Both devices' project URL/key, INSERT subscription, network, and public/authenticated advisory SELECT policies |
-| Login fails | Account exists in this project, confirmation state, password, auth settings |
-| Still shows old project after deploy | Vite variables were not rebuilt into the latest deployment |
-| Project appears unavailable later | Check whether the Free project is paused and restore it in the dashboard |
+| Login fails                                   | Account exists in this project, confirmation state, password, auth settings                                    |
+| Still shows old project after deploy          | Vite variables were not rebuilt into the latest deployment                                                     |
+| Project appears unavailable later             | Check whether the Free project is paused and restore it in the dashboard                                       |
 
 Do not fix permission errors by disabling RLS or putting a service-role key in the browser. See [Realtime troubleshooting](https://supabase.com/docs/guides/troubleshooting/realtime-postgres-changes-troubleshooting).
 
