@@ -119,3 +119,8 @@
   color: var(--color-low-text);
   font-weight: 600;
 }
+
+.call-screen__footer {
+  text-align: center;
+  padding: var(--space-4) 0;
+}

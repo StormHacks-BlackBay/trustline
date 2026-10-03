@@ -1,5 +1,6 @@
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
+import { Link } from "../../components/Link";
 import { DEMO_CALLS } from "../../data/demoCalls";
 import { CallerSettings } from "./CallerSettings";
 import { CallAnalysis } from "./CallAnalysis";
@@ -84,6 +85,10 @@ export function CallScreen() {
           ))}
         </ul>
       </Card>
+
+      <footer className="call-screen__footer">
+        <Link href="/partner">Partner dashboard</Link>
+      </footer>
     </div>
   );
 }
