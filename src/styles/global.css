@@ -50,6 +50,13 @@
 
   --content-max: 76rem;
   --reading-max: 40rem;
+  /* Minimum widths before content wraps or a column collapses. */
+  --control-min: 12rem;
+  --column-min: 16rem;
+  --side-min: 18rem;
+  /* Tallest a scrolling region gets before it scrolls internally. */
+  --scroll-max: 16rem;
+  --scroll-max-sm: 10rem;
   --gutter: var(--space-4);
 
   --scrim: rgb(0 0 0 / 0.45);

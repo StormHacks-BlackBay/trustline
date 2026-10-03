@@ -6,7 +6,7 @@
 
 @media (min-width: 60rem) {
   .dashboard {
-    grid-template-columns: minmax(16rem, 1fr) minmax(0, 2.4fr);
+    grid-template-columns: minmax(var(--column-min), 1fr) minmax(0, 2.4fr);
     gap: var(--space-8);
   }
 }

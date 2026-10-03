@@ -28,5 +28,5 @@
 }
 
 .sheet__actions > * {
-  flex: 1 1 12rem;
+  flex: 1 1 var(--control-min);
 }

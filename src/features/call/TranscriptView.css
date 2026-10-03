@@ -1,5 +1,5 @@
 .transcript {
-  max-height: 16rem;
+  max-height: var(--scroll-max);
   overflow-y: auto;
   display: flex;
   flex-direction: column;

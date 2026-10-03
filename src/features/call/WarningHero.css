@@ -66,7 +66,7 @@
 }
 
 .warning__actions > * {
-  flex: 1 1 16rem;
+  flex: 1 1 var(--column-min);
 }
 
 @media (min-width: 64rem) {
