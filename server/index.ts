@@ -23,8 +23,8 @@ if (!config.twilioAuthToken) {
     "TWILIO_AUTH_TOKEN is not set: webhook signatures are not checked (local use only).",
   );
 }
-if (!process.env.ANTHROPIC_API_KEY) {
-  console.warn("ANTHROPIC_API_KEY is not set: calls are scored by the rules layer only.");
+if (!process.env.GEMINI_API_KEY) {
+  console.warn("GEMINI_API_KEY is not set: calls are scored by the rules layer only.");
 }
 
 const server = createCallServer<AnalysisDeps>(

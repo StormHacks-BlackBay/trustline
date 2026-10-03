@@ -11,7 +11,7 @@ try {
 } catch {
   // No .env file: the LLM layer is skipped.
 }
-const useLlm = Boolean(process.env.ANTHROPIC_API_KEY);
+const useLlm = Boolean(process.env.GEMINI_API_KEY);
 
 interface Row {
   id: string;
@@ -112,7 +112,7 @@ for (const [name, pick] of [
   ["Rules + LLM", (r: Row) => r.combined],
 ] as const) {
   if (name === "Rules + LLM" && !useLlm) {
-    lines.push("Rules + LLM: skipped (set ANTHROPIC_API_KEY in .env to include it)");
+    lines.push("Rules + LLM: skipped (set GEMINI_API_KEY in .env to include it)");
     continue;
   }
   for (const threshold of ["medium", "high"] as const) {

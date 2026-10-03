@@ -33,7 +33,7 @@ TrustLine helps newcomers to Canada recognize scam tactics during financial phon
 - [x] **ElevenLabs Text to Speech (Eleven v3)**: Spoken warnings in all five languages, generated as phone audio
 - [x] **ElevenLabs Agents**: Scripted scam and legitimate callers for testing and the demo
 - [x] **Twilio Programmable Voice**: The TrustLine phone number and bidirectional Media Streams
-- [x] **Anthropic Claude (Haiku 4.5 by default)**: Structured risk scoring and translated explanations
+- [x] **Google Gemini API (free tier, `gemini-3.5-flash-lite` by default)**: Structured risk scoring and translated explanations, called over REST with no extra SDK
 - [x] **Vercel**: Hosting and serverless API routes
 
 ### Data Sources
@@ -46,7 +46,7 @@ TrustLine helps newcomers to Canada recognize scam tactics during financial phon
 ## Architecture 🏗️
 
 - **Pattern**: Feature folders (`src/features/call`, `src/features/partner`) with shared logic in `src/lib`
-- **Detection**: A rules layer flags known tactics in about 0.01 ms per transcript. Claude reads the recent transcript and returns structured JSON with flags, the claimed organization, exact evidence quotes and an explanation in the listener's language. Rules can raise risk immediately; only the LLM can lower it, and never when the rules found gift cards, crypto, one-time codes or remote access.
+- **Detection**: A rules layer flags known tactics in about 0.01 ms per transcript. Gemini reads the recent transcript and returns schema-constrained JSON (validated again with Zod) with flags, the claimed organization, exact evidence quotes and an explanation in the listener's language. Rules can raise risk immediately; only the LLM can lower it, and never when the rules found gift cards, crypto, one-time codes or remote access.
 - **Input**: Neither iOS nor Android lets third-party apps read cellular call audio. Instead, the user merges the TrustLine number into the call. A call server receives the audio from Twilio, sends it to Scribe (which accepts Twilio's 8 kHz mu-law directly), scores it, speaks a warning back into the call on the first high-risk moment, and streams the call to the user's app over Server-Sent Events. The app can also listen through the microphone of a second device, and scripted demo calls run through the same pipeline.
 - **State**: React state and hooks; one `CallAnalysis` component per call, keyed so state resets between calls
 - **Data**: `DataStore` interface with a Supabase implementation and a local implementation (localStorage + BroadcastChannel) used when Supabase is not configured
@@ -55,7 +55,7 @@ TrustLine helps newcomers to Canada recognize scam tactics during financial phon
 
 ```
 Phone call ──merge──▶ Twilio number ──media stream──▶ call server (server/)
-                                                         │  Scribe ─▶ rules + Claude ─▶ spoken warning ─▶ back into the call
+                                                         │  Scribe ─▶ rules + Gemini ─▶ spoken warning ─▶ back into the call
                                                          ▼
                                               Server-Sent Events ─▶ app (same pipeline as below)
 
@@ -63,7 +63,7 @@ Microphone ──▶ Scribe v2 Realtime ──▶ committed segments
                                          │
                        ┌─────────────────┴─────────────────┐
                        ▼                                   ▼
-                Rules layer (instant)             /api/score (Claude)
+                Rules layer (instant)             /api/score (Gemini)
                        └──────────────┬────────────────────┘
                                       ▼
                          fuse() ──▶ warning, evidence, verified contact
@@ -89,18 +89,27 @@ cp .env.example .env   # add keys; every key is optional
 npm run dev
 ```
 
+### Gemini API key (free)
+
+1. Sign in to [Google AI Studio](https://aistudio.google.com/apikey) and create an API key. No billing account is needed for the free tier.
+2. Put it in `.env` as `GEMINI_API_KEY` locally, and in the Vercel (and call server) environment variables for deployments. It is only read on the server; never prefix it with `VITE_`.
+3. Optionally set `GEMINI_MODEL` to another free-tier model, such as `gemini-3.5-flash`, if you want stronger reasoning at some cost in latency.
+
+Free-tier limits are per model and shown in [AI Studio](https://aistudio.google.com/rate-limit). If scoring is rate-limited or slow, the app falls back to the rules layer and says it is in basic mode. On the free tier, Google may use prompts to improve its products, so use demo calls rather than real ones until you move to a paid key (see [PRIVACY.md](PRIVACY.md)).
+
 Open `http://localhost:5173` for the app and `http://localhost:5173/partner` for the partner dashboard.
 
 | Setting                                       | Without it                                                                                |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | `ELEVENLABS_API_KEY`                          | Live listening is unavailable; demo calls still work                                      |
-| `ANTHROPIC_API_KEY`                           | Basic mode: warnings come from the rules layer only                                       |
+| `GEMINI_API_KEY`                              | Basic mode: warnings come from the rules layer only                                       |
+| `GEMINI_MODEL`                                | Uses `gemini-3.5-flash-lite`                                                              |
 | `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` | Incidents and advisories are shared between tabs of one browser instead of across devices |
 
 ### Phone calls (merge TrustLine into a call)
 
 1. Buy a phone number in the Twilio console.
-2. Deploy the call server with the `Dockerfile` on an always-on host such as Railway, Fly.io or Render. Set `ELEVENLABS_API_KEY`, `ANTHROPIC_API_KEY`, `PUBLIC_URL` (the server's https URL), `TWILIO_AUTH_TOKEN`, `APP_ORIGIN` (the web app's URL) and `PHONE_LINKS` (which demo user each of your phones belongs to).
+2. Deploy the call server with the `Dockerfile` on an always-on host such as Railway, Fly.io or Render. Set `ELEVENLABS_API_KEY`, `GEMINI_API_KEY`, `PUBLIC_URL` (the server's https URL), `TWILIO_AUTH_TOKEN`, `APP_ORIGIN` (the web app's URL) and `PHONE_LINKS` (which demo user each of your phones belongs to).
 3. In Twilio, set the number's "A call comes in" webhook to `POST https://<call server>/twilio/voice`.
 4. Set `VITE_CALL_SERVER_URL` and `VITE_TRUSTLINE_NUMBER` for the web app and redeploy it.
 5. Call someone, tap Add Call, call the TrustLine number and tap Merge Calls.
@@ -130,7 +139,7 @@ npm run lint
 npm run typecheck
 ```
 
-Rules-only results on the 17-case set: 100% precision and 91% recall when warning at medium risk or above, with no false positives on the 6 legitimate calls. The cases were written alongside the rules, so these numbers are optimistic. The missed case, a request for an Interac payment with no other keywords, is the kind the LLM layer is there to catch; set `ANTHROPIC_API_KEY` to include it in the report.
+Rules-only results on the 17-case set: 100% precision and 91% recall when warning at medium risk or above, with no false positives on the 6 legitimate calls. The cases were written alongside the rules, so these numbers are optimistic. The missed case, a request for an Interac payment with no other keywords, is the kind the LLM layer is there to catch; set `GEMINI_API_KEY` to include it in the report.
 
 <div align="center">
 

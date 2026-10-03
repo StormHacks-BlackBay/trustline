@@ -23,7 +23,6 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.131.0",
     "@elevenlabs/elevenlabs-js": "^2.70.0",
     "@elevenlabs/react": "^1.16.0",
     "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",

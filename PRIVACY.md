@@ -4,14 +4,14 @@ TrustLine listens to phone calls, so it is built to keep as little as possible.
 
 ## Data inventory
 
-| Data                                                    | Where it goes                                                                                                        | Stored?                                                |
-| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Call audio                                              | Streamed from the browser to ElevenLabs Scribe for transcription                                                     | Not stored by TrustLine                                |
-| Transcript                                              | Browser memory. The most recent part of the call is sent to `/api/score`, which forwards it to Anthropic for scoring | Discarded when the call ends unless the user shares it |
-| Incident summary                                        | Supabase, only after the user taps Share and confirms                                                                | Yes, redacted                                          |
-| Advisories                                              | Supabase                                                                                                             | Yes, written by partner organizations                  |
-| Preferences (demo user, language, dismissed advisories) | localStorage in the user's browser                                                                                   | On the device only                                     |
-| API keys                                                | Vercel environment variables                                                                                         | Server only                                            |
+| Data                                                    | Where it goes                                                                                                                    | Stored?                                                |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Call audio                                              | Streamed from the browser to ElevenLabs Scribe for transcription                                                                 | Not stored by TrustLine                                |
+| Transcript                                              | Browser memory. The most recent part of the call is sent to `/api/score`, which forwards it to the Google Gemini API for scoring | Discarded when the call ends unless the user shares it |
+| Incident summary                                        | Supabase, only after the user taps Share and confirms                                                                            | Yes, redacted                                          |
+| Advisories                                              | Supabase                                                                                                                         | Yes, written by partner organizations                  |
+| Preferences (demo user, language, dismissed advisories) | localStorage in the user's browser                                                                                               | On the device only                                     |
+| API keys                                                | Vercel environment variables                                                                                                     | Server only                                            |
 
 ## Consent and redaction
 
@@ -25,7 +25,7 @@ The user is a party to the call and chooses to add TrustLine. Canadian law allow
 
 - Twilio carries the merged call and streams its audio to the call server.
 - ElevenLabs processes call audio for transcription and generates the spoken warning.
-- Anthropic processes transcript text for risk scoring.
+- Google (Gemini API) processes transcript text for risk scoring. On the free tier, Google's terms allow it to use submitted content to improve its products; on a paid key it does not. This hackathon build uses the free tier, so demos use scripted calls rather than real ones.
 - Supabase stores redacted incidents and advisories.
 
 ## Demo build limits

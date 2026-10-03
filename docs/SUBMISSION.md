@@ -22,7 +22,7 @@ With the user's consent, TrustLine sends a redacted summary of the incident to t
 
 - **React + TypeScript (Vite)** mobile web app, deployed on **Vercel**
 - **ElevenLabs Scribe v2 Realtime** for streaming transcription, authorized with single-use tokens minted on our server
-- A **rules layer** for instant flags and **Claude** for structured risk scoring and translated explanations, validated with **Zod** on the server and in the browser
+- A **rules layer** for instant flags and **Google Gemini** (free tier) for structured risk scoring and translated explanations, validated with **Zod** on the server and in the browser
 - A fusion step where rules raise risk immediately and only the LLM can lower it, never below a hard signal such as a gift card request
 - **Supabase** (Postgres + Realtime) for incidents and advisories, with on-device redaction before anything is shared
 - **ElevenLabs Agents** playing scripted scam and legitimate callers for testing and the demo
@@ -37,7 +37,7 @@ With the user's consent, TrustLine sends a redacted summary of the incident to t
 ## Accomplishments that we're proud of
 
 - A full loop from a live call to a published community advisory on another partner's users' screens
-- On our 17-call evaluation set, the rules layer alone reaches 100% precision and 91% recall with no false positives on legitimate calls. [Add rules + LLM results from `npm run eval` with ANTHROPIC_API_KEY set.]
+- On our 17-call evaluation set, the rules layer alone reaches 100% precision and 91% recall with no false positives on legitimate calls. [Add rules + LLM results from `npm run eval` with GEMINI_API_KEY set.]
 - Median alert latency of [X] ms for rule warnings and [Y] ms for LLM explanations, measured in the app's Diagnostics panel
 - No axe-core accessibility violations across every screen, in light and dark themes
 
@@ -53,7 +53,7 @@ With the user's consent, TrustLine sends a redacted summary of the incident to t
 
 ## Built with
 
-react, typescript, vite, node.js, twilio, elevenlabs, anthropic, claude, supabase, postgresql, vercel, zod, vitest, websockets
+react, typescript, vite, node.js, twilio, elevenlabs, gemini, supabase, postgresql, vercel, zod, vitest, websockets
 
 ## Try it out
 

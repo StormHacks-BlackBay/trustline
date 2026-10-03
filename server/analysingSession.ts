@@ -1,5 +1,5 @@
 import type { WebSocket } from "ws";
-import { scoreWithClaude, type ScoreOutcome } from "../api/_claude";
+import { scoreTranscript, type ScoreOutcome } from "../api/_gemini";
 import { findOrganization } from "../src/lib/directory";
 import { ruleReason } from "../src/lib/flagText";
 import { fuse, type Assessment } from "../src/lib/fusion";
@@ -53,7 +53,7 @@ export class AnalysingCallSession extends CallSession {
     const controller = new AbortController();
     this.inFlight = controller;
     const window = recentWindow(this.segments.map((s, i) => ({ ...s, committedAt: i })));
-    const score = this.analysis.score ?? scoreWithClaude;
+    const score = this.analysis.score ?? scoreTranscript;
 
     score(window, language, controller.signal)
       .then((outcome) => {
