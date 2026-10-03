@@ -14,7 +14,9 @@
     "eval": "tsx eval/run.ts",
     "db:seed-sql": "tsx scripts/generate-seed.ts",
     "demo:agents": "tsx scripts/create-demo-agents.ts",
-    "check": "npm run typecheck && npm run lint && npm test && vite build"
+    "check": "npm run typecheck && npm run lint && npm test && vite build",
+    "server": "tsx watch server/index.ts",
+    "server:start": "tsx server/index.ts"
   },
   "engines": {
     "node": ">=20"
@@ -26,6 +28,8 @@
     "@supabase/supabase-js": "^2.117.2",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "twilio": "^6.1.2",
+    "ws": "^8.22.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {
@@ -33,6 +37,7 @@
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@types/ws": "^8.18.2",
     "@vitejs/plugin-react": "^6.1.1",
     "eslint": "^9.39.5",
     "eslint-plugin-react-hooks": "^7.1.1",

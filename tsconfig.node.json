@@ -15,5 +15,5 @@
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true
   },
-  "include": ["vite.config.ts", "api", "eval", "scripts", "demo"]
+  "include": ["vite.config.ts", "api", "eval", "scripts", "demo", "server"]
 }
