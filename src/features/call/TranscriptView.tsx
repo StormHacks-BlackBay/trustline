@@ -20,7 +20,14 @@ export function TranscriptView({ segments, partial, evidence = [] }: TranscriptV
 
   return (
     // aria-live is off: warnings are announced separately, the transcript itself would be too noisy.
-    <div className="transcript" role="log" aria-label="Call transcript" aria-live="off">
+    <div
+      className="transcript"
+      role="log"
+      aria-label="Call transcript"
+      aria-live="off"
+      // Scrollable, so keyboard users must be able to focus it.
+      tabIndex={0}
+    >
       {empty && <p className="muted">The caller's words will appear here.</p>}
       {segments.map((s) => (
         <p key={s.id} className="transcript__line">

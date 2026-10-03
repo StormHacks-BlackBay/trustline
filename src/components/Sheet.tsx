@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import "./Sheet.css";
 
 interface SheetProps {
@@ -11,6 +11,7 @@ interface SheetProps {
 /** Modal bottom sheet built on <dialog>, which handles focus trapping and Escape natively. */
 export function Sheet({ open, title, onClose, children }: SheetProps) {
   const ref = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
 
   useEffect(() => {
     const dialog = ref.current;
@@ -20,9 +21,9 @@ export function Sheet({ open, title, onClose, children }: SheetProps) {
   }, [open]);
 
   return (
-    <dialog ref={ref} className="sheet" aria-labelledby="sheet-title" onClose={onClose}>
+    <dialog ref={ref} className="sheet" aria-labelledby={titleId} onClose={onClose}>
       <div className="stack">
-        <h2 id="sheet-title">{title}</h2>
+        <h2 id={titleId}>{title}</h2>
         {children}
       </div>
     </dialog>

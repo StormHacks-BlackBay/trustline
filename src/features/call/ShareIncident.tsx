@@ -76,7 +76,9 @@ export function ShareIncident({
           <dd>{assessment.flags.map((f) => FLAG_LABELS[f]).join(", ") || "None"}</dd>
           <dt>What the caller said (redacted)</dt>
           <dd>
-            <blockquote>{excerpt}</blockquote>
+            <blockquote tabIndex={0} aria-label="Redacted excerpt">
+              {excerpt}
+            </blockquote>
           </dd>
         </dl>
         {state === "failed" && (
