@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { store } from "../../lib/store";
-import type { Advisory } from "../../lib/types";
+import { store } from "../lib/store";
+import type { Advisory } from "../lib/types";
 
 const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 

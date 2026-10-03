@@ -32,7 +32,7 @@ export function draftAdvisory(incident: Incident): { title: string; body: string
   const title = org ? `Scam calls pretending to be ${org}` : "Scam calls reported in our community";
   const who = org ? `someone claiming to be from ${org}` : "someone claiming to be an official";
   const caller = tactics.length > 0 ? ` The caller ${joinList(tactics)}.` : "";
-  const never = org ? ` ${org} does not do this.` : "";
+  const never = org ? ` This is not how ${org} contacts people.` : "";
   const body = `People in our community are getting calls from ${who}.${caller}${never} Hang up and contact the organization using its official number. Never use a number the caller gives you.`;
 
   return { title: title.slice(0, ADVISORY_TITLE_MAX), body: body.slice(0, ADVISORY_BODY_MAX) };

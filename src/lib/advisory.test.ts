@@ -28,6 +28,9 @@ describe("draftAdvisory", () => {
     expect(draft.body).toContain(
       "The caller asks for payment in gift cards, threatens deportation and pressures people to act right away.",
     );
+    expect(draft.body).toContain(
+      "This is not how Immigration, Refugees and Citizenship Canada (IRCC) contacts people.",
+    );
   });
 
   it("works without an organization or flags", () => {

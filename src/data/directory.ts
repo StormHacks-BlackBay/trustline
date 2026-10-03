@@ -135,7 +135,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   },
   {
     id: "your-bank",
-    organization: "Your bank",
+    organization: "a bank (not named)",
     shortName: "your bank",
     aliases: ["your bank", "the bank", "bank's security", "bank security", "fraud department"],
     category: "bank",

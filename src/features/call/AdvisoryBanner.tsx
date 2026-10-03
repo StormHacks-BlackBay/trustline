@@ -3,7 +3,7 @@ import { Button } from "../../components/Button";
 import { PARTNERS } from "../../data/partners";
 import { readStored, writeStored } from "../../lib/storage";
 import { timeAgo } from "../../lib/time";
-import { useAdvisories } from "./useAdvisories";
+import { useAdvisories } from "../../hooks/useAdvisories";
 import "./AdvisoryBanner.css";
 
 const DISMISSED_KEY = "trustline.dismissedAdvisories";
