@@ -17,13 +17,14 @@ TrustLine listens to phone calls, so it is built to keep as little as possible.
 
 Nothing about a call leaves the device for a partner organization unless the user chooses to share it. The consent sheet shows exactly what will be sent. Before sending, `src/lib/redact.ts` removes email addresses, phone numbers, card, account and SIN numbers, street addresses, postal codes, and names that follow introductions or titles. The organization the caller claimed to be and the scam wording are kept, because that is what partners need to warn others. Redaction is covered by tests in `src/lib/redact.test.ts`.
 
-## Recording
+## Recording and announcement
 
-The user is a party to the call. Canadian law allows a party to a conversation to record it, and TrustLine does not store audio.
+The user is a party to the call and chooses to add TrustLine. Canadian law allows a party to a conversation to record it. TrustLine still announces itself ("TrustLine is listening") when it joins, so everyone on the call knows, and it does not store audio.
 
 ## Third parties
 
-- ElevenLabs processes call audio for transcription.
+- Twilio carries the merged call and streams its audio to the call server.
+- ElevenLabs processes call audio for transcription and generates the spoken warning.
 - Anthropic processes transcript text for risk scoring.
 - Supabase stores redacted incidents and advisories.
 

@@ -4,7 +4,7 @@ Replace every bracketed value before submitting. Numbers in this file come from 
 
 **Project name:** TrustLine
 
-**Elevator pitch (155 characters):** Real-time, in-language scam warnings for newcomers on suspicious financial calls, backed by a shared alert network between community organizations and banks.
+**Elevator pitch (162 characters):** Merge TrustLine into a suspicious call and it warns you out loud, in your language, the moment the caller sounds like a scam. Then it alerts your whole community.
 
 ## About the project
 
@@ -29,7 +29,7 @@ With the user's consent, TrustLine sends a redacted summary of the incident to t
 
 ## Challenges we ran into
 
-- Neither iOS nor Android lets third-party apps read cellular call audio, so we designed TrustLine around speakerphone input.
+- Neither iOS nor Android lets third-party apps read cellular call audio. Our first design listened on speakerphone, which only works from a second device. Adding TrustLine as a third person on the call works on any phone with no special permissions, because the phone network does the audio routing.
 - A real bank fraud alert says "we will never ask for your PIN or a verification code". Our first rules would have flagged it, so we added negation handling and made that call a test case.
 - Balancing speed and accuracy: rules take about 0.01 ms but are rigid, while the LLM understands context but takes longer.
 - [Add what actually went wrong during the build]
@@ -53,7 +53,7 @@ With the user's consent, TrustLine sends a redacted summary of the incident to t
 
 ## Built with
 
-react, typescript, vite, node.js, elevenlabs, anthropic, claude, supabase, postgresql, vercel, zod, vitest
+react, typescript, vite, node.js, twilio, elevenlabs, anthropic, claude, supabase, postgresql, vercel, zod, vitest, websockets
 
 ## Try it out
 
