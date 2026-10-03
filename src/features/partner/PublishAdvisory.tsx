@@ -37,7 +37,11 @@ export function PublishAdvisory({
   };
 
   if (state === "sent") {
-    return <Alert tone="success">Advisory published to users of every TrustLine partner.</Alert>;
+    return (
+      <Alert tone="success" takeFocus>
+        Advisory published to users of every TrustLine partner.
+      </Alert>
+    );
   }
 
   return (

@@ -54,7 +54,9 @@ export function ShareIncident({
 
   if (state === "sent") {
     return (
-      <Alert tone="success">Shared with {partner?.name}. Thank you, this helps warn others.</Alert>
+      <Alert tone="success" takeFocus>
+        Shared with {partner?.name}. Thank you, this helps warn others.
+      </Alert>
     );
   }
 

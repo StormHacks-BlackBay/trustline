@@ -15,15 +15,17 @@ TrustLine targets WCAG 2.2 AA on mobile Safari with VoiceOver and Chrome on Andr
 | Motion              | No flashing; `prefers-reduced-motion` disables transitions.                                                                                            |
 | Dialogs             | Consent and publish sheets use the native `<dialog>` element for focus handling and Escape to close.                                                   |
 
-## Last audit
+## Last audit (2026-10-03)
 
-axe-core (WCAG 2.0 to 2.2 A and AA rules plus best practices) on the home screen, a finished scam call, the consent sheet and the partner dashboard, in light and dark themes: no violations.
+- **axe-core** (WCAG 2.0 to 2.2 A and AA rules plus best practices) on the call screen, a finished scam call, the consent sheet and the partner dashboard, in light and dark themes: no violations.
+- **Keyboard-only walkthrough** in Chrome of both main flows: playing a demo call, sharing it with the consent sheet, and publishing an advisory from the partner dashboard. This found and fixed two issues: the transcript's auto-scroll moved the keyboard starting point past the navigation, and focus was lost after publishing or sharing.
+- **Layout** at 320px, 390px, 1280px and 1440px, and at 200% zoom: no horizontal scrolling.
 
 ## Known gaps
 
 - Interface labels are in English. Only warnings and explanations are translated.
 - Non-English warning text has not yet been reviewed by native speakers.
-- Not yet tested with real VoiceOver and TalkBack users.
+- Not yet tested with VoiceOver or TalkBack on a real device, or with people who rely on them.
 
 ## Reporting a barrier
 

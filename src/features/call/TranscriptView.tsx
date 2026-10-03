@@ -10,10 +10,13 @@ interface TranscriptViewProps {
 }
 
 export function TranscriptView({ segments, partial, evidence = [] }: TranscriptViewProps) {
-  const endRef = useRef<HTMLDivElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
 
+  // Scroll only the transcript box. scrollIntoView would also scroll the page and move the
+  // browser's keyboard starting point into the transcript.
   useEffect(() => {
-    endRef.current?.scrollIntoView({ block: "nearest" });
+    const box = boxRef.current;
+    if (box) box.scrollTop = box.scrollHeight;
   }, [segments.length, partial]);
 
   const empty = segments.length === 0 && !partial;
@@ -21,6 +24,7 @@ export function TranscriptView({ segments, partial, evidence = [] }: TranscriptV
   return (
     // aria-live is off: warnings are announced separately, the transcript itself would be too noisy.
     <div
+      ref={boxRef}
       className="transcript"
       role="log"
       aria-label="Call transcript"
@@ -37,7 +41,6 @@ export function TranscriptView({ segments, partial, evidence = [] }: TranscriptV
         </p>
       ))}
       {partial && <p className="transcript__line transcript__line--partial">{partial}</p>}
-      <div ref={endRef} />
     </div>
   );
 }
