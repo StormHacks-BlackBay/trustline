@@ -16,7 +16,8 @@
     "demo:agents": "tsx scripts/create-demo-agents.ts",
     "check": "npm run typecheck && npm run lint && npm test && vite build",
     "server": "tsx watch server/index.ts",
-    "server:start": "tsx server/index.ts"
+    "server:start": "tsx server/index.ts",
+    "simulate:call": "tsx scripts/simulate-call.ts"
   },
   "engines": {
     "node": ">=20"
