@@ -37,6 +37,25 @@ describe("connectStreamTwiml", () => {
   });
 });
 
+describe("loadConfig", () => {
+  it("treats blank .env values as unset", () => {
+    const config = loadConfig({ PORT: "", PUBLIC_URL: "", APP_ORIGIN: " ", TWILIO_AUTH_TOKEN: "" });
+    expect(config.port).toBe(8787);
+    expect(config.publicUrl).toBe("http://localhost:8787");
+    expect(config.appOrigin).toBe("*");
+    expect(config.twilioAuthToken).toBeNull();
+  });
+
+  it("drops trailing slashes so URLs and origins match exactly", () => {
+    const config = loadConfig({
+      PUBLIC_URL: "https://calls.example.org/",
+      APP_ORIGIN: "https://trustline.vercel.app/",
+    });
+    expect(config.publicUrl).toBe("https://calls.example.org");
+    expect(config.appOrigin).toBe("https://trustline.vercel.app");
+  });
+});
+
 describe("userForCaller", () => {
   it("maps linked numbers and falls back to the default user", () => {
     const config = loadConfig({ PHONE_LINKS: '{"+16045550100":"mei"}' });

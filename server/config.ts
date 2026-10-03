@@ -29,14 +29,16 @@ function parsePhoneLinks(raw: string | undefined): Record<string, string> {
 }
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
-  const port = Number(env.PORT ?? 8787);
+  // A blank line such as `PUBLIC_URL=` in .env means "not set", not "set to nothing".
+  const read = (name: string) => env[name]?.trim() || undefined;
+  const port = Number(read("PORT") ?? 8787);
   return {
     port,
-    publicUrl: (env.PUBLIC_URL ?? `http://localhost:${port}`).replace(/\/$/, ""),
-    twilioAuthToken: env.TWILIO_AUTH_TOKEN || null,
-    appOrigin: env.APP_ORIGIN ?? "*",
-    phoneLinks: parsePhoneLinks(env.PHONE_LINKS),
-    defaultUserId: env.DEFAULT_USER_ID ?? DEMO_USERS[0]?.id ?? "harpreet",
+    publicUrl: (read("PUBLIC_URL") ?? `http://localhost:${port}`).replace(/\/$/, ""),
+    twilioAuthToken: read("TWILIO_AUTH_TOKEN") ?? null,
+    appOrigin: (read("APP_ORIGIN") ?? "*").replace(/\/$/, ""),
+    phoneLinks: parsePhoneLinks(read("PHONE_LINKS")),
+    defaultUserId: read("DEFAULT_USER_ID") ?? DEMO_USERS[0]?.id ?? "harpreet",
   };
 }
 
