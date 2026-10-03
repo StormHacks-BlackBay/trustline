@@ -18,6 +18,12 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Supabase onboarding guide for Rishon (Ariel)
+
+- **What changed:** added `docs/shared-plans/Supabase-Teammate-Onboarding.md`: what Supabase does in TrustLine, and the steps to accept the invite, install and link the CLI, configure `.env`, check it works, and make database changes.
+- **What the other person needs to do:** follow the guide once Ariel sends the Supabase invite (it expires after 24 hours).
+- **Verified:** documentation only; commands match the ones used to set up the project.
+
 ### 2026-10-03: Supabase project live with demo access (Ariel)
 
 - **What changed:** created Supabase project `trustline-stormhacks` (ref `tixwegxffiuouvrjavra`, `us-east-1`, Free). Added `supabase/config.toml` (Supabase CLI, linked locally) and `supabase/migrations/0003_demo_anon_grants.sql`. Applied migrations `0001` to `0003` and the seed. Details are in `CLAUDE-SHARED.md` under "Database".
