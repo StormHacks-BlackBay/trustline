@@ -1,9 +1,10 @@
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
+import { DEMO_CALLS } from "../../data/demoCalls";
 import { CallerSettings } from "./CallerSettings";
 import { TranscriptView } from "./TranscriptView";
+import { useCallSource } from "./useCallSource";
 import { useCaller } from "./useCaller";
-import { useLiveTranscript } from "./useLiveTranscript";
 import "./CallScreen.css";
 
 const STATUS_TEXT = {
@@ -16,8 +17,8 @@ const STATUS_TEXT = {
 
 export function CallScreen() {
   const { user, language, setUser, setLanguage } = useCaller();
-  const live = useLiveTranscript();
-  const active = live.status === "listening" || live.status === "connecting";
+  const call = useCallSource();
+  const active = call.status === "listening" || call.status === "connecting";
 
   return (
     <div className="call-screen stack">
@@ -35,26 +36,47 @@ export function CallScreen() {
 
       <Card className="stack" aria-labelledby="listen-heading">
         <div className="row call-screen__status">
-          <h2 id="listen-heading">Call</h2>
-          <span className={`status-pill status-pill--${live.status}`}>
-            {STATUS_TEXT[live.status]}
+          <h2 id="listen-heading">
+            {call.demoCall ? `Demo call: ${call.demoCall.title}` : "Call"}
+          </h2>
+          <span className={`status-pill status-pill--${call.status}`}>
+            {STATUS_TEXT[call.status]}
           </span>
         </div>
         {active ? (
-          <Button variant="secondary" fullWidth onClick={live.stop}>
-            Stop listening
+          <Button variant="secondary" fullWidth onClick={call.stop}>
+            {call.mode === "live" ? "Stop listening" : "Stop demo call"}
           </Button>
         ) : (
-          <Button fullWidth onClick={live.start}>
+          <Button fullWidth onClick={call.startLive}>
             Start listening
           </Button>
         )}
-        {live.error && (
+        {call.error && (
           <p className="call-screen__error" role="alert">
-            {live.error}
+            {call.error}
           </p>
         )}
-        <TranscriptView segments={live.segments} partial={live.partial} />
+        <TranscriptView segments={call.segments} partial={call.partial} />
+      </Card>
+
+      <Card className="stack" aria-labelledby="demo-heading">
+        <div>
+          <h2 id="demo-heading">Demo calls</h2>
+          <p className="muted small">
+            Scripted calls that run through the same detection as a live call.
+          </p>
+        </div>
+        <ul className="demo-calls">
+          {DEMO_CALLS.map((demo) => (
+            <li key={demo.id}>
+              <Button variant="secondary" fullWidth onClick={() => call.playDemo(demo)}>
+                {demo.title}
+              </Button>
+              <p className="muted small">{demo.description}</p>
+            </li>
+          ))}
+        </ul>
       </Card>
     </div>
   );
