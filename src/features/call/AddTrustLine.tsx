@@ -1,3 +1,4 @@
+import { ButtonLink } from "../../components/ButtonLink";
 import { Card } from "../../components/Card";
 import { callServer, formatPhone, trustLineVCard } from "../../lib/callServer";
 
@@ -21,13 +22,9 @@ export function AddTrustLine({ connected }: { connected: boolean }) {
           and shows the details here.
         </li>
       </ol>
-      <a
-        className="button button--secondary button--full add-contact"
-        href={vcard}
-        download="TrustLine.vcf"
-      >
+      <ButtonLink variant="secondary" fullWidth href={vcard} download="TrustLine.vcf">
         Save TrustLine to contacts
-      </a>
+      </ButtonLink>
       <p className="muted small" role="status">
         {connected ? "Ready: merged calls will appear on this screen." : "Connecting to TrustLine…"}
       </p>

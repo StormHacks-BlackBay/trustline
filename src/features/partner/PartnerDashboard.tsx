@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Alert } from "../../components/Alert";
+import { Field, Select } from "../../components/Field";
 import { PARTNERS } from "../../data/partners";
 import { readStored, writeStored } from "../../lib/storage";
 import { store } from "../../lib/store";
@@ -25,16 +27,17 @@ export function PartnerDashboard() {
     <div className="dashboard stack">
       <header className="stack dashboard__header">
         <h1>Partner dashboard</h1>
-        <label className="field">
-          <span className="field__label">Organization</span>
-          <select value={partnerId} onChange={(e) => choosePartner(e.target.value)}>
-            {PARTNERS.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        <Field label="Organization">
+          {(props) => (
+            <Select {...props} value={partnerId} onChange={(e) => choosePartner(e.target.value)}>
+              {PARTNERS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </Select>
+          )}
+        </Field>
         <p className="muted small">
           {store.kind === "local"
             ? "Local demo mode: reports from other tabs in this browser appear here."
@@ -47,11 +50,7 @@ export function PartnerDashboard() {
         <div className="visually-hidden" aria-live="polite">
           {latestId ? "A new call was reported." : ""}
         </div>
-        {error && (
-          <p role="alert" className="call-screen__error">
-            Could not load reports. Check the connection.
-          </p>
-        )}
+        {error && <Alert tone="error">Could not load reports. Check the connection.</Alert>}
         {incidents.length === 0 && !error && (
           <p className="muted">
             No calls reported to {partner?.name} yet. When a user shares a suspicious call, it

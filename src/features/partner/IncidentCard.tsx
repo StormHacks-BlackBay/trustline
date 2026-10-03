@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Card } from "../../components/Card";
+import { Chip, ChipList } from "../../components/Chip";
 import { RiskBadge } from "../../components/RiskBadge";
 import { FLAG_LABELS } from "../../lib/flagText";
 import { timeAgo } from "../../lib/time";
@@ -17,20 +18,14 @@ export function IncidentCard({ incident, isNew, actions }: IncidentCardProps) {
     <Card className={`incident stack ${isNew ? "incident--new" : ""}`}>
       <div className="row incident__meta">
         <RiskBadge risk={incident.risk} />
-        {isNew && <span className="incident__new">New</span>}
+        {isNew && <Chip tone="solid">New</Chip>}
         <span className="muted small">
           <time dateTime={incident.createdAt}>{timeAgo(incident.createdAt)}</time> · Warnings in{" "}
           {language}
         </span>
       </div>
       <h3>Caller claimed to be: {incident.claimedOrg ?? "not stated"}</h3>
-      {incident.flags.length > 0 && (
-        <ul className="incident__flags" aria-label="Warning signs">
-          {incident.flags.map((f) => (
-            <li key={f}>{FLAG_LABELS[f]}</li>
-          ))}
-        </ul>
-      )}
+      <ChipList label="Warning signs" items={incident.flags.map((f) => FLAG_LABELS[f])} />
       <blockquote className="incident__excerpt">{incident.redactedExcerpt}</blockquote>
       {actions}
     </Card>

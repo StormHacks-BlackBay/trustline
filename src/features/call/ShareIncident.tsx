@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Alert } from "../../components/Alert";
 import { Button } from "../../components/Button";
 import { Sheet } from "../../components/Sheet";
 import { PARTNERS } from "../../data/partners";
@@ -53,9 +54,7 @@ export function ShareIncident({
 
   if (state === "sent") {
     return (
-      <p className="share-done" role="status">
-        Shared with {partner?.name}. Thank you, this helps warn others.
-      </p>
+      <Alert tone="success">Shared with {partner?.name}. Thank you, this helps warn others.</Alert>
     );
   }
 
@@ -82,15 +81,15 @@ export function ShareIncident({
           </dd>
         </dl>
         {state === "failed" && (
-          <p role="alert" className="call-screen__error">
+          <Alert tone="error">
             Could not share right now. Check your connection and try again.
-          </p>
+          </Alert>
         )}
-        <div className="stack">
-          <Button fullWidth onClick={() => void share()} disabled={state === "sending"}>
+        <div className="sheet__actions">
+          <Button onClick={() => void share()} disabled={state === "sending"}>
             {state === "sending" ? "Sharing…" : "Share"}
           </Button>
-          <Button variant="secondary" fullWidth onClick={() => setOpen(false)}>
+          <Button variant="secondary" onClick={() => setOpen(false)}>
             Don't share
           </Button>
         </div>

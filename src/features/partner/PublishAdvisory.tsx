@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Alert } from "../../components/Alert";
 import { Button } from "../../components/Button";
+import { Field, Input, TextArea } from "../../components/Field";
 import { Sheet } from "../../components/Sheet";
 import { ADVISORY_BODY_MAX, ADVISORY_TITLE_MAX, draftAdvisory } from "../../lib/advisory";
 import { store } from "../../lib/store";
@@ -35,53 +37,46 @@ export function PublishAdvisory({
   };
 
   if (state === "sent") {
-    return (
-      <p className="share-done" role="status">
-        Advisory published to users of every TrustLine partner.
-      </p>
-    );
+    return <Alert tone="success">Advisory published to users of every TrustLine partner.</Alert>;
   }
 
   return (
     <>
-      <Button fullWidth onClick={() => setOpen(true)}>
-        Publish advisory
-      </Button>
+      <Button onClick={() => setOpen(true)}>Publish advisory</Button>
       <Sheet open={open} title="Publish a community advisory" onClose={() => setOpen(false)}>
-        <p className="muted small">
+        <p className="muted">
           Advisories reach users of every TrustLine partner, including banks and credit unions.
         </p>
-        <label className="field">
-          <span className="field__label">Title</span>
-          <input
-            value={draft.title}
-            maxLength={ADVISORY_TITLE_MAX}
-            onChange={(e) => setDraft((d) => ({ ...d, title: e.target.value }))}
-          />
-        </label>
-        <label className="field">
-          <span className="field__label">Message</span>
-          <textarea
-            rows={6}
-            value={draft.body}
-            maxLength={ADVISORY_BODY_MAX}
-            onChange={(e) => setDraft((d) => ({ ...d, body: e.target.value }))}
-          />
-        </label>
-        {state === "failed" && (
-          <p role="alert" className="call-screen__error">
-            Could not publish right now. Try again.
-          </p>
-        )}
-        <div className="stack">
+        <Field label="Title">
+          {(props) => (
+            <Input
+              {...props}
+              value={draft.title}
+              maxLength={ADVISORY_TITLE_MAX}
+              onChange={(e) => setDraft((d) => ({ ...d, title: e.target.value }))}
+            />
+          )}
+        </Field>
+        <Field label="Message" hint={`Up to ${ADVISORY_BODY_MAX} characters.`}>
+          {(props) => (
+            <TextArea
+              {...props}
+              rows={6}
+              value={draft.body}
+              maxLength={ADVISORY_BODY_MAX}
+              onChange={(e) => setDraft((d) => ({ ...d, body: e.target.value }))}
+            />
+          )}
+        </Field>
+        {state === "failed" && <Alert tone="error">Could not publish right now. Try again.</Alert>}
+        <div className="sheet__actions">
           <Button
-            fullWidth
             onClick={() => void publish()}
             disabled={state === "sending" || !draft.title.trim() || !draft.body.trim()}
           >
             {state === "sending" ? "Publishing…" : "Publish to all partners"}
           </Button>
-          <Button variant="secondary" fullWidth onClick={() => setOpen(false)}>
+          <Button variant="secondary" onClick={() => setOpen(false)}>
             Cancel
           </Button>
         </div>

@@ -1,4 +1,6 @@
+import { Alert } from "../../components/Alert";
 import { Button } from "../../components/Button";
+import { Chip } from "../../components/Chip";
 import { Card } from "../../components/Card";
 import { DEMO_CALLS } from "../../data/demoCalls";
 import { CallerSettings } from "./CallerSettings";
@@ -51,9 +53,9 @@ export function CallScreen() {
                 ? `Demo call: ${call.demoCall.title}`
                 : "Call"}
           </h2>
-          <span className={`status-pill status-pill--${call.status}`}>
+          <Chip tone={call.status === "listening" ? "accent" : "neutral"}>
             {STATUS_TEXT[call.status]}
-          </span>
+          </Chip>
         </div>
         {call.mode === "phone" ? (
           <p className="muted">
@@ -70,11 +72,7 @@ export function CallScreen() {
             Start listening
           </Button>
         )}
-        {call.error && (
-          <p className="call-screen__error" role="alert">
-            {call.error}
-          </p>
-        )}
+        {call.error && <Alert tone="error">{call.error}</Alert>}
         {call.spokenWarning && (
           <p className="spoken-warning" lang={language} dir={textDirection(language)}>
             <strong lang="en" dir="ltr">

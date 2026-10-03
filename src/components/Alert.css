@@ -1,0 +1,22 @@
+.alert {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border-inline-start: var(--border-accent) solid currentColor;
+  font-weight: var(--weight-medium);
+}
+
+.alert--error {
+  background: var(--color-high-background);
+  color: var(--color-high-text);
+}
+
+.alert--success {
+  background: var(--color-low-background);
+  color: var(--color-low-text);
+}
+
+.alert--info {
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+  border-inline-start-color: var(--color-accent);
+}

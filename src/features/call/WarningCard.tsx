@@ -1,4 +1,5 @@
 import { Card } from "../../components/Card";
+import { ChipList } from "../../components/Chip";
 import { RiskBadge } from "../../components/RiskBadge";
 import { FLAG_LABELS, ruleReason, textDirection } from "../../lib/flagText";
 import type { Assessment } from "../../lib/fusion";
@@ -37,13 +38,7 @@ export function WarningCard({ assessment, llmStatus, language }: WarningCardProp
           English: {english}
         </p>
       )}
-      {assessment.flags.length > 0 && (
-        <ul className="warning__flags" aria-label="Warning signs">
-          {assessment.flags.map((f) => (
-            <li key={f}>{FLAG_LABELS[f]}</li>
-          ))}
-        </ul>
-      )}
+      <ChipList label="Warning signs" items={assessment.flags.map((f) => FLAG_LABELS[f])} />
       {note && <p className="muted small">{note}</p>}
     </Card>
   );

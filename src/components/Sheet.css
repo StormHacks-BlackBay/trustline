@@ -20,3 +20,13 @@
     border-radius: var(--radius-md);
   }
 }
+
+.sheet__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.sheet__actions > * {
+  flex: 1 1 12rem;
+}
