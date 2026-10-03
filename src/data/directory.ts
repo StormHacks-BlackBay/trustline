@@ -45,7 +45,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "service-canada",
     organization: "Service Canada",
-    aliases: ["service canada", "social insurance", "sin number"],
+    aliases: ["service canada"],
     category: "government",
     phone: "1-800-622-6232",
     url: "https://www.canada.ca/en/employment-social-development/corporate/contact.html",
@@ -55,7 +55,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "police",
     organization: "Police (RCMP or local)",
-    aliases: ["rcmp", "police", "royal canadian mounted police", "officer", "constable"],
+    aliases: ["rcmp", "police department", "police service", "royal canadian mounted police"],
     category: "government",
     phone: null,
     url: "https://www.rcmp-grc.gc.ca/en/contact-us",
@@ -121,6 +121,16 @@ export const DIRECTORY: DirectoryEntry[] = [
     url: "https://example.org",
     guidance:
       "Call the number on the back of your card. Your credit union will never ask for a one-time code.",
+  },
+  {
+    id: "your-bank",
+    organization: "Your bank",
+    aliases: ["your bank", "the bank", "bank's security", "bank security", "fraud department"],
+    category: "bank",
+    phone: null,
+    url: "https://www.canada.ca/en/financial-consumer-agency/services/banking/fraud-scams.html",
+    guidance:
+      "Call the number on the back of your card. Your bank will never ask for a one-time code.",
   },
   {
     id: "cafc",
