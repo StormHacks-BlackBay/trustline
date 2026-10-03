@@ -1,4 +1,4 @@
-import { FLAG_REASONS_EN, leadFlag } from "../../lib/flagText";
+import { ruleReason } from "../../lib/flagText";
 import type { Segment } from "../../lib/transcript";
 import type { LanguageCode } from "../../lib/types";
 import { RiskAnnouncer } from "./RiskAnnouncer";
@@ -15,13 +15,14 @@ interface CallAnalysisProps {
 /** Everything that depends on one call. Mounted with key={callNumber} so it resets per call. */
 export function CallAnalysis({ segments, partial, language }: CallAnalysisProps) {
   const { assessment, llmStatus } = useRiskEngine(segments, language);
-  const lead = leadFlag(assessment.flags);
-  const reason = assessment.explanationEnglish ?? (lead ? FLAG_REASONS_EN[lead] : "");
+  const reason = assessment.explanation ?? ruleReason(assessment.flags, language);
 
   return (
     <>
-      <RiskAnnouncer risk={assessment.risk} reason={reason} />
-      {segments.length > 0 && <WarningCard assessment={assessment} llmStatus={llmStatus} />}
+      <RiskAnnouncer risk={assessment.risk} reason={reason} language={language} />
+      {segments.length > 0 && (
+        <WarningCard assessment={assessment} llmStatus={llmStatus} language={language} />
+      )}
       <TranscriptView segments={segments} partial={partial} evidence={assessment.evidence} />
     </>
   );

@@ -1,13 +1,15 @@
 import { Card } from "../../components/Card";
 import { RiskBadge } from "../../components/RiskBadge";
-import { FLAG_LABELS, FLAG_REASONS_EN, leadFlag } from "../../lib/flagText";
+import { FLAG_LABELS, ruleReason, textDirection } from "../../lib/flagText";
 import type { Assessment } from "../../lib/fusion";
+import type { LanguageCode } from "../../lib/types";
 import type { LlmStatus } from "./useRiskEngine";
 import "./WarningCard.css";
 
 interface WarningCardProps {
   assessment: Assessment;
   llmStatus: LlmStatus;
+  language: LanguageCode;
 }
 
 function contextNote(status: LlmStatus): string | null {
@@ -16,11 +18,9 @@ function contextNote(status: LlmStatus): string | null {
   return null;
 }
 
-export function WarningCard({ assessment, llmStatus }: WarningCardProps) {
-  const lead = leadFlag(assessment.flags);
-  const reason =
-    assessment.explanation ??
-    (lead ? FLAG_REASONS_EN[lead] : "Nothing in this call matches a known scam tactic so far.");
+export function WarningCard({ assessment, llmStatus, language }: WarningCardProps) {
+  const reason = assessment.explanation ?? ruleReason(assessment.flags, language);
+  const english = assessment.explanationEnglish ?? ruleReason(assessment.flags, "en");
   const note = contextNote(llmStatus);
 
   return (
@@ -29,7 +29,14 @@ export function WarningCard({ assessment, llmStatus }: WarningCardProps) {
         Call check
       </h2>
       <RiskBadge risk={assessment.risk} />
-      <p className="warning__reason">{reason}</p>
+      <p className="warning__reason" lang={language} dir={textDirection(language)}>
+        {reason}
+      </p>
+      {language !== "en" && (
+        <p className="muted small" lang="en">
+          English: {english}
+        </p>
+      )}
       {assessment.flags.length > 0 && (
         <ul className="warning__flags" aria-label="Warning signs">
           {assessment.flags.map((f) => (
