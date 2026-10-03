@@ -45,6 +45,8 @@ export type DirectoryCategory = "government" | "bank" | "reporting";
 export interface DirectoryEntry {
   id: string;
   organization: string;
+  /** How the organization is said aloud, e.g. "IRCC". */
+  shortName: string;
   aliases: string[];
   category: DirectoryCategory;
   /** Null for banks: the trusted number is the one printed on the user's own card. */

@@ -8,6 +8,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "ircc",
     organization: "Immigration, Refugees and Citizenship Canada (IRCC)",
+    shortName: "IRCC",
     aliases: [
       "ircc",
       "immigration canada",
@@ -26,6 +27,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "cra",
     organization: "Canada Revenue Agency (CRA)",
+    shortName: "the CRA",
     aliases: ["cra", "canada revenue agency", "revenue canada", "tax agency", "revenue agency"],
     category: "government",
     phone: "1-800-959-8281",
@@ -36,6 +38,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "cbsa",
     organization: "Canada Border Services Agency (CBSA)",
+    shortName: "the CBSA",
     aliases: ["cbsa", "canada border services", "border services", "border agency", "customs"],
     category: "government",
     phone: "1-800-461-9999",
@@ -45,6 +48,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "service-canada",
     organization: "Service Canada",
+    shortName: "Service Canada",
     aliases: ["service canada"],
     category: "government",
     phone: "1-800-622-6232",
@@ -55,6 +59,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "police",
     organization: "Police (RCMP or local)",
+    shortName: "the police",
     aliases: ["rcmp", "police department", "police service", "royal canadian mounted police"],
     category: "government",
     phone: null,
@@ -65,6 +70,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "rbc",
     organization: "RBC Royal Bank",
+    shortName: "RBC",
     aliases: ["rbc", "royal bank"],
     category: "bank",
     phone: null,
@@ -75,6 +81,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "td",
     organization: "TD Bank",
+    shortName: "TD",
     aliases: ["td", "td bank", "toronto dominion"],
     category: "bank",
     phone: null,
@@ -85,6 +92,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "scotiabank",
     organization: "Scotiabank",
+    shortName: "Scotiabank",
     aliases: ["scotiabank", "scotia"],
     category: "bank",
     phone: null,
@@ -95,6 +103,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "bmo",
     organization: "BMO Bank of Montreal",
+    shortName: "BMO",
     aliases: ["bmo", "bank of montreal"],
     category: "bank",
     phone: null,
@@ -105,6 +114,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "cibc",
     organization: "CIBC",
+    shortName: "CIBC",
     aliases: ["cibc", "canadian imperial bank"],
     category: "bank",
     phone: null,
@@ -115,6 +125,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "demo-credit-union",
     organization: "Demo Credit Union",
+    shortName: "Demo Credit Union",
     aliases: ["demo credit union", "credit union"],
     category: "bank",
     phone: null,
@@ -125,6 +136,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "your-bank",
     organization: "Your bank",
+    shortName: "your bank",
     aliases: ["your bank", "the bank", "bank's security", "bank security", "fraud department"],
     category: "bank",
     phone: null,
@@ -135,6 +147,7 @@ export const DIRECTORY: DirectoryEntry[] = [
   {
     id: "cafc",
     organization: "Canadian Anti-Fraud Centre",
+    shortName: "the Canadian Anti-Fraud Centre",
     aliases: ["anti-fraud centre", "anti fraud centre", "cafc"],
     category: "reporting",
     phone: "1-888-495-8501",

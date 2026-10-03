@@ -1,5 +1,6 @@
 import type { WebSocket } from "ws";
 import { scoreWithClaude, type ScoreOutcome } from "../api/_claude";
+import { findOrganization } from "../src/lib/directory";
 import { ruleReason } from "../src/lib/flagText";
 import { fuse, type Assessment } from "../src/lib/fusion";
 import { spokenWarning } from "../src/lib/i18n/spoken";
@@ -74,7 +75,9 @@ export class AnalysingCallSession extends CallSession {
     if (this.warned) return;
     this.warned = true;
     const reason = assessment.explanation ?? ruleReason(assessment.flags, language);
-    const text = spokenWarning(language, reason);
+    const transcript = this.segments.map((s) => s.text).join("\n");
+    const organization = findOrganization(transcript, assessment.claimedOrg);
+    const text = spokenWarning(language, reason, organization);
 
     let spoken = false;
     const { speaker } = this.analysis;

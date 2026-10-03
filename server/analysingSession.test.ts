@@ -66,6 +66,7 @@ describe("AnalysingCallSession", () => {
     expect(media).toHaveLength(2); // 12000 bytes in 8000 byte chunks
     expect(synthesized).toHaveLength(1);
     expect(synthesized[0]).toContain("gift cards");
+    expect(synthesized[0]).toContain("call the CRA yourself at 1 800 959 8281");
     const warning = events.find((e) => e.type === "warning");
     expect(warning).toMatchObject({ risk: "high", spoken: true });
     call.close();
