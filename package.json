@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "eval": "tsx eval/run.ts",
-    "db:seed-sql": "tsx scripts/generate-seed.ts"
+    "db:seed-sql": "tsx scripts/generate-seed.ts",
+    "demo:agents": "tsx scripts/create-demo-agents.ts"
   },
   "engines": {
     "node": ">=20"
