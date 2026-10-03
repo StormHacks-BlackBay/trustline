@@ -4,6 +4,7 @@ import { PARTNERS } from "../../data/partners";
 import { readStored, writeStored } from "../../lib/storage";
 import { store } from "../../lib/store";
 import { IncidentCard } from "./IncidentCard";
+import { PublishAdvisory } from "./PublishAdvisory";
 import { usePartnerIncidents } from "./usePartnerIncidents";
 import "./PartnerDashboard.css";
 
@@ -64,7 +65,11 @@ export function PartnerDashboard() {
         <ol className="dashboard__list">
           {incidents.map((incident) => (
             <li key={incident.id}>
-              <IncidentCard incident={incident} isNew={incident.id === latestId} />
+              <IncidentCard
+                incident={incident}
+                isNew={incident.id === latestId}
+                actions={partner && <PublishAdvisory incident={incident} publisher={partner} />}
+              />
             </li>
           ))}
         </ol>

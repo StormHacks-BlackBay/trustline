@@ -3,6 +3,7 @@ import { Card } from "../../components/Card";
 import { Link } from "../../components/Link";
 import { DEMO_CALLS } from "../../data/demoCalls";
 import { CallerSettings } from "./CallerSettings";
+import { AdvisoryBanner } from "./AdvisoryBanner";
 import { CallAnalysis } from "./CallAnalysis";
 import { useCallSource } from "./useCallSource";
 import { useCaller } from "./useCaller";
@@ -27,6 +28,8 @@ export function CallScreen() {
         <h1>TrustLine</h1>
         <p className="muted">Put the call on speaker and start listening.</p>
       </header>
+
+      <AdvisoryBanner />
 
       <CallerSettings
         user={user}
