@@ -24,15 +24,12 @@ async function handleVoice(req: IncomingMessage, res: ServerResponse, config: Se
   send(res, 200, connectStreamTwiml(streamUrl, from), "text/xml");
 }
 
-export type SessionFactory = (
-  ws: ConstructorParameters<typeof CallSession>[0],
-  deps: SessionDeps,
-) => unknown;
+type Socket = ConstructorParameters<typeof CallSession>[0];
 
 /** HTTP routes plus the Twilio media WebSocket. */
-export function createCallServer(
-  deps: SessionDeps,
-  createSession: SessionFactory = (ws, d) => new CallSession(ws, d),
+export function createCallServer<D extends SessionDeps>(
+  deps: D,
+  createSession: (ws: Socket, deps: D) => unknown = (ws, d) => new CallSession(ws, d),
 ): Server {
   const { config } = deps;
   const server = createServer((req, res) => {
