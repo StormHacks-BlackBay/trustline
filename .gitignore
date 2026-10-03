@@ -1,0 +1,41 @@
+# Operating System
+.DS_Store
+Thumbs.db
+
+# IDE & Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Dependencies
+node_modules/
+
+# Build Artifacts
+dist/
+.vercel/
+*.tsbuildinfo
+
+# Security & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+.netrc
+
+# Supabase Local
+supabase/.branches/
+supabase/.temp/
+
+# Logs & Local Data
+*.log
+npm-debug.log*
+*.sqlite
+*.db
+
+# Testing & Evaluation Output
+coverage/
+eval/results/
+
+# Demo Recordings (large files, keep out of git)
+demo/recordings/*.wav
+demo/recordings/*.mp3
