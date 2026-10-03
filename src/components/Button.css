@@ -1,0 +1,35 @@
+.button {
+  min-height: var(--touch);
+  min-width: var(--touch);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius);
+  border: 2px solid var(--color-accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.button--primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.button--secondary {
+  background: var(--color-surface);
+  color: var(--color-accent);
+}
+
+.button--danger {
+  background: var(--color-high-text);
+  border-color: var(--color-high-text);
+  color: var(--color-high-background);
+}
+
+.button--full {
+  width: 100%;
+}

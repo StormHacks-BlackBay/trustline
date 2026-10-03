@@ -1,0 +1,23 @@
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.risk-badge--low {
+  background: var(--color-low-background);
+  color: var(--color-low-text);
+}
+
+.risk-badge--medium {
+  background: var(--color-medium-background);
+  color: var(--color-medium-text);
+}
+
+.risk-badge--high {
+  background: var(--color-high-background);
+  color: var(--color-high-text);
+}
