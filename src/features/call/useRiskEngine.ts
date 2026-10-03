@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ApiError } from "../../lib/api";
+import { fuse } from "../../lib/fusion";
 import { runRules } from "../../lib/rules";
 import type { RiskAssessment } from "../../lib/schemas";
 import { scoreTranscript } from "../../lib/scoring";
@@ -57,5 +58,12 @@ export function useRiskEngine(segments: Segment[], language: LanguageCode) {
   else if (failedCount === segments.length) llmStatus = "unavailable";
   else llmStatus = "pending";
 
-  return { transcript, rules, llm, llmStatus };
+  // An explanation in another language is stale after the listener switches language.
+  const usableLlm = llm && llm.language === language ? llm : null;
+  const assessment = useMemo(
+    () => fuse({ transcript, rules, llm: usableLlm }),
+    [transcript, rules, usableLlm],
+  );
+
+  return { transcript, rules, llm, llmStatus, assessment };
 }
