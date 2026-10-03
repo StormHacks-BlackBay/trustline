@@ -30,8 +30,11 @@ function PrimaryAction({ organization }: { organization: DirectoryEntry | null }
   if (organization?.phone) {
     return (
       <ButtonLink href={telHref(organization.phone)}>
-        Hang up and call {organization.shortName} at{" "}
-        <span className="nowrap">{organization.phone}</span>
+        {/* One text run, so the button's flex gap cannot split the sentence from the number. */}
+        <span>
+          Hang up and call {organization.shortName} at{" "}
+          <span className="nowrap">{organization.phone}</span>
+        </span>
       </ButtonLink>
     );
   }
