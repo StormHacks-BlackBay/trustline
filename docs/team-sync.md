@@ -18,6 +18,11 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: API setup plan revised for Gemini (Rishon)
+
+- **What changed:** `docs/shared-plans/TrustLine-Secure-API-Setup-Plan.md` now describes Gemini instead of Claude Haiku 4.5: creating a free-tier key in AI Studio with no billing account, restricting it to the Generative Language API, `GEMINI_API_KEY` / `GEMINI_MODEL`, free-tier data use, and $0 cost capped by rate limits.
+- **What the other person needs to do:** follow section 5 of the plan if you need your own key. Keys still go only in local `.env`, Vercel and the call server host, never in the repo.
+
 ### 2026-10-03: Risk scoring moved from Claude to the Gemini API free tier (Rishon)
 
 - **What changed:** `api/_claude.ts` was replaced by `api/_gemini.ts` (`scoreTranscript()`), which calls Gemini `generateContent` over REST with a response schema and validates the result with Zod. `api/score.ts`, `server/analysingSession.ts`, `server/index.ts` and `eval/run.ts` use it. `@anthropic-ai/sdk` was removed. README, PRIVACY, SUBMISSION and `.env.example` were updated.
