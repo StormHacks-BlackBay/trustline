@@ -18,6 +18,14 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Supabase project live with demo access (Ariel)
+
+- **What changed:** created Supabase project `trustline-stormhacks` (ref `tixwegxffiuouvrjavra`, `us-east-1`, Free). Added `supabase/config.toml` (Supabase CLI, linked locally) and `supabase/migrations/0003_demo_anon_grants.sql`. Applied migrations `0001` to `0003` and the seed. Details are in `CLAUDE-SHARED.md` under "Database".
+- **Why:** reports and advisories need to sync across separate devices for the demo.
+- **What the other person needs to do:** to use Supabase locally, add `VITE_SUPABASE_URL=https://tixwegxffiuouvrjavra.supabase.co` and `VITE_SUPABASE_ANON_KEY` (the publishable key from Supabase, Settings, API Keys) to your `.env`. To run migrations yourself, ask Ariel for dashboard access, then `supabase login` and `supabase link --project-ref tixwegxffiuouvrjavra`. Add the same two variables in Vercel once the site is deployed.
+- **Verified:** dry run, then `supabase db push --include-seed`. Through the public API: partners and all 13 directory entries readable, incident insert works, delete and update refused. Realtime is enabled for `incidents` and `advisories`, and RLS is on for all four tables. In the app, with three isolated browser profiles: a shared report reached the partner dashboard in 105 ms and the advisory reached a credit union member in 731 ms. Test rows were deleted afterwards; the database starts empty.
+- **Open questions:** the anonymous demo access should be replaced by the partner sign-in (Supabase guide section 5) before any public launch.
+
 ### 2026-10-03: Rishon owns the Vercel project (Rishon)
 
 - **What changed:** the Vercel deployment guide and `CLAUDE-SHARED.md` now name Rishon as the Vercel project owner (they previously assumed Ariel). The guide's CLI step now uses `npx vercel@latest` or Homebrew instead of a global npm install.

@@ -40,6 +40,15 @@ Rules for assistants:
 
 **Setup plan:** `docs/shared-plans/TrustLine-Secure-API-Setup-Plan.md` has been revised for Gemini (key creation, free-tier limits, env vars, costs).
 
+### Database: Supabase project `trustline-stormhacks` (demo access, no sign-in)
+
+- Project ref `tixwegxffiuouvrjavra`, region `us-east-1`, Free plan. URL `https://tixwegxffiuouvrjavra.supabase.co`.
+- Created with **Enable Data API** on, **Automatically expose new tables** off and **Enable automatic RLS** on. Because tables are not exposed automatically, every table the browser uses needs an explicit `grant` in a migration.
+- Migrations `0001` to `0003` and `supabase/seed.sql` are applied. `0003_demo_anon_grants.sql` grants the `anon` role only what `src/lib/store/supabaseStore.ts` uses: read partners and directory, read and insert incidents, read and insert advisories. Updates and deletes are refused.
+- This is demo access: anyone with the site's public key can read reports and publish advisories. Use fictional demo calls only. The partner sign-in in `docs/shared-plans/Supabase-Setup-Guide.md` section 5 replaces it; renumber that migration to `0004` because `0003` is taken.
+- Browser env vars: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (holds the `sb_publishable_...` key, which is public by design). Never put the database password, a `sb_secret_...` key or `service_role` key in any `VITE_` variable.
+- The repo is linked with the Supabase CLI (`supabase/config.toml`). Apply new migrations with `supabase db push`; preview first with `supabase db push --dry-run`.
+
 ## Project conventions (quick reference)
 
 Full details are in `README.md`, `PRIVACY.md`, `ACCESSIBILITY.md` and `DESIGN.md`.
