@@ -4,10 +4,11 @@ import { Logo } from "./Logo";
 import "./AppShell.css";
 
 const NAV = [
-  { href: "/", label: "Call check" },
-  { href: "/check", label: "Message check" },
+  { href: "/", label: "Home" },
+  { href: "/check", label: "Check a message" },
   { href: "/recover", label: "Already paid?" },
-  { href: "/partner", label: "Partner dashboard" },
+  { href: "/live", label: "Live call view" },
+  { href: "/partner", label: "For organizations" },
 ];
 
 interface AppShellProps {
@@ -18,13 +19,14 @@ interface AppShellProps {
 
 export function AppShell({ path, title, children }: AppShellProps) {
   useEffect(() => {
-    document.title = `${title} · TrustLine`;
+    document.title = title === "TrustLine" ? "TrustLine" : `${title} · TrustLine`;
   }, [title]);
 
-  // The call check is the home page and also shows for any path no other page claims.
+  // The home page also shows for any path no other page claims.
   const current = (href: string) =>
     href === "/"
-      ? !NAV.some((item) => item.href !== "/" && path.startsWith(item.href))
+      ? !NAV.some((item) => item.href !== "/" && path.startsWith(item.href)) &&
+        !path.startsWith("/after-call")
       : path.startsWith(href);
 
   return (

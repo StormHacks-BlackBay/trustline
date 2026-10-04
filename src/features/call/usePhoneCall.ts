@@ -19,6 +19,8 @@ export function usePhoneCall(userId: string, language: LanguageCode, onCallStart
   const [segments, setSegments] = useState<Segment[]>([]);
   const [partial, setPartial] = useState("");
   const [warning, setWarning] = useState<SpokenWarning | null>(null);
+  /** Saved summary of the last call, for the after-call page. */
+  const [summaryId, setSummaryId] = useState<string | null>(null);
   const onStarted = useRef(onCallStarted);
 
   useEffect(() => {
@@ -37,6 +39,7 @@ export function usePhoneCall(userId: string, language: LanguageCode, onCallStart
         setSegments([]);
         setPartial("");
         setWarning(null);
+        setSummaryId(null);
         setStatus("listening");
         onStarted.current();
         return;
@@ -52,6 +55,7 @@ export function usePhoneCall(userId: string, language: LanguageCode, onCallStart
         );
       }
       if (event.type === "warning") setWarning({ text: event.text, spoken: event.spoken });
+      if (event.type === "call_summary") setSummaryId(event.summaryId);
       if (event.type === "call_ended") {
         setPartial("");
         setStatus("ended");
@@ -71,5 +75,5 @@ export function usePhoneCall(userId: string, language: LanguageCode, onCallStart
     return () => source.close();
   }, [userId, language]);
 
-  return { connected, status, segments, partial, warning };
+  return { connected, status, segments, partial, warning, summaryId };
 }

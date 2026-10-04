@@ -2,7 +2,10 @@ import { Alert } from "../../components/Alert";
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
 import { Chip } from "../../components/Chip";
+import { ButtonLink } from "../../components/ButtonLink";
 import { DEMO_CALLS } from "../../data/demoCalls";
+import { afterCallPath } from "../../lib/callSummary";
+import { navigate } from "../../lib/router";
 import { textDirection } from "../../lib/flagText";
 import { AddTrustLine } from "./AddTrustLine";
 import { AdvisoryBanner } from "./AdvisoryBanner";
@@ -84,9 +87,10 @@ export function CallScreen() {
   return (
     <div className="stack call-screen">
       <header className="page-header">
-        <h1>Call check</h1>
+        <h1>Live call view</h1>
         <p className="page-header__lead">
-          Add TrustLine to a suspicious call, or listen to a speakerphone call on another device.
+          Follow a call TrustLine has been added to as it happens, listen to a speakerphone call on
+          another device, or play a scripted demo call.
         </p>
       </header>
 
@@ -117,6 +121,18 @@ export function CallScreen() {
                 />
                 <div className="call-control">{control}</div>
                 {call.error && <Alert tone="error">{call.error}</Alert>}
+                {call.summaryId && (
+                  <ButtonLink
+                    variant="secondary"
+                    href={afterCallPath(call.summaryId)}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigate(afterCallPath(call.summaryId ?? ""));
+                    }}
+                  >
+                    Open the call summary
+                  </ButtonLink>
+                )}
               </Card>
               {call.spokenWarning && (
                 <Alert tone="info">

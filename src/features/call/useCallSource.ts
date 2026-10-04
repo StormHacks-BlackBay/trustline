@@ -56,6 +56,8 @@ export function useCallSource(userId: string, language: LanguageCode) {
     setReadAloud: replay.setReadAloud,
     phoneConnected: phone.connected,
     spokenWarning: mode === "phone" ? phone.warning : null,
+    /** The after-call summary of the last phone call, once it has ended. */
+    summaryId: mode === "phone" && phone.status === "ended" ? phone.summaryId : null,
     /** Increments whenever a new call starts, so per-call state can reset. */
     callNumber,
     startLive,
