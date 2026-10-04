@@ -1,7 +1,7 @@
 import type { AddressInfo } from "node:net";
 import { DEMO_CALLS } from "../src/data/demoCalls";
 import { AnalysingCallSession, type AnalysisDeps } from "../server/analysingSession";
-import { createCallServer } from "../server/app";
+import { createCallServer, mediaStreamUrl } from "../server/app";
 import { loadConfig, userForCaller } from "../server/config";
 import { EventHub } from "../server/hub";
 import { LanguagePreferences } from "../server/preferences";
@@ -85,7 +85,11 @@ hub.subscribe(userId, (event) => {
   if (event.type === "warning")
     console.log(`  TrustLine ${event.spoken ? "said" : "warned (silent)"}: ${event.text}`);
 });
-const call = await fakeTwilioStream(server, from);
+// Sign the stream like Twilio, so the simulator exercises the same signature check as a real call.
+const signing = config.twilioAuthToken
+  ? { authToken: config.twilioAuthToken, mediaUrl: mediaStreamUrl(config) }
+  : undefined;
+const call = await fakeTwilioStream(server, from, signing);
 const totalMs =
   1500 + demo.lines.reduce((ms, l) => ms + l.split(" ").length * WORD_MS + LINE_PAUSE_MS, 0);
 await sleep(totalMs + 3000);

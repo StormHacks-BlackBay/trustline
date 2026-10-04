@@ -1,4 +1,5 @@
 import type { AddressInfo } from "node:net";
+import twilio from "twilio";
 import WebSocket from "ws";
 import type { Transcriber, TranscriberFactory, TranscriberHandlers } from "./transcriber";
 
@@ -27,16 +28,35 @@ export function fakeTranscriber() {
   };
 }
 
-/** Plays the Twilio side of a media stream against the server. */
+export interface StreamSigning {
+  authToken: string;
+  /** The wss:// URL the server expects, as written in its TwiML. */
+  mediaUrl: string;
+}
+
+/** Plays the Twilio side of a media stream against the server, signing it like Twilio if asked. */
 export async function fakeTwilioStream(
   server: { address: () => AddressInfo | string | null },
   from: string,
+  signing?: StreamSigning,
 ) {
   const { port } = server.address() as AddressInfo;
-  const ws = new WebSocket(`ws://127.0.0.1:${port}/twilio/media`);
+  const headers = signing
+    ? {
+        "x-twilio-signature": twilio.getExpectedTwilioSignature(
+          signing.authToken,
+          signing.mediaUrl,
+          {},
+        ),
+      }
+    : undefined;
+  const ws = new WebSocket(`ws://127.0.0.1:${port}/twilio/media`, { headers });
   const outbound: unknown[] = [];
   ws.on("message", (raw) => outbound.push(JSON.parse(raw.toString())));
-  await new Promise((resolve) => ws.once("open", resolve));
+  await new Promise((resolve, reject) => {
+    ws.once("open", resolve);
+    ws.once("error", reject);
+  });
   const streamSid = "MZ-test";
   ws.send(JSON.stringify({ event: "connected" }));
   ws.send(

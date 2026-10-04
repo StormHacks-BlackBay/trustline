@@ -11,6 +11,8 @@ export interface ServerConfig {
   /** Caller phone number (E.164) to demo user id. */
   phoneLinks: Record<string, string>;
   defaultUserId: string;
+  /** Calls are cut off after this long, so a forgotten call cannot keep spending credit. */
+  maxCallMs: number;
 }
 
 function parsePhoneLinks(raw: string | undefined): Record<string, string> {
@@ -39,6 +41,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     appOrigin: (read("APP_ORIGIN") ?? "*").replace(/\/$/, ""),
     phoneLinks: parsePhoneLinks(read("PHONE_LINKS")),
     defaultUserId: read("DEFAULT_USER_ID") ?? DEMO_USERS[0]?.id ?? "harpreet",
+    maxCallMs: Number(read("MAX_CALL_MINUTES") ?? 10) * 60_000,
   };
 }
 

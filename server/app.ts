@@ -20,9 +20,33 @@ async function handleVoice(req: IncomingMessage, res: ServerResponse, config: Se
   }
 
   const from = params.From ?? null;
-  const streamUrl = `${config.publicUrl.replace(/^http/, "ws")}/twilio/media`;
+  const streamUrl = mediaStreamUrl(config);
   console.log(`Incoming call for user ${userForCaller(config, from)}`);
   send(res, 200, connectStreamTwiml(streamUrl, from), "text/xml");
+}
+
+/** The exact wss:// address given to Twilio in the TwiML, which Twilio also signs. */
+export const mediaStreamUrl = (config: ServerConfig) =>
+  `${config.publicUrl.replace(/^http/, "ws")}/twilio/media`;
+
+/**
+ * Twilio signs the media stream's WebSocket handshake like a webhook, using the wss:// URL from
+ * the TwiML and no parameters. Without this check, anyone who found the server could stream audio
+ * and spend transcription, scoring and speech credit.
+ */
+function mediaHandshakeIsTrusted(req: IncomingMessage, config: ServerConfig): boolean {
+  if (!config.twilioAuthToken) return true;
+  const signature = req.headers["x-twilio-signature"];
+  if (typeof signature !== "string") return false;
+  const query = (req.url ?? "").includes("?")
+    ? (req.url ?? "").slice((req.url ?? "").indexOf("?"))
+    : "";
+  return twilio.validateRequest(
+    config.twilioAuthToken,
+    signature,
+    `${mediaStreamUrl(config)}${query}`,
+    {},
+  );
 }
 
 type Socket = ConstructorParameters<typeof CallSession>[0];
@@ -50,6 +74,12 @@ export function createCallServer<D extends SessionDeps>(
   const wss = new WebSocketServer({ noServer: true });
   server.on("upgrade", (req, socket, head) => {
     if ((req.url ?? "").split("?")[0] !== "/twilio/media") {
+      socket.destroy();
+      return;
+    }
+    if (!mediaHandshakeIsTrusted(req, config)) {
+      console.warn("Rejected a media stream without a valid Twilio signature");
+      socket.write("HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n");
       socket.destroy();
       return;
     }

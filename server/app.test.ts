@@ -2,7 +2,7 @@ import type { AddressInfo } from "node:net";
 import twilio from "twilio";
 import { afterEach, describe, expect, it } from "vitest";
 import type { CallEvent } from "../src/lib/callEvents";
-import { createCallServer } from "./app";
+import { createCallServer, mediaStreamUrl } from "./app";
 import { loadConfig, userForCaller } from "./config";
 import { EventHub } from "./hub";
 import { LanguagePreferences } from "./preferences";
@@ -169,5 +169,50 @@ describe("GET /events", () => {
     const { base } = await start();
     const response = await fetch(`${base}/events?user=nobody`);
     expect(response.status).toBe(400);
+  });
+});
+
+describe("media stream security", () => {
+  it("refuses an unsigned media stream when an auth token is set", async () => {
+    const { server, transcriber } = await start({ TWILIO_AUTH_TOKEN: "secret" });
+    await expect(fakeTwilioStream(server, "+16045550100")).rejects.toThrow(/403/);
+    expect(transcriber.ready()).toBe(false);
+  });
+
+  it("refuses a stream signed with the wrong token", async () => {
+    const { server, config } = await start({
+      TWILIO_AUTH_TOKEN: "secret",
+      PUBLIC_URL: "https://calls.example.org",
+    });
+    await expect(
+      fakeTwilioStream(server, "+16045550100", {
+        authToken: "wrong",
+        mediaUrl: mediaStreamUrl(config),
+      }),
+    ).rejects.toThrow(/403/);
+  });
+
+  it("accepts a stream Twilio signed for the wss:// URL", async () => {
+    const { server, config, transcriber } = await start({
+      TWILIO_AUTH_TOKEN: "secret",
+      PUBLIC_URL: "https://calls.example.org",
+    });
+    expect(mediaStreamUrl(config)).toBe("wss://calls.example.org/twilio/media");
+    const call = await fakeTwilioStream(server, "+16045550100", {
+      authToken: "secret",
+      mediaUrl: mediaStreamUrl(config),
+    });
+    await waitFor(() => transcriber.ready());
+    call.close();
+  });
+
+  it("closes a call that runs past the length limit", async () => {
+    const { server, hub, transcriber } = await start({ MAX_CALL_MINUTES: "0.001" });
+    const events: string[] = [];
+    hub.subscribe("harpreet", (e) => events.push(e.type));
+    const call = await fakeTwilioStream(server, "+16045550100");
+    await waitFor(() => events.includes("call_ended"), 3000);
+    expect(transcriber.isClosed()).toBe(true);
+    call.close();
   });
 });

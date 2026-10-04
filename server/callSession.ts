@@ -29,6 +29,7 @@ export class CallSession {
   private transcriber: Transcriber | null = null;
   private pendingAudio: string[] = [];
   private ended = false;
+  private limit: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     protected readonly ws: WebSocket,
@@ -79,6 +80,11 @@ export class CallSession {
     this.streamSid = streamSid;
     this.callId = callSid;
     this.userId = userForCaller(this.deps.config, from);
+    this.limit = setTimeout(() => {
+      console.warn(`Call ${callSid} reached the length limit; closing the stream`);
+      this.ws.close();
+      this.end();
+    }, this.deps.config.maxCallMs);
     this.emit({ type: "call_started", callId: callSid, at: new Date().toISOString() });
 
     try {
@@ -116,6 +122,7 @@ export class CallSession {
   protected end(): void {
     if (this.ended) return;
     this.ended = true;
+    if (this.limit) clearTimeout(this.limit);
     this.transcriber?.close();
     if (this.userId) this.emit({ type: "call_ended", callId: this.callId });
     this.onEnd();
