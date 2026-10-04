@@ -1,3 +1,4 @@
+import { simulatorAudio } from "./simulatorAudio";
 import type { AddressInfo } from "node:net";
 import { DEMO_CALLS } from "../src/data/demoCalls";
 import { AnalysingCallSession, type AnalysisDeps } from "../server/analysingSession";
@@ -58,13 +59,14 @@ const scriptedTranscriber: TranscriberFactory = async ({ onPartial, onCommitted 
 const config = loadConfig({ ...process.env, PORT: process.env.PORT ?? "8787" });
 const hub = new EventHub();
 const elevenLabsKey = process.env.ELEVENLABS_API_KEY;
+const audio = elevenLabsKey ? simulatorAudio(elevenLabsSpeaker(elevenLabsKey)) : null;
 const server = createCallServer<AnalysisDeps>(
   {
     config,
     hub,
     languages: new LanguagePreferences(),
     createTranscriber: scriptedTranscriber,
-    speaker: elevenLabsKey ? elevenLabsSpeaker(elevenLabsKey) : null,
+    speaker: audio?.speaker ?? null,
   },
   (ws, deps) => new AnalysingCallSession(ws, deps),
 );
@@ -95,6 +97,7 @@ const totalMs =
 await sleep(totalMs + 3000);
 const spoken = call.outbound.filter((m) => (m as { event: string }).event === "media").length;
 console.log(`Sent ${spoken} audio chunks back into the call`);
+await audio?.finished();
 call.stop();
 await sleep(500);
 call.close();

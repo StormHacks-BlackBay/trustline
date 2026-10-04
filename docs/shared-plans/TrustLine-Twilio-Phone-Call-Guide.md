@@ -256,7 +256,9 @@ Twilio's **Monitor**, then **Logs**, then **Calls** (and the **Debugger**) show 
 
 ## Rehearsing without Twilio
 
-`npm run simulate:call -- ircc-scam` runs the real call server and plays the IRCC script as if it were a merged call, including the spoken warning if `ELEVENLABS_API_KEY` is set. Start it, then open the app with `VITE_CALL_SERVER_URL=http://localhost:8787`. Use it to rehearse the demo when the phones or the network are not cooperating.
+`npm run simulate:call -- ircc-scam` runs the real call server and plays the IRCC script as if it were a merged call, including the spoken warning if `ELEVENLABS_API_KEY` is set. On macOS the warning also plays through the laptop speakers. The simulator saves WAV and mu-law files under git-ignored `demo/recordings/` and reuses identical warnings across runs, so repeat playback does not spend more ElevenLabs credit. Set `SIMULATOR_PLAY_AUDIO=0` to save without playback. Other platforms can open the saved WAV manually. Set `GEMINI_API_KEY= ELEVENLABS_API_KEY= npm run simulate:call -- ircc-scam` for a free, silent rules-only rehearsal. Stop the live call server before running the simulator because both use port 8787.
+
+Start it, then open the app with `VITE_CALL_SERVER_URL=http://localhost:8787`. Use it to rehearse the demo when the phones or the network are not cooperating.
 
 ## After it works
 

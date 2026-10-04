@@ -18,6 +18,14 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Live Twilio number and audible simulator warnings (Ariel / Codex)
+
+- **What changed:** approved Individual Trust Hub profile verified through Twilio. Provisioned **+1 604-373-6537** (the earlier planned number was unavailable). Ariel owns the account. The local ignored `.env` links Ariel's phone to Harpreet and sets the new number, local call server, public tunnel and 10-minute cap. Existing verified caller IDs were preserved.
+- **Costs:** pricing API confirms US$1.15/month and US$0.0085/min incoming local calls. Media Streams adds US$0.0044/min per Twilio's Canada pricing page; ElevenLabs is separate. Only one number was bought, no outbound calls were placed, and no auto-recharge changes were made. Release the number after the event to stop future monthly rental.
+- **Simulator:** saves warning audio as WAV and mu-law under ignored `demo/recordings/`, plays it with macOS `afplay`, and caches identical text/language/voice/model across runs. `SIMULATOR_PLAY_AUDIO=0` disables playback. Gemini was disabled for the rehearsal; one Punjabi warning was synthesized.
+- **Verified:** `npm run check` passed (139 tests); public unsigned webhook returned 403, signed webhook returned valid TwiML, and the signed public WebSocket connected without starting paid transcription. Signed simulator produced the Punjabi IRCC warning and its audio file. A real handset call still needs testing; no claim of live phone transcription verification.
+- **What the other person needs to do:** pull main. Local app: `http://localhost:5173`, Harpreet selected. Call the new number from Ariel's linked phone; merge with the scripted demo call. The current quick tunnel and server depend on Ariel's laptop remaining awake. A new tunnel URL requires updating both local `PUBLIC_URL` and the number's POST `/twilio/voice` webhook. Hosted Vercel configuration was not changed.
+
 ### 2026-10-03: Demo transcript synced to the voice; abandoned Gemini calls cancelled (Rishon)
 
 - **What changed:**

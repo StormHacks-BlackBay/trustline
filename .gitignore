@@ -39,3 +39,6 @@ eval/results/
 # Demo Recordings (large files, keep out of git)
 demo/recordings/*.wav
 demo/recordings/*.mp3
+
+.local/
+demo/recordings/*.ulaw
