@@ -55,7 +55,13 @@ export async function GET(request: Request): Promise<Response> {
         },
       });
     }
-    console.error(`ElevenLabs text to speech error ${upstream.status} for voice ${voice}`);
+    const reason = await upstream
+      .json()
+      .then((body: { detail?: { status?: string } }) => body.detail?.status ?? "")
+      .catch(() => "");
+    console.error(
+      `ElevenLabs text to speech error ${upstream.status}${reason ? ` (${reason})` : ""} for voice ${voice}`,
+    );
     if (upstream.status === 401) return errorResponse("speech_not_configured", 503);
     if (upstream.status === 429) return errorResponse("speech_rate_limited", 429);
     // Anything else (for example a voice missing from the account): try the fallback voice.
