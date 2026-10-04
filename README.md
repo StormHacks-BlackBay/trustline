@@ -82,6 +82,7 @@ Microphone ──▶ Scribe v2 Realtime ──▶ committed segments
 - 🌐 **In-language explanations**: Warnings in English, Punjabi, Mandarin, Tagalog and Farsi, with right-to-left layout for Farsi
 - ☎️ **Verified next step**: Official contact channels instead of caller-supplied numbers
 - 🤝 **Partner advisories**: Consent-based, redacted reports shared across community organizations and banks
+- 🔊 **Spoken demo calls**: Demo calls are read aloud with a different ElevenLabs voice per caller (or the browser's voice without a key), with the transcript appearing in time with the speech. A checkbox turns it off
 - 📊 **Diagnostics**: Measured alert latency for the rules and LLM layers
 
 ## Getting Started 🚀
@@ -102,12 +103,12 @@ Free-tier limits are per model and shown in [AI Studio](https://aistudio.google.
 
 Open `http://localhost:5173` for the app and `http://localhost:5173/partner` for the partner dashboard.
 
-| Setting                                       | Without it                                                                                |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `ELEVENLABS_API_KEY`                          | Live listening is unavailable; demo calls still work                                      |
-| `GEMINI_API_KEY`                              | Basic mode: warnings come from the rules layer only                                       |
-| `GEMINI_MODEL`                                | Uses `gemini-3.5-flash-lite`                                                              |
-| `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` | Incidents and advisories are shared between tabs of one browser instead of across devices |
+| Setting                                       | Without it                                                                                                                    |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `ELEVENLABS_API_KEY`                          | Live listening is unavailable; demo calls still work and are read aloud by the browser's built-in voice instead of ElevenLabs |
+| `GEMINI_API_KEY`                              | Basic mode: warnings come from the rules layer only                                                                           |
+| `GEMINI_MODEL`                                | Uses `gemini-3.5-flash-lite`                                                                                                  |
+| `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` | Incidents and advisories are shared between tabs of one browser instead of across devices                                     |
 
 ### Phone calls (merge TrustLine into a call)
 

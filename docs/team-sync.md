@@ -18,6 +18,13 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Demo calls are read aloud (Rishon)
+
+- **What changed:** demo calls now speak each line, and the transcript words appear in time with the voice. New `api/demo-speech.ts` (GET) voices a single line of `DEMO_CALLS` with ElevenLabs text to speech. It only accepts lines that exist, checked with a hash from `src/lib/demoSpeech.ts`, and it returns cacheable mp3s, so Vercel's CDN serves repeat plays without calling ElevenLabs again. Each caller has its own stock voice, and there's a fallback voice. New `src/features/call/demoVoice.ts` plays the clips; without `ELEVENLABS_API_KEY` it falls back to the browser's speech synthesis, then to silent timing. `useReplayTranscript` gained `readAloud` / `setReadAloud`, saved in localStorage as `trustline.readDemoCallsAloud`, and the Demo calls card has a "Read demo calls aloud" checkbox, on by default. New optional env var `ELEVENLABS_DEMO_TTS_MODEL` (default `eleven_multilingual_v2`).
+- **Why:** the demos were text only; hearing the caller makes them more immersive for judges.
+- **What the other person needs to do:** nothing. If you change a demo line, its audio regenerates automatically because the hash in the URL changes. If you add a demo call, add its voice to `CALLER_VOICES` in `api/demo-speech.ts`, or it uses the fallback voice.
+- **Verified:** new unit tests for the route (`api/_demo-speech.test.ts`, underscore so Vercel doesn't deploy it) and the URL helper. Full `npm run check` ran in CI. Not yet heard against the live ElevenLabs API or on an iPhone.
+
 ### 2026-10-03: Gemini path verified against the live API (Ariel)
 
 - **What changed:** `eval/run.ts` now spaces Gemini requests (`EVAL_SPACING_MS`, default 4500 ms) and retries on 429 with backoff. Without this, the free tier rate-limited the eval after a few requests and it crashed. Updated the verification line in `CLAUDE-SHARED.md`.

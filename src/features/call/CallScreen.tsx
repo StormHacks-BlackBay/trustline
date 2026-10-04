@@ -55,6 +55,19 @@ export function CallScreen() {
           Scripted calls that run through the same detection as a real call.
         </p>
       </div>
+      <div className="read-aloud">
+        <input
+          id="read-aloud"
+          type="checkbox"
+          checked={call.readAloud}
+          onChange={(e) => call.setReadAloud(e.target.checked)}
+          aria-describedby="read-aloud-hint"
+        />
+        <label htmlFor="read-aloud">Read demo calls aloud</label>
+        <p id="read-aloud-hint" className="muted small read-aloud__hint">
+          Each caller has their own voice. Turn this off to read the transcript silently.
+        </p>
+      </div>
       <ul className="demo-calls">
         {DEMO_CALLS.map((demo) => (
           <li key={demo.id}>

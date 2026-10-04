@@ -51,6 +51,9 @@ export function useCallSource(userId: string, language: LanguageCode) {
     partial: source.partial,
     error: mode === "live" ? live.error : null,
     demoCall: mode === "replay" ? replay.call : null,
+    /** Whether demo calls are read aloud, and the switch for it. */
+    readAloud: replay.readAloud,
+    setReadAloud: replay.setReadAloud,
     phoneConnected: phone.connected,
     spokenWarning: mode === "phone" ? phone.warning : null,
     /** Increments whenever a new call starts, so per-call state can reset. */

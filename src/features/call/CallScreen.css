@@ -122,3 +122,31 @@
   flex-direction: column;
   gap: var(--space-2);
 }
+
+.read-aloud {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: var(--space-3);
+  row-gap: var(--space-1);
+}
+
+.read-aloud input {
+  inline-size: var(--space-6);
+  block-size: var(--space-6);
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+.read-aloud label {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--touch);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.read-aloud__hint {
+  grid-column: 2;
+  margin: 0;
+}
