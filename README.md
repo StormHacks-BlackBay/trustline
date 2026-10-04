@@ -114,6 +114,22 @@ Open `http://localhost:5173` for the app and `http://localhost:5173/partner` for
 
 ### Phone calls (merge TrustLine into a call)
 
+**StormHacks demo number: [+1 604-373-6537](tel:+16043736537).** This number is already provisioned; use it for the team demo.
+
+#### Use the number with the app
+
+1. On Ariel's laptop, open [the local app](http://localhost:5173), select **Harpreet**, and choose the warning language (for example, Punjabi).
+2. Wait until the call card says **“Ready: merged calls will appear on this screen.”** The app, call server, and tunnel must all be running.
+3. For a quick test, call **+1 604-373-6537** from Ariel's linked phone. You should hear “TrustLine is listening.” Speak a fictional demo script and watch for the transcript and warning in the app.
+4. For a merged-call demo, first call your teammate. On your phone, tap **Add Call**, dial **+1 604-373-6537**, then tap **Merge Calls**. Have your teammate read the scripted scam lines; keep the app open on the laptop to see the transcript and warning. Merge Calls depends on your carrier supporting conference calls.
+5. Hang up when finished. The server's call limit is 10 minutes.
+
+The current local setup maps Ariel's phone to Harpreet. To use another phone or demo user, update `PHONE_LINKS` in the server's ignored `.env` and restart the server. Keep the laptop awake: the demo number depends on its call server and Cloudflare tunnel. Restarting the tunnel can change its URL; update both `PUBLIC_URL` and Twilio's POST `/twilio/voice` webhook if that happens. The hosted app needs its own call-server configuration; use the local app for this setup.
+
+The number costs US$1.15/month, plus call and audio-service usage. Release it in Twilio after the event to stop monthly renewal. Automated connectivity checks passed; the real handset and merged-call flow still need a manual test. See the [Twilio phone-call guide](docs/shared-plans/TrustLine-Twilio-Phone-Call-Guide.md) for setup and troubleshooting.
+
+#### Set up a separate deployment
+
 1. Buy a phone number in the Twilio console.
 2. Deploy the call server with the `Dockerfile` on an always-on host such as Railway, Fly.io or Render. Set `ELEVENLABS_API_KEY`, `GEMINI_API_KEY`, `PUBLIC_URL` (the server's https URL), `TWILIO_AUTH_TOKEN`, `APP_ORIGIN` (the web app's URL) and `PHONE_LINKS` (which demo user each of your phones belongs to).
 3. In Twilio, set the number's "A call comes in" webhook to `POST https://<call server>/twilio/voice`.
