@@ -239,6 +239,7 @@ const FLAG_SITUATIONS: Partial<Record<FlagId, SituationId>> = {
   gift_card_payment: "gift_cards",
   crypto_payment: "crypto",
   wire_transfer: "money_transfer",
+  upfront_fee: "money_transfer",
   one_time_code: "codes_or_passwords",
   personal_info: "identity",
   remote_access: "device_access",

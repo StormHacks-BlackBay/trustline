@@ -9,6 +9,7 @@ export const FLAG_PRIORITY: FlagId[] = [
   "one_time_code",
   "remote_access",
   "wire_transfer",
+  "upfront_fee",
   "suspicious_link",
   "deportation_threat",
   "arrest_threat",

@@ -13,6 +13,7 @@ export const CALLER_VOICES: Record<string, string> = {
   "ircc-scam": "pNInz6obpgDQGcFmaJgB",
   "bank-alert": "EXAVITQu4vr4xnSDxMaL",
   "bank-ambiguous": "onwK4e9ZLuTAKqWW03F9",
+  "job-scam": "21m00Tcm4TlvDq8ikWAM",
 };
 /** Used if a caller's voice is unavailable on the account. Same stock voice as server/speaker.ts. */
 export const FALLBACK_VOICE = "JBFqnCBsd6RMkjVDRZzb";

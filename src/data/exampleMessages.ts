@@ -22,6 +22,11 @@ export const EXAMPLE_MESSAGES: ExampleMessage[] = [
     text: "Hi Mom, I dropped my phone, this is my new number. Can you send me $800 by e-transfer today? I'll explain later. Please don't tell Dad yet.",
   },
   {
+    id: "job-offer",
+    title: "Job offer text",
+    text: "Maple Staffing: You're hired for the warehouse job at $28/hr! To secure your spot, pay the $1,800 LMIA fee by e-transfer within the next 24 hours. Spots are limited.",
+  },
+  {
     id: "appointment",
     title: "Appointment reminder",
     text: "Reminder: your appointment at Service Canada is on Tuesday, October 6 at 10:30 a.m. Please bring your passport and proof of address.",

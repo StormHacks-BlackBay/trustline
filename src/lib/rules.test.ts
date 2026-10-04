@@ -106,3 +106,21 @@ describe("runRules on family secrecy", () => {
     expect(runRules("Do not tell your husband about this.").flags).toContain("secrecy");
   });
 });
+
+describe("runRules on job offer scams", () => {
+  it("rates the job offer demo call as high risk because of the LMIA fee and the deadline", () => {
+    const result = runRules(script("job-scam"));
+    expect(result.flags).toEqual(expect.arrayContaining(["upfront_fee", "urgency"]));
+    expect(result.risk).toBe("high");
+  });
+
+  it("flags fees for jobs and permits but not ordinary mentions of a job", () => {
+    expect(runRules("You need to pay for your work permit before you start.").flags).toContain(
+      "upfront_fee",
+    );
+    expect(runRules("There is a registration fee to hold the position.").flags).toContain(
+      "upfront_fee",
+    );
+    expect(runRules("Your shift at the warehouse starts on Monday.").flags).toEqual([]);
+  });
+});

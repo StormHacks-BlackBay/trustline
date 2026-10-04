@@ -23,6 +23,11 @@ const PATTERNS: Record<FlagId, RegExp[]> = {
   wire_transfer: [
     /\b(western union|moneygram|wire (the )?(money|funds|payment)|e-?transfer (it|the (money|funds|payment))|transfer (the |your )?(money|funds|savings) (to|into)|(safe|secure|protected) account)\b/gi,
   ],
+  upfront_fee: [
+    /\b(lmia|work permit|visa|job offer|employment|recruitment|placement|training|registration|processing|application|onboarding|uniform|equipment)\s+(fee|fees|deposit|charge)\b/gi,
+    /\bpay (for )?(your|the) (lmia|work permit|visa|training|uniform|equipment|job offer)\b/gi,
+    /\b(fee|deposit) (to|before you) (start|secure|confirm|hold|get) (the|your|this) (job|position|offer|spot|role)\b/gi,
+  ],
   one_time_code: [
     /\b(verification code|one[- ]time (code|passcode|password)|security code|six[- ]digit code|(the )?code (we|i) (just )?(sent|texted)|read (me )?the code|passcode|pin( number)?)\b/gi,
   ],
@@ -63,7 +68,12 @@ const HARD_FLAGS: FlagId[] = [
   "one_time_code",
   "remote_access",
 ];
-const REQUEST_FLAGS: FlagId[] = ["wire_transfer", "personal_info", "suspicious_link"];
+const REQUEST_FLAGS: FlagId[] = [
+  "wire_transfer",
+  "personal_info",
+  "suspicious_link",
+  "upfront_fee",
+];
 const PRESSURE_FLAGS: FlagId[] = ["urgency", "secrecy", "arrest_threat", "deportation_threat"];
 const THREAT_FLAGS: FlagId[] = ["arrest_threat", "deportation_threat"];
 

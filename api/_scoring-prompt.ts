@@ -5,6 +5,7 @@ const FLAGS = `Flags (use only these ids, and only when the transcript shows the
 - gift_card_payment: asks for payment with gift cards, prepaid cards or vouchers
 - crypto_payment: asks for payment in bitcoin or other cryptocurrency, or at a crypto ATM
 - wire_transfer: asks to wire or e-transfer money to a person or an unfamiliar account to "secure" or "verify" it
+- upfront_fee: asks the listener to pay a fee or deposit to get a job, job offer, LMIA or work permit (employers in Canada cannot charge workers for these)
 - one_time_code: asks the listener to read out a verification code, one-time passcode, PIN or password
 - personal_info: asks for a SIN, passport number, full card number or online banking login
 - remote_access: asks the listener to install an app or give control of their device or computer

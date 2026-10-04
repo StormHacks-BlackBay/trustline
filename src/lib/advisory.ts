@@ -5,6 +5,7 @@ const TACTICS: Record<FlagId, string> = {
   gift_card_payment: "asks for payment in gift cards",
   crypto_payment: "asks for payment in cryptocurrency",
   wire_transfer: "asks people to move money",
+  upfront_fee: "charges fees for jobs, LMIAs or work permits",
   one_time_code: "asks for verification codes or PINs",
   personal_info: "asks for personal details such as a SIN",
   remote_access: "asks to control phones or computers",

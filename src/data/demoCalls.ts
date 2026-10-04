@@ -49,4 +49,15 @@ export const DEMO_CALLS: DemoCall[] = [
       "Thank you. A specialist will call you back shortly to finish the review.",
     ],
   },
+  {
+    id: "job-scam",
+    title: "Job offer scam",
+    description: "A 'recruiter' offers a warehouse job but wants an LMIA fee first.",
+    lines: [
+      "Hi, this is Sarah from Maple Staffing. Congratulations, you have been selected for the warehouse position in Surrey at twenty-eight dollars an hour.",
+      "The employer will support your work permit, but first we need the LMIA processing fee of eighteen hundred dollars.",
+      "Once the fee is paid, we can confirm your start date for Monday.",
+      "You can pay by e-transfer. If we do not receive it within the next two hours, the position goes to the next candidate.",
+    ],
+  },
 ];

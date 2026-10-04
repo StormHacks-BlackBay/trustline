@@ -87,6 +87,12 @@ export const CASES: EvalCase[] = [
     ].join("\n"),
   },
   {
+    id: "job-lmia-fee",
+    label: "scam",
+    note: "Demo script: recruiter charges an LMIA fee",
+    transcript: demo("job-scam"),
+  },
+  {
     id: "job-crypto",
     label: "scam",
     note: "Job offer with crypto payment",

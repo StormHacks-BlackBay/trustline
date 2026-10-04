@@ -15,6 +15,7 @@ export const FLAG_IDS = [
   "gift_card_payment",
   "crypto_payment",
   "wire_transfer",
+  "upfront_fee",
   "one_time_code",
   "personal_info",
   "remote_access",

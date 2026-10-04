@@ -10,7 +10,7 @@ const example = (id: string) => {
 
 describe("example messages", () => {
   // In basic mode (no Gemini) the rules alone must still warn on the scam examples.
-  it.each(["cra-refund", "delivery-fee", "new-number"])("rules warn on %s", (id) => {
+  it.each(["cra-refund", "delivery-fee", "new-number", "job-offer"])("rules warn on %s", (id) => {
     expect(runRules(example(id)).risk).not.toBe("low");
   });
 
