@@ -1,17 +1,21 @@
 import { readError } from "./api";
-import { RiskAssessmentSchema, type RiskAssessment } from "./schemas";
+import { RiskAssessmentSchema, type RiskAssessment, type ScoreSource } from "./schemas";
 import type { LanguageCode } from "./types";
 
-/** Sends a transcript window to the scoring route. Throws ApiError when scoring is unavailable. */
+/**
+ * Sends a call transcript window or a pasted message to the scoring route. Throws ApiError when
+ * scoring is unavailable.
+ */
 export async function scoreTranscript(
   transcript: string,
   language: LanguageCode,
   signal: AbortSignal,
+  source: ScoreSource = "call",
 ): Promise<RiskAssessment> {
   const response = await fetch("/api/score", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ transcript, language }),
+    body: JSON.stringify({ transcript, language, source }),
     signal,
   });
   if (!response.ok) throw await readError(response);

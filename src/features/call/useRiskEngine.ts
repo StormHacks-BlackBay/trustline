@@ -3,7 +3,7 @@ import { ApiError } from "../../lib/api";
 import { fuse } from "../../lib/fusion";
 import { recordLatency } from "../../lib/metrics";
 import { runRules } from "../../lib/rules";
-import type { RiskAssessment } from "../../lib/schemas";
+import type { RiskAssessment, ScoreSource } from "../../lib/schemas";
 import { scoreTranscript } from "../../lib/scoring";
 import { recentWindow, type Segment } from "../../lib/transcript";
 import type { LanguageCode } from "../../lib/types";
@@ -27,7 +27,11 @@ let scoringConfigured = true;
  * segment. A newer segment cancels the in-flight LLM request, so a slow response can never
  * replace a fresher one. Mount it with a key per call so state resets between calls.
  */
-export function useRiskEngine(segments: Segment[], language: LanguageCode) {
+export function useRiskEngine(
+  segments: Segment[],
+  language: LanguageCode,
+  source: ScoreSource = "call",
+) {
   const transcript = useMemo(() => segments.map((s) => s.text).join("\n"), [segments]);
   const rules = useMemo(() => runRules(transcript), [transcript]);
 
@@ -42,7 +46,7 @@ export function useRiskEngine(segments: Segment[], language: LanguageCode) {
     const coversWholeCall = window.length >= transcript.length;
     const committedAt = segments[segments.length - 1]?.committedAt ?? performance.now();
 
-    scoreTranscript(window, language, controller.signal)
+    scoreTranscript(window, language, controller.signal, source)
       .then((assessment) => {
         recordLatency("llm", performance.now() - committedAt);
         setLlm({ assessment, segmentCount, coversWholeCall, language });
@@ -54,7 +58,7 @@ export function useRiskEngine(segments: Segment[], language: LanguageCode) {
       });
 
     return () => controller.abort();
-  }, [segments, transcript, language]);
+  }, [segments, transcript, language, source]);
 
   let llmStatus: LlmStatus = "idle";
   if (!scoringConfigured) llmStatus = "unavailable";

@@ -8,9 +8,14 @@ const languageCodes = LANGUAGES.map((l) => l.code) as [
 
 export const LanguageCodeSchema = z.enum(languageCodes);
 
+/** What is being scored: a live call transcript, or a text, email or social media message. */
+export const ScoreSourceSchema = z.enum(["call", "message"]);
+export type ScoreSource = z.infer<typeof ScoreSourceSchema>;
+
 export const ScoreRequestSchema = z.object({
   transcript: z.string().min(1).max(6000),
   language: LanguageCodeSchema,
+  source: ScoreSourceSchema.default("call"),
 });
 export type ScoreRequest = z.infer<typeof ScoreRequestSchema>;
 

@@ -15,6 +15,7 @@ export async function POST(request: Request): Promise<Response> {
     parsed.data.transcript,
     parsed.data.language,
     request.signal,
+    parsed.data.source,
   );
   return outcome.ok ? json(outcome.assessment) : errorResponse(outcome.error, outcome.status);
 }

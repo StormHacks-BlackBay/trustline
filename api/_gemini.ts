@@ -1,6 +1,7 @@
 import { RiskAssessmentSchema, type RiskAssessment } from "../src/lib/schemas";
 import { FLAG_IDS, RISK_LEVELS, type LanguageCode } from "../src/lib/types";
-import { SCORING_SYSTEM_PROMPT, scoringUserMessage } from "./_scoring-prompt";
+import type { ScoreSource } from "../src/lib/schemas";
+import { scoringSystemPrompt, scoringUserMessage } from "./_scoring-prompt";
 
 export type ScoreOutcome =
   | { ok: true; assessment: RiskAssessment }
@@ -44,11 +45,15 @@ interface GenerateContentResponse {
   promptFeedback?: { blockReason?: string };
 }
 
-/** Scores a transcript window with Gemini. Shared by the /api/score route and the call server. */
+/**
+ * Scores a call transcript window or a pasted message with Gemini. Shared by the /api/score route
+ * and the call server.
+ */
 export async function scoreTranscript(
   transcript: string,
   language: LanguageCode,
   signal?: AbortSignal,
+  source: ScoreSource = "call",
 ): Promise<ScoreOutcome> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return { ok: false, error: "scoring_not_configured", status: 503 };
@@ -62,8 +67,10 @@ export async function scoreTranscript(
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SCORING_SYSTEM_PROMPT }] },
-        contents: [{ role: "user", parts: [{ text: scoringUserMessage(transcript, language) }] }],
+        systemInstruction: { parts: [{ text: scoringSystemPrompt(source) }] },
+        contents: [
+          { role: "user", parts: [{ text: scoringUserMessage(transcript, language, source) }] },
+        ],
         generationConfig: {
           responseMimeType: "application/json",
           responseSchema: RESPONSE_SCHEMA,
