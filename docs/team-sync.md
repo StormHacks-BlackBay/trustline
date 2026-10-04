@@ -18,6 +18,13 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-04: TrustLine joins calls silently (Rishon)
+
+- **What changed:** removed the spoken "TrustLine is listening" greeting from `server/twiml.ts`. TrustLine now says nothing until it warns. The home page, `PRIVACY.md`, the README and the Twilio guide are updated, and a test checks the TwiML has no `<Say>`.
+- **Why:** the greeting tipped off scammers before TrustLine could hear the scam. The user who merges TrustLine in is a party to the call, which is what Canada's one-party consent rule requires.
+- **What the other person needs to do:** restart the call server to pick it up. Ariel, this reverses your announce-on-join choice. Say if you object.
+- **Verified:** CI.
+
 ### 2026-10-03: The number is the product; after-call text, summary page and partner portal (Rishon)
 
 - **What changed:** the site is restructured around Goals 8 and 17.

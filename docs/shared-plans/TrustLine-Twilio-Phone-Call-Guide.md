@@ -32,7 +32,7 @@ Code that does this, for reference:
 | File                                | Role                                                                                  |
 | ----------------------------------- | ------------------------------------------------------------------------------------- |
 | `server/app.ts`                     | Routes: `POST /twilio/voice`, WebSocket `/twilio/media`, `GET /events`, `GET /health` |
-| `server/twiml.ts`                   | Tells Twilio to say "TrustLine is listening" and open a two-way media stream          |
+| `server/twiml.ts`                   | Tells Twilio to open a two-way media stream (TrustLine joins silently)                |
 | `server/analysingSession.ts`        | Scores each phrase and speaks the warning once, when risk first turns high            |
 | `server/config.ts`                  | Reads the settings below from `.env`                                                  |
 | `src/features/call/usePhoneCall.ts` | The app's connection to `/events`                                                     |
@@ -177,7 +177,7 @@ VITE_TRUSTLINE_NUMBER=+16045550123
 1. **Scammer's phone** calls **the user's phone**. Answer it.
 2. On the user's phone, tap **Add Call** and dial the TrustLine number (or pick the TrustLine contact). The scammer is put on hold for a moment.
 3. **Trial accounts:** Twilio may play a short "trial account" message first and ask you to press a key. Press any key; the call continues.
-4. You hear **"TrustLine is listening."**
+4. TrustLine joins silently; you hear nothing until it warns you.
 5. Tap **Merge Calls**. All three are now on one call.
 6. The scammer reads the script, slowly, one sentence at a time:
 
@@ -242,7 +242,7 @@ Then point the Twilio webhook at `https://<host>/twilio/voice`, and set `VITE_CA
 | Calling TrustLine gives "an application error has occurred"                                                            | Twilio could not reach the webhook                                                                                                                                                  | Check the tunnel is running, the URL in Twilio ends in `/twilio/voice`, method is POST, and `curl <tunnel>/health` returns `ok` |
 | The call hangs up right away; server log shows nothing                                                                 | Webhook URL is wrong or points at an old tunnel address                                                                                                                             | Update the Twilio webhook to the current tunnel address                                                                         |
 | Twilio's debugger shows 403 on `/twilio/voice`                                                                         | `PUBLIC_URL` does not exactly match the address Twilio called, or the Auth Token is wrong                                                                                           | Make `PUBLIC_URL` the tunnel address with no trailing slash; recopy the Auth Token; restart the server                          |
-| "TrustLine is listening" plays, then nothing happens in the app                                                        | The call went to a different user, or the app is not connected                                                                                                                      | Check `PHONE_LINKS` uses the user's phone number in `+1...` format and the app shows that user; check the card says "Ready"     |
+| The call connects, then nothing happens in the app                                                                     | The call went to a different user, or the app is not connected                                                                                                                      | Check `PHONE_LINKS` uses the user's phone number in `+1...` format and the app shows that user; check the card says "Ready"     |
 | App card stuck on "Connecting to TrustLine…"                                                                           | `VITE_CALL_SERVER_URL` wrong, server not running, or `APP_ORIGIN` does not match the app's address                                                                                  | Set `VITE_CALL_SERVER_URL=http://localhost:8787`, `APP_ORIGIN=http://localhost:5173`, restart both                              |
 | Transcript appears but no spoken warning                                                                               | Risk never reached high, or ElevenLabs speech failed                                                                                                                                | Read the full script including the deportation and gift card lines; check the server log for "Could not speak warning"          |
 | Warning appears in the app but the call is silent                                                                      | Text to speech failed (quota or key)                                                                                                                                                | The app still shows the warning (`spoken: false`); check the ElevenLabs key and remaining quota                                 |

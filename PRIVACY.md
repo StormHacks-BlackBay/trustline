@@ -19,7 +19,7 @@ Nothing about a call leaves the device for a partner organization unless the use
 
 ## Recording and announcement
 
-The user is a party to the call and chooses to add TrustLine. Canadian law allows a party to a conversation to record it. TrustLine still announces itself ("TrustLine is listening") when it joins, so everyone on the call knows, and it does not store audio.
+The user is a party to the call and chooses to add TrustLine. Canadian law allows a party to a conversation to record it. TrustLine joins silently, so a scammer is not warned before TrustLine can hear the scam. It only speaks if it hears a likely scam, and it does not store audio. The transcript is kept in memory on the call server for one day so the user can open the call summary.
 
 ## Third parties
 

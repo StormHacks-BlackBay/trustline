@@ -72,8 +72,8 @@ export function HomePage() {
             During a call you're unsure about, tap <strong>Add Call</strong> and choose TrustLine.
           </li>
           <li>
-            Tap <strong>Merge Calls</strong>. TrustLine says it is listening, so everyone on the
-            call knows.
+            Tap <strong>Merge Calls</strong>. TrustLine joins quietly and listens without
+            interrupting.
           </li>
           <li>
             If it hears a scam, it warns you out loud and tells you the official number to call

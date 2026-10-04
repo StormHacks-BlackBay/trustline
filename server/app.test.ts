@@ -34,6 +34,7 @@ describe("connectStreamTwiml", () => {
     const xml = connectStreamTwiml("wss://example.org/twilio/media", '+1604"<x>');
     expect(xml).toContain('<Stream url="wss://example.org/twilio/media">');
     expect(xml).toContain('value="+1604&quot;&lt;x&gt;"');
+    expect(xml).not.toContain("<Say>");
   });
 });
 
