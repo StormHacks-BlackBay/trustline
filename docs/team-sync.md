@@ -18,6 +18,16 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-04: Call server crash fix and a public hosting guide (Ariel)
+
+- **What changed:**
+  - `server/transcriber.ts`: the ElevenLabs SDK's `realtime.connect()` resolves before the socket opens, so the first audio chunk threw "WebSocket is not connected" and crashed the call server on every real call. It now waits for the socket to open (10 second timeout; earlier audio stays buffered in `pendingAudio`), and a dropped connection is logged once instead of throwing.
+  - New `docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md`: call server on Railway with the existing `Dockerfile`, Twilio webhook pointed at it, Vercel made public and connected with `VITE_CALL_SERVER_URL`.
+- **Why:** real calls crashed the server. And the demo depended on the laptop and a quick tunnel whose address changes on restart, while the after-call text linked to `localhost`.
+- **What the other person needs to do:** Rishon, please do step 3 of the hosting guide: turn off Vercel Authentication (every deployment URL currently redirects to a Vercel sign-in), set `VITE_CALL_SERVER_URL` and `VITE_TRUSTLINE_NUMBER`, redeploy, and send Ariel the production URL. Note `trustline.vercel.app` belongs to an unrelated company.
+- **Verified:** `npm run check`. A live Scribe connection opened in 142 ms and streamed audio without errors. A real phone call to the Twilio number was transcribed, warned out loud, and texted the summary link.
+- **Open questions:** Railway vs Fly.io for the call server (guide recommends Railway).
+
 ### 2026-10-04: TrustLine joins calls silently (Rishon)
 
 - **What changed:** removed the spoken "TrustLine is listening" greeting from `server/twiml.ts`. TrustLine now says nothing until it warns. The home page, `PRIVACY.md`, the README and the Twilio guide are updated, and a test checks the TwiML has no `<Say>`.

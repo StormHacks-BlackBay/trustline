@@ -5,6 +5,7 @@ Shared context for the coding assistants (Claude or otherwise) used by both memb
 - **Team:** Ariel Tyson (`arieltyson`) and Rishon Ghosh (`rishon-g`)
 - **Repo:** `StormHacks-BlackBay/trustline`, default branch `main`
 - **Vercel project owner:** Rishon (`rishon-g`). On the Hobby plan only the owner can deploy, so deployments and environment variables go through him. Guide: `docs/shared-plans/TrustLine-Vercel-Deployment-Guide.md`.
+- **Public demo hosting:** call server on an always-on host (Railway recommended), web app on Vercel with Deployment Protection off. Guide: `docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md`.
 - **Running log of changes:** [`docs/team-sync.md`](docs/team-sync.md). Add an entry there after any change your teammate's assistant should know about.
 
 ## Current decisions (source of truth)
