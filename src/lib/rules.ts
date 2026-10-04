@@ -33,6 +33,11 @@ const PATTERNS: Record<FlagId, RegExp[]> = {
   remote_access: [
     /\b(anydesk|teamviewer|remote access|(install|download) (this|an|the) app|control of your (computer|phone|screen)|share your screen)\b/gi,
   ],
+  suspicious_link: [
+    /\b(click|tap|open|visit|follow|use) (on )?(the|this|that|our|a|my) (link|url)\b/gi,
+    /\bhttps?:\/\/[^\s<>"]*[^\s<>".,;:!?)]/gi,
+    /\b(?:[a-z0-9-]+\.)+(?:com|ca|net|org|info|xyz|top|online|site|live|link|co|io|me|ly|app|shop|support)\b(?:\/[^\s<>"]*[^\s<>".,;:!?)])?/gi,
+  ],
   secrecy: [
     /\b((do not|don'?t) (tell|inform|speak to|talk to) (anyone|anybody|your (family|bank|friends))|keep (this|it) (confidential|secret|between us)|(do not|don'?t) hang up|stay on the line)\b/gi,
   ],
@@ -49,7 +54,7 @@ const PATTERNS: Record<FlagId, RegExp[]> = {
 
 // "We will never ask for your PIN" describes a safe practice, not a request.
 const NEGATED_REQUEST =
-  /\b(never|won'?t|will not|would not|wouldn'?t|do not|don'?t|does not|doesn'?t) (ever )?(ask|request|need|call)\b[^.?!]*$/i;
+  /\b(never|won'?t|will not|would not|wouldn'?t|do not|don'?t|does not|doesn'?t) (ever )?(ask|request|need|call|send|text|email)\b[^.?!]*$/i;
 
 const HARD_FLAGS: FlagId[] = [
   "gift_card_payment",
@@ -57,7 +62,7 @@ const HARD_FLAGS: FlagId[] = [
   "one_time_code",
   "remote_access",
 ];
-const REQUEST_FLAGS: FlagId[] = ["wire_transfer", "personal_info"];
+const REQUEST_FLAGS: FlagId[] = ["wire_transfer", "personal_info", "suspicious_link"];
 const PRESSURE_FLAGS: FlagId[] = ["urgency", "secrecy", "arrest_threat", "deportation_threat"];
 const THREAT_FLAGS: FlagId[] = ["arrest_threat", "deportation_threat"];
 

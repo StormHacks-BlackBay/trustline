@@ -11,6 +11,7 @@ Flags (use only these ids, and only when the transcript shows the tactic):
 - one_time_code: asks the listener to read out a verification code, one-time passcode, PIN or password
 - personal_info: asks for a SIN, passport number, full card number or online banking login
 - remote_access: asks the listener to install an app or give control of their device or computer
+- suspicious_link: asks the listener to click, tap or visit a link or website they were given, to pay, claim money or "verify" an account
 - secrecy: tells the listener not to tell family, the bank or anyone else, or not to hang up
 - urgency: demands action within minutes or hours, or before the call ends
 - arrest_threat: threatens arrest, police, a warrant, jail or legal action

@@ -69,3 +69,33 @@ describe("riskFromFlags", () => {
     expect(riskFromFlags([])).toBe("low");
   });
 });
+
+describe("runRules on links", () => {
+  it("flags full URLs, bare domains and 'click the link'", () => {
+    for (const text of [
+      "Claim your refund at https://cra-refund-portal.com/claim.",
+      "Pay the $1.99 fee at canadapost-redelivery.info to avoid return.",
+      "Click the link below to verify your account.",
+    ]) {
+      expect(runRules(text).flags, text).toContain("suspicious_link");
+    }
+  });
+
+  it("keeps trailing punctuation out of the evidence", () => {
+    const match = runRules("Go to https://example.com/pay.").matches.find(
+      (m) => m.flag === "suspicious_link",
+    );
+    expect(match?.text).toBe("https://example.com/pay");
+  });
+
+  it("does not flag a promise never to send links, times or decimals", () => {
+    expect(runRules("We will never text you a link asking for your password.").flags).toEqual([]);
+    expect(runRules("Your appointment is at 10:30 a.m. and costs $1.99.").flags).toEqual([]);
+  });
+
+  it("rates a link combined with pressure as high risk", () => {
+    const result = runRules("Do not tell anyone. Pay the fine at cra-payments.net right now.");
+    expect(result.flags).toEqual(expect.arrayContaining(["suspicious_link", "urgency", "secrecy"]));
+    expect(result.risk).toBe("high");
+  });
+});

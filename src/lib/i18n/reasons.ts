@@ -27,6 +27,8 @@ export const REASONS: Record<LanguageCode, Record<ReasonKey, string>> = {
     secrecy:
       "They told you to keep this secret or stay on the line. You can always hang up and check.",
     urgency: "They are rushing you. Real organizations give you time to check.",
+    suspicious_link:
+      "They want you to open a link. Go to the organization's official website yourself instead of using a link you were sent.",
     none: "Nothing in this call matches a known scam tactic so far.",
   },
   pa: {
@@ -49,6 +51,8 @@ export const REASONS: Record<LanguageCode, Record<ReasonKey, string>> = {
     secrecy:
       "ਉਹਨਾਂ ਨੇ ਕਿਹਾ ਕਿ ਇਹ ਗੱਲ ਕਿਸੇ ਨੂੰ ਨਾ ਦੱਸੋ ਜਾਂ ਫ਼ੋਨ ਨਾ ਕੱਟੋ। ਤੁਸੀਂ ਹਮੇਸ਼ਾ ਫ਼ੋਨ ਕੱਟ ਕੇ ਜਾਂਚ ਕਰ ਸਕਦੇ ਹੋ।",
     urgency: "ਉਹ ਤੁਹਾਨੂੰ ਜਲਦਬਾਜ਼ੀ ਕਰਵਾ ਰਹੇ ਹਨ। ਅਸਲੀ ਸੰਸਥਾਵਾਂ ਤੁਹਾਨੂੰ ਜਾਂਚ ਕਰਨ ਦਾ ਸਮਾਂ ਦਿੰਦੀਆਂ ਹਨ।",
+    suspicious_link:
+      "ਉਹ ਚਾਹੁੰਦੇ ਹਨ ਕਿ ਤੁਸੀਂ ਕੋਈ ਲਿੰਕ ਖੋਲ੍ਹੋ। ਭੇਜੇ ਗਏ ਲਿੰਕ ਦੀ ਬਜਾਏ, ਸੰਸਥਾ ਦੀ ਅਧਿਕਾਰਤ ਵੈੱਬਸਾਈਟ 'ਤੇ ਖੁਦ ਜਾਓ।",
     none: "ਹੁਣ ਤੱਕ ਇਸ ਕਾਲ ਵਿੱਚ ਕੋਈ ਜਾਣੀ-ਪਛਾਣੀ ਠੱਗੀ ਵਾਲੀ ਗੱਲ ਨਹੀਂ ਮਿਲੀ।",
   },
   zh: {
@@ -62,6 +66,7 @@ export const REASONS: Record<LanguageCode, Record<ReasonKey, string>> = {
     personal_info: "对方索要您的个人信息。在提供任何信息之前，请先核实来电者身份。",
     secrecy: "对方要求您保密或不要挂断电话。您随时可以挂断电话并自行核实。",
     urgency: "对方在催促您。正规机构会给您时间核实。",
+    suspicious_link: "对方希望您打开一个链接。请不要使用收到的链接，而是自己访问该机构的官方网站。",
     none: "到目前为止，这通电话中没有发现已知的诈骗手法。",
   },
   tl: {
@@ -85,6 +90,8 @@ export const REASONS: Record<LanguageCode, Record<ReasonKey, string>> = {
       "Sinabihan ka nilang ilihim ito o huwag ibaba ang tawag. Puwede mong ibaba ang tawag anumang oras at mag-check.",
     urgency:
       "Minamadali ka nila. Binibigyan ka ng oras ng mga totoong organisasyon para mag-check.",
+    suspicious_link:
+      "Gusto nilang buksan mo ang isang link. Sa halip na gamitin ang ipinadalang link, pumunta mismo sa opisyal na website ng organisasyon.",
     none: "Wala pang nakitang kilalang taktika ng scam sa tawag na ito.",
   },
   fa: {
@@ -107,6 +114,8 @@ export const REASONS: Record<LanguageCode, Record<ReasonKey, string>> = {
     secrecy:
       "آن‌ها گفتند این موضوع را مخفی نگه دارید یا تلفن را قطع نکنید. شما همیشه می‌توانید تلفن را قطع کنید و بررسی کنید.",
     urgency: "آن‌ها شما را عجله می‌دهند. سازمان‌های واقعی به شما فرصت بررسی می‌دهند.",
+    suspicious_link:
+      "آن‌ها می‌خواهند یک لینک را باز کنید. به جای استفاده از لینکی که برایتان فرستاده شده، خودتان به وب‌سایت رسمی آن سازمان بروید.",
     none: "تا اینجا هیچ ترفند کلاهبرداری شناخته‌شده‌ای در این تماس دیده نشده است.",
   },
 };

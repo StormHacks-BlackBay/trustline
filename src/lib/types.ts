@@ -18,6 +18,7 @@ export const FLAG_IDS = [
   "one_time_code",
   "personal_info",
   "remote_access",
+  "suspicious_link",
   "secrecy",
   "urgency",
   "arrest_threat",

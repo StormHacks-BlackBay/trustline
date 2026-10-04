@@ -8,6 +8,7 @@ const TACTICS: Record<FlagId, string> = {
   one_time_code: "asks for verification codes or PINs",
   personal_info: "asks for personal details such as a SIN",
   remote_access: "asks to control phones or computers",
+  suspicious_link: 'sends links to pay or "verify" an account',
   secrecy: "tells people to keep the call secret",
   urgency: "pressures people to act right away",
   arrest_threat: "threatens arrest",
