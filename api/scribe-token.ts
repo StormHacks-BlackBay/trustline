@@ -1,5 +1,5 @@
 import { ElevenLabsClient, ElevenLabsError } from "@elevenlabs/elevenlabs-js";
-import { errorResponse, json } from "./_http";
+import { errorResponse, json } from "./_http.js";
 
 /** Mints a single-use Scribe token so the ElevenLabs API key never reaches the browser. */
 export async function POST(): Promise<Response> {

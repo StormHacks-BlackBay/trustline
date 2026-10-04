@@ -1,4 +1,4 @@
-import type { DemoCall } from "../data/demoCalls";
+import type { DemoCall } from "../data/demoCalls.js";
 
 /**
  * Short, stable hash of a demo line. It is part of the audio URL, so cached audio is replaced

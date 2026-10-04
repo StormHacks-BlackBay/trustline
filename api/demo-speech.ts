@@ -1,6 +1,6 @@
-import { DEMO_CALLS } from "../src/data/demoCalls";
-import { speechHash, spokenText, wordStartTimes, type DemoSpeech } from "../src/lib/demoSpeech";
-import { errorResponse, json } from "./_http";
+import { DEMO_CALLS } from "../src/data/demoCalls.js";
+import { speechHash, spokenText, wordStartTimes, type DemoSpeech } from "../src/lib/demoSpeech.js";
+import { errorResponse, json } from "./_http.js";
 
 const API_BASE = "https://api.elevenlabs.io/v1/text-to-speech";
 const OUTPUT = "output_format=mp3_44100_128";

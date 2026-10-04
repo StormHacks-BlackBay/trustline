@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FLAG_IDS, LANGUAGES, RISK_LEVELS } from "./types";
+import { FLAG_IDS, LANGUAGES, RISK_LEVELS } from "./types.js";
 
 const languageCodes = LANGUAGES.map((l) => l.code) as [
   (typeof LANGUAGES)[number]["code"],

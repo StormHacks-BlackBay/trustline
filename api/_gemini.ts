@@ -1,7 +1,7 @@
-import { RiskAssessmentSchema, type RiskAssessment } from "../src/lib/schemas";
-import { FLAG_IDS, RISK_LEVELS, type LanguageCode } from "../src/lib/types";
-import type { ScoreSource } from "../src/lib/schemas";
-import { scoringSystemPrompt, scoringUserMessage } from "./_scoring-prompt";
+import { RiskAssessmentSchema, type RiskAssessment } from "../src/lib/schemas.js";
+import { FLAG_IDS, RISK_LEVELS, type LanguageCode } from "../src/lib/types.js";
+import type { ScoreSource } from "../src/lib/schemas.js";
+import { scoringSystemPrompt, scoringUserMessage } from "./_scoring-prompt.js";
 
 export type ScoreOutcome =
   | { ok: true; assessment: RiskAssessment }

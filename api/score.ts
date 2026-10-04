@@ -1,6 +1,6 @@
-import { ScoreRequestSchema } from "../src/lib/schemas";
-import { scoreTranscript } from "./_gemini";
-import { errorResponse, json } from "./_http";
+import { ScoreRequestSchema } from "../src/lib/schemas.js";
+import { scoreTranscript } from "./_gemini.js";
+import { errorResponse, json } from "./_http.js";
 
 /**
  * Scores a window of call transcript with Gemini and returns a validated RiskAssessment. The

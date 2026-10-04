@@ -1,5 +1,5 @@
-import type { ScoreSource } from "../src/lib/schemas";
-import { LANGUAGES, type LanguageCode } from "../src/lib/types";
+import type { ScoreSource } from "../src/lib/schemas.js";
+import { LANGUAGES, type LanguageCode } from "../src/lib/types.js";
 
 const FLAGS = `Flags (use only these ids, and only when the transcript shows the tactic):
 - gift_card_payment: asks for payment with gift cards, prepaid cards or vouchers
