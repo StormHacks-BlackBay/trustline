@@ -68,7 +68,7 @@ describe("GET /api/demo-speech", () => {
     const body = (await response.json()) as DemoSpeech;
     expect(body.audio).toBe("QUJD");
     expect(body.wordStarts).toHaveLength(transcriptWords.length);
-    // The leading "[clears throat]" tag is skipped: "Hello" is the first timed word.
+    // Each word starts where it appears in the line, at 0.1 s per character.
     expect(body.wordStarts?.[0]).toBeCloseTo(firstLine.indexOf("Hello") / 10);
 
     const [url, init] = fetchMock.mock.calls[0] ?? [];

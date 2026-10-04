@@ -33,15 +33,14 @@ describe("demoSpeechPath", () => {
 });
 
 describe("spoken scripts", () => {
-  it.each(DEMO_CALLS.filter((c) => c.spoken))(
-    "$id speaks the same words the transcript shows",
-    (call) => {
-      expect(call.spoken).toHaveLength(call.lines.length);
+  it("speaks the same words the transcript shows", () => {
+    for (const call of DEMO_CALLS) {
+      if (call.spoken) expect(call.spoken).toHaveLength(call.lines.length);
       call.lines.forEach((line, i) => {
-        expect(plainWords(spokenText(call, i))).toEqual(plainWords(line));
+        expect(plainWords(spokenText(call, i)), `${call.id} line ${i}`).toEqual(plainWords(line));
       });
-    },
-  );
+    }
+  });
 
   it("falls back to the transcript line when a call has no acted script", () => {
     const call = { id: "x", title: "", description: "", lines: ["Plain line."] };
