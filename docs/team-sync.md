@@ -18,6 +18,12 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: The warning and share flow follow the chosen language (Rishon)
+
+- **What changed:** new `src/lib/i18n/warning.ts` holds `WARNING_TEXT` (warning statuses, next-step sentences with `{org}` and `{phone}`, recovery link, share button, consent sheet, confirmation), `RISK_LABELS` and `FLAG_LABELS_BY_LANGUAGE` for all five languages. `WarningHero` and `ShareIncident` use them and set `lang` and `dir`, so Farsi is right to left. `RiskBadge` takes an optional `language`, `flagLabel(flag, language)` is in `flagText.ts`, and `Sheet` takes optional `lang` and `dir`. `FLAG_LABELS` (English) is unchanged for the partner dashboard. The English line and the quoted caller or message words stay English. The rest of the UI chrome is still English by design.
+- **What the other person needs to do:** if you add text to the warning or share flow, add it to all five languages in `warning.ts`. A test checks completeness and matching placeholders. Non-English strings are drafted and need native review.
+- **Verified:** CI.
+
 ### 2026-10-03: Plain demo voices and a simpler recovery list (Rishon)
 
 - **What changed:** removed the acted `spoken` scripts (the `[sternly]`-style audio tags and pauses) from `src/data/demoCalls.ts`, because they didn't sound good. Voices now read `lines` exactly as written; the optional `spoken` field and its word-match test remain in case someone wants it later. The recovery guide's steps are a plain numbered list without tick boxes; the "What happened?" choices are unchanged.
