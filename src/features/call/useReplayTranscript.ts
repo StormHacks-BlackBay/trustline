@@ -14,7 +14,7 @@ const READ_ALOUD_KEY = "trustline.readDemoCallsAloud";
 /**
  * Plays a scripted call word by word with realistic timing. Uses the same Segment stream as the
  * live microphone, so detection, warnings and sharing behave exactly as they would on a real call.
- * When "read aloud" is on, each line is spoken and the words appear in time with the voice.
+ * When "read aloud" is on, each line is spoken and every word appears as the voice says it.
  */
 export function useReplayTranscript() {
   const [status, setStatus] = useState<SourceStatus>("idle");
@@ -76,18 +76,11 @@ export function useReplayTranscript() {
       if (token !== run.current) return;
       const line = demo.lines[lineIndex] ?? "";
       const words = line.split(" ");
-      let lineDone = false;
-      await speaker.speak(demo, lineIndex, (durationMs) => {
-        if (lineDone || token !== run.current) return;
-        const perWord = durationMs / words.length;
-        words.forEach((_, wordIndex) => {
-          const shown = words.slice(0, wordIndex + 1).join(" ");
-          timers.current.push(window.setTimeout(() => setPartial(shown), perWord * wordIndex));
-        });
+      // The voice reports how many words it has said; the transcript shows exactly those.
+      await speaker.speak(demo, lineIndex, (spoken) => {
+        if (token === run.current) setPartial(words.slice(0, spoken).join(" "));
       });
-      lineDone = true;
       if (token !== run.current) return;
-      clearTimers();
       commit(demo, lineIndex, line);
       await later(SPOKEN_LINE_GAP_MS);
     }

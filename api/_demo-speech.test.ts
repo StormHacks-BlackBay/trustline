@@ -1,13 +1,27 @@
 // Prefixed with an underscore so Vercel does not deploy this test as a function.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DEMO_CALLS } from "../src/data/demoCalls";
-import { demoSpeechPath, spokenText } from "../src/lib/demoSpeech";
+import { demoSpeechPath, spokenText, type DemoSpeech } from "../src/lib/demoSpeech";
 import { CALLER_VOICES, FALLBACK_VOICE, GET } from "./demo-speech";
 
 const ircc = DEMO_CALLS.find((c) => c.id === "ircc-scam")!;
 const request = (path: string) => GET(new Request(`http://local${path}`));
 const firstLine = spokenText(ircc, 0);
+const transcriptWords = (ircc.lines[0] ?? "").split(" ");
 const validPath = demoSpeechPath(ircc.id, 0, firstLine);
+
+/** An ElevenLabs with-timestamps body where each character of `text` lasts 0.1 s. */
+function timestamped(text: string, audio = "QUJD") {
+  const characters = [...text];
+  return Response.json({
+    audio_base64: audio,
+    alignment: {
+      characters,
+      character_start_times_seconds: characters.map((_, i) => i / 10),
+      character_end_times_seconds: characters.map((_, i) => (i + 1) / 10),
+    },
+  });
+}
 
 describe("GET /api/demo-speech", () => {
   const fetchMock = vi.fn<typeof fetch>();
@@ -45,25 +59,42 @@ describe("GET /api/demo-speech", () => {
     expect(await response.json()).toEqual({ error: "speech_not_configured" });
   });
 
-  it("returns cacheable mp3 audio in the caller's voice", async () => {
-    fetchMock.mockResolvedValue(new Response(new Uint8Array([1, 2, 3]), { status: 200 }));
+  it("returns cacheable audio with a start time for every transcript word", async () => {
+    fetchMock.mockResolvedValue(timestamped(firstLine));
     const response = await request(validPath);
 
     expect(response.status).toBe(200);
-    expect(response.headers.get("content-type")).toBe("audio/mpeg");
     expect(response.headers.get("cache-control")).toContain("s-maxage");
-    expect(new Uint8Array(await response.arrayBuffer())).toEqual(new Uint8Array([1, 2, 3]));
+    const body = (await response.json()) as DemoSpeech;
+    expect(body.audio).toBe("QUJD");
+    expect(body.wordStarts).toHaveLength(transcriptWords.length);
+    // The leading "[clears throat]" tag is skipped: "Hello" is the first timed word.
+    expect(body.wordStarts?.[0]).toBeCloseTo(firstLine.indexOf("Hello") / 10);
 
     const [url, init] = fetchMock.mock.calls[0] ?? [];
-    expect(String(url)).toContain(`/text-to-speech/${CALLER_VOICES[ircc.id]}`);
-    expect(JSON.parse(String(init?.body))).toMatchObject({ text: firstLine });
+    expect(String(url)).toContain(`/text-to-speech/${CALLER_VOICES[ircc.id]}/with-timestamps`);
+    expect(JSON.parse(String(init?.body))).toMatchObject({
+      text: firstLine,
+      model_id: "eleven_v3",
+    });
     expect(new Headers(init?.headers).get("xi-api-key")).toBe("test-key");
+  });
+
+  it("falls back to plain audio without timings when timestamps are rejected", async () => {
+    fetchMock
+      .mockResolvedValueOnce(new Response("{}", { status: 422 }))
+      .mockResolvedValueOnce(new Response(new Uint8Array([65, 66, 67]), { status: 200 }));
+    const response = await request(validPath);
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ audio: "QUJD", wordStarts: null });
+    expect(String(fetchMock.mock.calls[1]?.[0])).not.toContain("with-timestamps");
   });
 
   it("retries with the fallback voice when the caller's voice is unavailable", async () => {
     fetchMock
       .mockResolvedValueOnce(new Response("not found", { status: 404 }))
-      .mockResolvedValueOnce(new Response(new Uint8Array([9]), { status: 200 }));
+      .mockResolvedValueOnce(timestamped(firstLine));
     const response = await request(validPath);
 
     expect(response.status).toBe(200);

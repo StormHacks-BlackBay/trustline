@@ -1,20 +1,35 @@
 import type { DemoCall } from "../../data/demoCalls";
-import { demoSpeechPath, spokenText } from "../../lib/demoSpeech";
+import { demoSpeechPath, spokenText, type DemoSpeech } from "../../lib/demoSpeech";
 
 /** Pace used when the real length of the speech is unknown (browser voices, muted playback). */
 const MS_PER_WORD = 360;
 /** How long to wait for an ElevenLabs clip before using the browser's voice instead. */
-const CLIP_TIMEOUT_MS = 8_000;
+const CLIP_TIMEOUT_MS = 10_000;
 /** Some browsers never fire speech events; give up waiting after this much extra time. */
 const SPEECH_GRACE_MS = 3_000;
+/** How often the transcript checks the audio's position. Fast enough to look instant. */
+const TICK_MS = 40;
 
 export function estimateMs(text: string): number {
   return Math.max(1, text.split(" ").length) * MS_PER_WORD;
 }
 
+/** Number of words that should be visible `elapsed` seconds into a line. */
+export function wordsSpoken(
+  elapsed: number,
+  wordCount: number,
+  wordStarts: readonly number[] | null,
+  duration: number,
+): number {
+  if (wordStarts) return wordStarts.filter((start) => start <= elapsed).length;
+  if (!(duration > 0)) return 0;
+  return Math.min(wordCount, Math.floor((elapsed / duration) * wordCount) + 1);
+}
+
 /**
- * Reads demo call lines aloud. Prefers ElevenLabs audio from `/api/demo-speech`, falls back to
- * the browser's speech synthesis, and falls back again to silent timing, so a demo always runs.
+ * Reads demo call lines aloud and keeps the transcript in step with the voice. Prefers ElevenLabs
+ * audio with word timings from `/api/demo-speech`, falls back to the browser's speech synthesis,
+ * and falls back again to silent timing, so a demo always runs.
  */
 export interface DemoVoice {
   /** Call synchronously inside the click that starts a demo, so mobile browsers allow audio. */
@@ -22,12 +37,17 @@ export interface DemoVoice {
   /** Starts fetching every line of a call so playback does not wait between lines. */
   prefetch: (call: DemoCall) => void;
   /**
-   * Speaks one line. `onStart` receives the expected length in milliseconds once speech begins.
+   * Speaks one line and calls `reveal` with how many of its words have been said so far.
    * Resolves when the line finishes, fails or is cancelled.
    */
-  speak: (call: DemoCall, line: number, onStart: (durationMs: number) => void) => Promise<void>;
+  speak: (call: DemoCall, line: number, reveal: (words: number) => void) => Promise<void>;
   setMuted: (muted: boolean) => void;
   cancel: () => void;
+}
+
+interface Clip {
+  url: string;
+  wordStarts: number[] | null;
 }
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
@@ -56,6 +76,11 @@ function silentWavUrl(): string {
   return URL.createObjectURL(new Blob([buffer], { type: "audio/wav" }));
 }
 
+function mp3Url(base64: string): string {
+  const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+  return URL.createObjectURL(new Blob([bytes], { type: "audio/mpeg" }));
+}
+
 export function createDemoVoice(): DemoVoice {
   let audio: HTMLAudioElement | null = null;
   let silence: string | null = null;
@@ -63,25 +88,27 @@ export function createDemoVoice(): DemoVoice {
   let elevenLabsAvailable = true;
   let generation = 0;
   let stopCurrent: (() => void) | null = null;
-  const clips = new Map<string, Promise<string | null>>();
+  const clips = new Map<string, Promise<Clip | null>>();
   const hasSpeech = () => typeof window !== "undefined" && "speechSynthesis" in window;
 
   const element = () => (audio ??= new Audio());
 
-  const clip = (call: DemoCall, line: number): Promise<string | null> => {
+  const clip = (call: DemoCall, line: number): Promise<Clip | null> => {
     if (!elevenLabsAvailable) return Promise.resolve(null);
     const path = demoSpeechPath(call.id, line, spokenText(call, line));
     const cached = clips.get(path);
     if (cached) return cached;
     const pending = fetch(path)
-      .then(async (response) => {
+      .then(async (response): Promise<Clip | null> => {
         if (response.status === 503) elevenLabsAvailable = false;
-        return response.ok ? URL.createObjectURL(await response.blob()) : null;
+        if (!response.ok) return null;
+        const speech = (await response.json()) as DemoSpeech;
+        return { url: mp3Url(speech.audio), wordStarts: speech.wordStarts };
       })
       .catch(() => null);
     clips.set(path, pending);
-    void pending.then((url) => {
-      if (!url) clips.delete(path);
+    void pending.then((result) => {
+      if (!result) clips.delete(path);
     });
     return pending;
   };
@@ -89,13 +116,25 @@ export function createDemoVoice(): DemoVoice {
   const withTimeout = <T>(promise: Promise<T>, ms: number, fallback: T) =>
     Promise.race([promise, wait(ms).then(() => fallback)]);
 
-  const playClip = (url: string, text: string, onStart: (ms: number) => void) =>
+  /** Plays an ElevenLabs clip, revealing each word as the audio reaches it. */
+  const playClip = (found: Clip, wordCount: number, reveal: (words: number) => void) =>
     new Promise<boolean>((resolve) => {
       const el = element();
+      let ticker = 0;
+      let shown = -1;
+      const update = () => {
+        const words = wordsSpoken(el.currentTime, wordCount, found.wordStarts, el.duration);
+        if (words !== shown) {
+          shown = words;
+          reveal(words);
+        }
+      };
       const finish = (ok: boolean) => {
+        window.clearInterval(ticker);
         el.onended = null;
         el.onerror = null;
         stopCurrent = null;
+        if (ok) reveal(wordCount);
         resolve(ok);
       };
       el.onended = () => finish(true);
@@ -104,32 +143,48 @@ export function createDemoVoice(): DemoVoice {
         el.pause();
         finish(true);
       };
-      el.src = url;
+      el.src = found.url;
       el.play().then(
-        () => onStart(Number.isFinite(el.duration) ? el.duration * 1000 : estimateMs(text)),
+        () => {
+          update();
+          ticker = window.setInterval(update, TICK_MS);
+        },
         () => finish(false),
       );
     });
 
-  const speakWithBrowser = (text: string, onStart: (ms: number) => void) =>
+  /** The browser's own voice. Word boundary events keep the transcript in step where supported. */
+  const speakWithBrowser = (text: string, wordCount: number, reveal: (words: number) => void) =>
     new Promise<void>((resolve) => {
       const estimate = estimateMs(text);
+      const timers: number[] = [];
+      let boundaries = false;
       let started = false;
       let done = false;
-      const begin = () => {
+      const paced = () => {
         if (started) return;
         started = true;
-        onStart(estimate);
+        for (let i = 0; i < wordCount; i++) {
+          const at = (estimate / wordCount) * i;
+          timers.push(window.setTimeout(() => boundaries || reveal(i + 1), at));
+        }
       };
       const finish = () => {
         if (done) return;
         done = true;
+        timers.forEach((t) => window.clearTimeout(t));
         stopCurrent = null;
+        reveal(wordCount);
         resolve();
       };
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "en-CA";
-      utterance.onstart = begin;
+      utterance.onstart = paced;
+      utterance.onboundary = (event) => {
+        if (event.name !== "word") return;
+        boundaries = true;
+        reveal(text.slice(0, event.charIndex).split(" ").filter(Boolean).length + 1);
+      };
       utterance.onend = finish;
       utterance.onerror = finish;
       stopCurrent = () => {
@@ -138,22 +193,26 @@ export function createDemoVoice(): DemoVoice {
       };
       window.speechSynthesis.speak(utterance);
       // If the browser has no voice or never reports progress, keep the transcript moving.
-      void wait(1_500).then(begin);
+      void wait(1_500).then(paced);
       void wait(estimate + SPEECH_GRACE_MS).then(finish);
     });
 
-  const silently = async (text: string, onStart: (ms: number) => void) => {
-    const ms = estimateMs(text);
-    onStart(ms);
-    await new Promise<void>((resolve) => {
-      const timer = window.setTimeout(resolve, ms);
-      stopCurrent = () => {
-        window.clearTimeout(timer);
+  const silently = (text: string, wordCount: number, reveal: (words: number) => void) =>
+    new Promise<void>((resolve) => {
+      const perWord = estimateMs(text) / wordCount;
+      const timers: number[] = [];
+      const finish = () => {
+        timers.forEach((t) => window.clearTimeout(t));
+        stopCurrent = null;
+        reveal(wordCount);
         resolve();
       };
+      for (let i = 0; i < wordCount; i++) {
+        timers.push(window.setTimeout(() => reveal(i + 1), perWord * i));
+      }
+      timers.push(window.setTimeout(finish, perWord * wordCount));
+      stopCurrent = finish;
     });
-    stopCurrent = null;
-  };
 
   return {
     unlock() {
@@ -169,17 +228,18 @@ export function createDemoVoice(): DemoVoice {
       call.lines.forEach((_, line) => void clip(call, line));
     },
 
-    async speak(call, line, onStart) {
+    async speak(call, line, reveal) {
       const text = call.lines[line] ?? "";
+      const wordCount = Math.max(1, text.split(" ").length);
       const current = generation;
-      if (muted) return silently(text, onStart);
+      if (muted) return silently(text, wordCount, reveal);
 
-      const url = await withTimeout(clip(call, line), CLIP_TIMEOUT_MS, null);
+      const found = await withTimeout(clip(call, line), CLIP_TIMEOUT_MS, null);
       if (current !== generation) return;
-      if (url && !muted && (await playClip(url, text, onStart))) return;
+      if (found && !muted && (await playClip(found, wordCount, reveal))) return;
       if (current !== generation) return;
-      if (hasSpeech() && !muted) return speakWithBrowser(text, onStart);
-      return silently(text, onStart);
+      if (hasSpeech() && !muted) return speakWithBrowser(text, wordCount, reveal);
+      return silently(text, wordCount, reveal);
     },
 
     setMuted(value) {

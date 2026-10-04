@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { DEMO_CALLS } from "../data/demoCalls";
-import { demoSpeechPath, lineHash, plainWords, spokenText } from "./demoSpeech";
+import {
+  demoSpeechPath,
+  lineHash,
+  plainWords,
+  speechHash,
+  spokenText,
+  wordStartTimes,
+} from "./demoSpeech";
 
 describe("lineHash", () => {
   it("is stable for the same text and changes when the text changes", () => {
@@ -21,7 +28,7 @@ describe("demoSpeechPath", () => {
     expect(url.pathname).toBe("/api/demo-speech");
     expect(url.searchParams.get("call")).toBe("ircc-scam");
     expect(url.searchParams.get("line")).toBe("2");
-    expect(url.searchParams.get("v")).toBe(lineHash("Some line"));
+    expect(url.searchParams.get("v")).toBe(speechHash("Some line"));
   });
 });
 
@@ -47,5 +54,45 @@ describe("spoken scripts", () => {
       "and",
       "deported",
     ]);
+  });
+});
+
+describe("wordStartTimes", () => {
+  const timed = (text: string) => {
+    const characters = [...text];
+    return wordStartTimes(
+      characters,
+      characters.map((_, i) => i),
+      text
+        .replace(/\[[^\]]*\]/g, "")
+        .trim()
+        .split(/\s+/).length,
+    );
+  };
+
+  it("returns the start of each word and skips audio tags", () => {
+    expect(timed("[sternly] Pay now... or else.")).toEqual([10, 14, 21, 24]);
+  });
+
+  it("keeps contractions and numbers as single words", () => {
+    expect(timed("We'll call 4821.")).toEqual([0, 6, 11]);
+  });
+
+  it("returns null when the word count does not match the transcript", () => {
+    expect(wordStartTimes([..."one two"], [0, 1, 2, 3, 4, 5, 6], 3)).toBeNull();
+  });
+
+  it("times every transcript word of every demo line", () => {
+    for (const call of DEMO_CALLS) {
+      call.lines.forEach((line, i) => {
+        const characters = [...spokenText(call, i)];
+        const starts = wordStartTimes(
+          characters,
+          characters.map((_, j) => j),
+          line.split(" ").length,
+        );
+        expect(starts, `${call.id} line ${i}`).not.toBeNull();
+      });
+    }
   });
 });
