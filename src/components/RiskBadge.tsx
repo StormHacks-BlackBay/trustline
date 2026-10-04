@@ -1,11 +1,6 @@
-import type { RiskLevel } from "../lib/types";
+import { RISK_LABELS } from "../lib/i18n/warning";
+import type { LanguageCode, RiskLevel } from "../lib/types";
 import "./RiskBadge.css";
-
-const LABELS: Record<RiskLevel, string> = {
-  low: "No warning signs",
-  medium: "Could not confirm",
-  high: "Likely scam",
-};
 
 function RiskIcon({ risk }: { risk: RiskLevel }) {
   if (risk === "low") {
@@ -41,13 +36,20 @@ function RiskIcon({ risk }: { risk: RiskLevel }) {
 }
 
 /** Risk is always shown as icon + word + colour, so it never depends on colour alone. */
-export function RiskBadge({ risk }: { risk: RiskLevel }) {
+export function RiskBadge({
+  risk,
+  language = "en",
+}: {
+  risk: RiskLevel;
+  /** Language of the label; the partner dashboard keeps English. */
+  language?: LanguageCode;
+}) {
   return (
     <span className={`risk-badge risk-badge--${risk}`}>
       <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
         <RiskIcon risk={risk} />
       </svg>
-      {LABELS[risk]}
+      {RISK_LABELS[language][risk]}
     </span>
   );
 }
