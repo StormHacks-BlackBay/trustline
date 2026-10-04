@@ -13,6 +13,10 @@ export interface ServerConfig {
   defaultUserId: string;
   /** Calls are cut off after this long, so a forgotten call cannot keep spending credit. */
   maxCallMs: number;
+  /** For texting the after-call summary. Texts are off unless this and smsFrom are set. */
+  twilioAccountSid: string | null;
+  /** The TrustLine number (E.164) that after-call texts come from. */
+  smsFrom: string | null;
 }
 
 function parsePhoneLinks(raw: string | undefined): Record<string, string> {
@@ -42,7 +46,14 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     phoneLinks: parsePhoneLinks(read("PHONE_LINKS")),
     defaultUserId: read("DEFAULT_USER_ID") ?? DEMO_USERS[0]?.id ?? "harpreet",
     maxCallMs: Number(read("MAX_CALL_MINUTES") ?? 10) * 60_000,
+    twilioAccountSid: read("TWILIO_ACCOUNT_SID") ?? null,
+    smsFrom: read("TWILIO_PHONE_NUMBER") ?? read("VITE_TRUSTLINE_NUMBER") ?? null,
   };
+}
+
+/** Link to the after-call page, or null when the web app's address is not configured. */
+export function summaryLink(config: ServerConfig, path: string): string | null {
+  return config.appOrigin === "*" ? null : `${config.appOrigin}${path}`;
 }
 
 export function userForCaller(config: ServerConfig, from: string | null): string {

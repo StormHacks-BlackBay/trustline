@@ -1,8 +1,10 @@
 import { AnalysingCallSession, type AnalysisDeps } from "./analysingSession";
+import { CallArchive } from "./archive";
 import { createCallServer } from "./app";
 import { loadConfig } from "./config";
 import { EventHub } from "./hub";
 import { LanguagePreferences } from "./preferences";
+import { twilioSms } from "./sms";
 import { elevenLabsSpeaker } from "./speaker";
 import { elevenLabsTranscriber } from "./transcriber";
 
@@ -27,6 +29,18 @@ if (!process.env.GEMINI_API_KEY) {
   console.warn("GEMINI_API_KEY is not set: calls are scored by the rules layer only.");
 }
 
+const sms =
+  config.twilioAccountSid && config.twilioAuthToken && config.smsFrom
+    ? twilioSms(config.twilioAccountSid, config.twilioAuthToken, config.smsFrom)
+    : null;
+if (!sms) {
+  console.warn(
+    "After-call texts are off: set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN and TWILIO_PHONE_NUMBER.",
+  );
+} else if (config.appOrigin === "*") {
+  console.warn("After-call texts are off: set APP_ORIGIN to the web app's URL for the link.");
+}
+
 const server = createCallServer<AnalysisDeps>(
   {
     config,
@@ -34,6 +48,8 @@ const server = createCallServer<AnalysisDeps>(
     createTranscriber: elevenLabsTranscriber(elevenLabsKey),
     languages: new LanguagePreferences(),
     speaker: elevenLabsSpeaker(elevenLabsKey),
+    archive: new CallArchive(),
+    sms,
   },
   (ws, deps) => new AnalysingCallSession(ws, deps),
 );

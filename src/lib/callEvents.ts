@@ -18,6 +18,8 @@ export const CallEventSchema = z.discriminatedUnion("type", [
     /** False when text-to-speech is unavailable and the warning was only sent to the app. */
     spoken: z.boolean(),
   }),
+  /** The call was saved for the after-call page; sent just before call_ended. */
+  z.object({ type: z.literal("call_summary"), callId: z.string(), summaryId: z.string() }),
   z.object({ type: z.literal("call_ended"), callId: z.string() }),
 ]);
 

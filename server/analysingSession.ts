@@ -95,6 +95,7 @@ export class AnalysingCallSession extends CallSession {
         console.error(`Could not speak warning on ${this.callId}`, error);
       }
     }
+    this.warning = { risk: assessment.risk, text, spoken };
     this.emit({ type: "warning", callId: this.callId, risk: assessment.risk, text, spoken });
   }
 

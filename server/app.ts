@@ -5,6 +5,7 @@ import { CallSession, type SessionDeps } from "./callSession";
 import { userForCaller, type ServerConfig } from "./config";
 import { handleEvents } from "./events";
 import { parseForm, readBody, send } from "./http";
+import type { CallArchive } from "./archive";
 import { connectStreamTwiml, rejectTwiml } from "./twiml";
 
 async function handleVoice(req: IncomingMessage, res: ServerResponse, config: ServerConfig) {
@@ -49,6 +50,22 @@ function mediaHandshakeIsTrusted(req: IncomingMessage, config: ServerConfig): bo
   );
 }
 
+/** One saved call for the after-call page. The id is the only key, so it must stay unguessable. */
+function handleSummary(
+  res: ServerResponse,
+  id: string,
+  archive: CallArchive | undefined,
+  config: ServerConfig,
+) {
+  const summary = archive?.get(id) ?? null;
+  res.writeHead(summary ? 200 : 404, {
+    "content-type": "application/json",
+    "cache-control": "no-store",
+    "access-control-allow-origin": config.appOrigin,
+  });
+  res.end(JSON.stringify(summary ?? { error: "not_found" }));
+}
+
 type Socket = ConstructorParameters<typeof CallSession>[0];
 
 /** HTTP routes plus the Twilio media WebSocket. */
@@ -61,6 +78,10 @@ export function createCallServer<D extends SessionDeps>(
     const path = (req.url ?? "/").split("?")[0];
     if (req.method === "GET" && path === "/health") return send(res, 200, "ok", "text/plain");
     if (req.method === "GET" && path === "/events") return handleEvents(req, res, deps);
+    const summaryMatch = path?.match(/^\/calls\/([\w-]{1,64})$/);
+    if (req.method === "GET" && summaryMatch?.[1]) {
+      return handleSummary(res, summaryMatch[1], deps.archive, config);
+    }
     if (req.method === "POST" && path === "/twilio/voice") {
       handleVoice(req, res, config).catch((error: unknown) => {
         console.error("Voice webhook failed", error);
