@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { Alert } from "../../components/Alert";
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
@@ -101,25 +101,25 @@ export function MessageCheck() {
   const [checked, setChecked] = useState<{ text: string; id: number; at: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const check = (text: string) => {
+  /** `at` is the event's timestamp: the same clock as performance.now(), when the user acted. */
+  const check = (text: string, at: number) => {
     const trimmed = text.trim();
     if (!trimmed) {
       setError("Paste a message to check.");
       return;
     }
     setError(null);
-    const at = performance.now();
     setChecked((prev) => ({ text: trimmed, id: (prev?.id ?? 0) + 1, at }));
   };
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    check(draft);
+    check(draft, event.timeStamp);
   };
 
-  const tryExample = (text: string) => {
+  const tryExample = (text: string, event: MouseEvent) => {
     setDraft(text);
-    check(text);
+    check(text, event.timeStamp);
   };
 
   return (
@@ -167,7 +167,7 @@ export function MessageCheck() {
           <ul className="message-examples" aria-labelledby="examples-heading">
             {EXAMPLE_MESSAGES.map((example) => (
               <li key={example.id}>
-                <Button variant="secondary" onClick={() => tryExample(example.text)}>
+                <Button variant="secondary" onClick={(event) => tryExample(example.text, event)}>
                   {example.title}
                 </Button>
               </li>
