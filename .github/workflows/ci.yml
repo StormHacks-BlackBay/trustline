@@ -19,7 +19,12 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
       - name: Lint
-        run: npm run lint
+        # Same as `npm run lint`; errors are also printed as annotations on the commit.
+        run: |
+          npx eslint . --format json --output-file eslint-report.json || {
+            node -e "for (const f of require('./eslint-report.json')) for (const m of f.messages) console.log('::' + (m.severity === 2 ? 'error' : 'warning') + ' file=' + f.filePath.replace(process.cwd() + '/', '') + ',line=' + m.line + '::' + (m.ruleId ?? '') + ': ' + m.message)"
+            exit 1
+          }
       - name: Test
         run: npm test
       - name: Build

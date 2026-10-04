@@ -42,3 +42,4 @@ demo/recordings/*.mp3
 
 .local/
 demo/recordings/*.ulaw
+eslint-report.json
