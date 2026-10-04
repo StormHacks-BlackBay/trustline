@@ -27,12 +27,12 @@ The website runs on Vercel and the call server on Railway, so the demo works wit
 
 **Try it:**
 
-1. Open the [live call view](https://trustline-blackbay.vercel.app/live), select **Harpreet**, choose a warning language, and wait for **"Ready: merged calls will appear on this screen."**
+1. Open the [live call view](https://trustline-blackbay.vercel.app/live), choose a warning language, and wait for **"Ready: merged calls will appear on this screen."**
 2. Call **+1 604-373-6537**. TrustLine joins silently. Read a fictional scam script and watch the transcript and warning appear, and hear TrustLine warn you on the call.
 3. For a merged call, call a teammate first, tap **Add Call**, dial **+1 604-373-6537**, then tap **Merge Calls** (your carrier must support conference calls).
 4. Hang up. After a warned call, the phone gets a text linking to the call summary.
 
-Calls from numbers not linked to a demo user show up as Harpreet, so anyone can try it. Calls end after 10 minutes. Use scripted calls only: Gemini runs on the free tier (see [PRIVACY.md](PRIVACY.md)).
+Calls from any number show up on the live call view, so anyone can try it. Calls end after 10 minutes. Use scripted calls only: Gemini runs on the free tier (see [PRIVACY.md](PRIVACY.md)).
 
 ## Screenshots:
 
@@ -54,7 +54,7 @@ Calls from numbers not linked to a demo user show up as Harpreet, so anyone can 
 ### Frameworks
 
 - [x] **React + TypeScript (Vite)**: Mobile-first single-page app with strict TypeScript
-- [x] **Supabase Realtime**: Live incident feed and advisory banners across devices
+- [x] **Supabase Realtime**: Live incident feed and advisories across devices
 - [x] **Zod**: Validation of every risk assessment on the server and again in the browser
 - [x] **Vitest**: Unit tests for detection, fusion, redaction, directory matching and colour contrast
 
@@ -107,7 +107,7 @@ Microphone ──▶ Scribe v2 Realtime ──▶ committed segments
 
 - ☎️ **The TrustLine number** (`/`): The home page is built around the number, with a Save to contacts button and how merging works
 - 📲 **After-call text and call summary** (`/after-call/:id`): When a merged call ends after a warning, the call server texts the caller a link to the summary: transcript, evidence, amount asked for, what TrustLine said on the call, verified contact, recovery steps and one-tap reporting. Summaries are kept in memory on the call server for one day
-- 🏢 **Partner portal** (`/partner`): Redacted member reports, money at risk, trends by tactic and language, advisories with a "Send to members" message, a pre-filled Canadian Anti-Fraud Centre report per incident, and a CSV export (no transcript excerpts)
+- 🏢 **Partner portal** (`/partner`): Redacted member reports, money at risk, trends by tactic and language, advisories partners can email or text to their members (demo: nothing is sent), a pre-filled Canadian Anti-Fraud Centre report per incident, and a CSV export (no transcript excerpts)
 - 💼 **Job offer scams**: A warning sign for anyone asking for a fee to get a job, an LMIA or a work permit (Goal 8.8), with a demo call and an example message
 - 🎙️ **Live call view** (`/live`): Follow a merged call as it happens, listen to a speakerphone call on another device, or play a demo call
 - 🚩 **Evidence-backed warnings**: The exact words that triggered each flag are highlighted

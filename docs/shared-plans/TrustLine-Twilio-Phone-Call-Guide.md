@@ -167,7 +167,7 @@ VITE_TRUSTLINE_NUMBER=+16045550123
 ### Step 11: check the setup before calling
 
 1. In the app, the **Add TrustLine to a call** card shows your Twilio number and, after a moment, **"Ready: merged calls will appear on this screen."** If it says "Connecting to TrustLine…" and stays there, see Troubleshooting.
-2. Pick the demo user that matches `PHONE_LINKS` (Harpreet) and a warning language.
+2. Pick a warning language. The live call view always follows `harpreet`, so map your phone to `harpreet` in `PHONE_LINKS`.
 3. Optional: save the TrustLine contact to the user's phone with **Save TrustLine to contacts**, or add the number to Contacts by hand as "TrustLine".
 
 ## Part 4: the test call

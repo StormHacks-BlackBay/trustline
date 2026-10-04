@@ -14,6 +14,7 @@ import type { Incident } from "../../lib/types";
 import { CopySheet } from "./CopySheet";
 import { IncidentCard } from "./IncidentCard";
 import { PublishAdvisory } from "./PublishAdvisory";
+import { SendToMembers } from "./SendToMembers";
 import { CAFC_REPORT_URL, cafcSummary, incidentsCsv, memberAlert } from "./partnerReports";
 import { summarize, type Count } from "./summary";
 import { usePartnerIncidents } from "./usePartnerIncidents";
@@ -59,6 +60,8 @@ export function PartnerDashboard() {
     () => PARTNERS.find((p) => p.id === readStored(PARTNER_KEY))?.id ?? PARTNERS[0]?.id ?? "",
   );
   const partner = PARTNERS.find((p) => p.id === partnerId);
+  // The Anti-Fraud Centre receives reports itself, so it has nothing to forward to the Centre.
+  const isGovernment = partner?.kind === "government";
   const { incidents, latestId, error } = usePartnerIncidents(partnerId);
   const advisories = useAdvisories();
   const summary = summarize(incidents);
@@ -167,12 +170,7 @@ export function PartnerDashboard() {
                     </p>
                     {partner && (
                       <div className="advisory-list__actions">
-                        <CopySheet
-                          label="Send to members"
-                          title="Pass this alert to your members"
-                          intro={`Send this through the text messages, email or newsletter ${partner.name} already uses. TrustLine writes the alert; it does not send messages for you.`}
-                          text={memberAlert(a, partner)}
-                        />
+                        <SendToMembers partnerName={partner.name} text={memberAlert(a, partner)} />
                       </div>
                     )}
                   </li>
@@ -191,7 +189,7 @@ export function PartnerDashboard() {
           {incidents.length === 0 && !error && (
             <Card>
               <p className="muted">
-                No calls reported to {partner?.name} yet. When a member shares a suspicious call, it
+                No calls reported to {partner?.name} yet. When someone shares a suspicious call, it
                 appears here with personal details removed.
               </p>
             </Card>
@@ -206,22 +204,24 @@ export function PartnerDashboard() {
                     partner && (
                       <>
                         <PublishAdvisory incident={incident} publisher={partner} />
-                        <CopySheet
-                          label="Report to the Anti-Fraud Centre"
-                          title="Report to the Canadian Anti-Fraud Centre"
-                          intro="Copy this summary into the Centre's online report. The member's identity is not included."
-                          text={cafcSummary(incident, partner)}
-                          actions={
-                            <ButtonLink
-                              variant="secondary"
-                              href={CAFC_REPORT_URL}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              Open the reporting site
-                            </ButtonLink>
-                          }
-                        />
+                        {!isGovernment && (
+                          <CopySheet
+                            label="Report to the Anti-Fraud Centre"
+                            title="Report to the Canadian Anti-Fraud Centre"
+                            intro="Copy this summary into the Centre's online report. The member's identity is not included."
+                            text={cafcSummary(incident, partner)}
+                            actions={
+                              <ButtonLink
+                                variant="secondary"
+                                href={CAFC_REPORT_URL}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                Open the reporting site
+                              </ButtonLink>
+                            }
+                          />
+                        )}
                       </>
                     )
                   }

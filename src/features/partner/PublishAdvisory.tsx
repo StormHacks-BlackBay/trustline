@@ -39,7 +39,7 @@ export function PublishAdvisory({
   if (state === "sent") {
     return (
       <Alert tone="success" takeFocus>
-        Advisory published to users of every TrustLine partner.
+        Advisory published to every TrustLine partner. Each can now email or text it to its members.
       </Alert>
     );
   }
@@ -49,7 +49,8 @@ export function PublishAdvisory({
       <Button onClick={() => setOpen(true)}>Publish advisory</Button>
       <Sheet open={open} title="Publish a community advisory" onClose={() => setOpen(false)}>
         <p className="muted">
-          Advisories reach users of every TrustLine partner, including banks and credit unions.
+          Advisories go to every TrustLine partner, including banks, credit unions and the
+          Anti-Fraud Centre, who can email or text them to their members.
         </p>
         <Field label="Title">
           {(props) => (

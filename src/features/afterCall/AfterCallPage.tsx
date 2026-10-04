@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Alert } from "../../components/Alert";
 import { Card } from "../../components/Card";
 import { Link } from "../../components/Link";
-import { DEMO_USERS } from "../../data/partners";
+import { AFTER_CALL_PARTNER_ID, PARTNERS } from "../../data/partners";
 import { callServer } from "../../lib/callServer";
 import { CallSummarySchema, type CallSummary } from "../../lib/callSummary";
 import { textDirection } from "../../lib/flagText";
@@ -33,15 +33,15 @@ function useCallSummary(id: string): Load {
 }
 
 function Summary({ summary }: { summary: CallSummary }) {
-  const user = DEMO_USERS.find((u) => u.id === summary.userId) ?? DEMO_USERS[0];
+  const shareWith = PARTNERS.find((p) => p.id === AFTER_CALL_PARTNER_ID);
   const segments = useMemo<Segment[]>(
     () => summary.segments.map((text, i) => ({ id: `${summary.id}-${i}`, text, committedAt: 0 })),
     [summary],
   );
-  if (!user) return null;
+  if (!shareWith) return null;
 
   return (
-    <CallAnalysis segments={segments} partial="" language={summary.language} user={user}>
+    <CallAnalysis segments={segments} partial="" language={summary.language} shareWith={shareWith}>
       {({ main, side }) => (
         <div className="call-layout">
           <div className="call-layout__main stack">
@@ -66,7 +66,7 @@ function Summary({ summary }: { summary: CallSummary }) {
 
 /**
  * The page the after-call text links to: what the caller said, the warning, the official contact,
- * one-tap reporting to the user's community organization, and what to do if they already paid.
+ * one-tap reporting to the Canadian Anti-Fraud Centre, and what to do if they already paid.
  */
 export function AfterCallPage({ id }: { id: string }) {
   const load = useCallSummary(id);

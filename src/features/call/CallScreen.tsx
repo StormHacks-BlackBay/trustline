@@ -8,7 +8,6 @@ import { afterCallPath } from "../../lib/callSummary";
 import { navigate } from "../../lib/router";
 import { textDirection } from "../../lib/flagText";
 import { AddTrustLine } from "./AddTrustLine";
-import { AdvisoryBanner } from "./AdvisoryBanner";
 import { CallAnalysis } from "./CallAnalysis";
 import { CallerSettings } from "./CallerSettings";
 import { Diagnostics } from "./Diagnostics";
@@ -25,7 +24,7 @@ const STATUS_TEXT = {
 } as const;
 
 export function CallScreen() {
-  const { user, language, setUser, setLanguage } = useCaller();
+  const { user, partner, language, setLanguage } = useCaller();
   const call = useCallSource(user.id, language);
   const active = call.status === "listening" || call.status === "connecting";
   const phoneActive = call.mode === "phone" && active;
@@ -94,14 +93,12 @@ export function CallScreen() {
         </p>
       </header>
 
-      <AdvisoryBanner />
-
       <CallAnalysis
         key={call.callNumber}
         segments={call.segments}
         partial={call.partial}
         language={language}
-        user={user}
+        shareWith={partner}
       >
         {({ main, side }) => (
           <div className="call-layout">
@@ -113,12 +110,7 @@ export function CallScreen() {
                     {STATUS_TEXT[call.status]}
                   </Chip>
                 </div>
-                <CallerSettings
-                  user={user}
-                  language={language}
-                  onUserChange={setUser}
-                  onLanguageChange={setLanguage}
-                />
+                <CallerSettings language={language} onLanguageChange={setLanguage} />
                 <div className="call-control">{control}</div>
                 {call.error && <Alert tone="error">{call.error}</Alert>}
                 {call.summaryId && (
