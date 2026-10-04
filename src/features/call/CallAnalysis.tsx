@@ -4,7 +4,7 @@ import { findOrganization, reportingEntry } from "../../lib/directory";
 import { ruleReason } from "../../lib/flagText";
 import { recordLatency } from "../../lib/metrics";
 import type { Segment } from "../../lib/transcript";
-import type { DemoUser, LanguageCode } from "../../lib/types";
+import type { LanguageCode, Partner } from "../../lib/types";
 import { CallerDetails } from "./CallerDetails";
 import { RiskAnnouncer } from "./RiskAnnouncer";
 import { ShareIncident } from "./ShareIncident";
@@ -16,13 +16,20 @@ interface CallAnalysisProps {
   segments: Segment[];
   partial: string;
   language: LanguageCode;
-  user: DemoUser;
+  /** Who the user can share a report of this call with. */
+  shareWith: Partner;
   /** Lets the screen place the warning and the caller details in different columns. */
   children: (parts: { main: ReactNode; side: ReactNode }) => ReactNode;
 }
 
 /** Everything that depends on one call. Mounted with key={callNumber} so it resets per call. */
-export function CallAnalysis({ segments, partial, language, user, children }: CallAnalysisProps) {
+export function CallAnalysis({
+  segments,
+  partial,
+  language,
+  shareWith,
+  children,
+}: CallAnalysisProps) {
   const { assessment, llmStatus, transcript } = useRiskEngine(segments, language);
   const organization = findOrganization(transcript, assessment.claimedOrg);
   const reason = assessment.explanation ?? ruleReason(assessment.flags, language);
@@ -37,7 +44,7 @@ export function CallAnalysis({ segments, partial, language, user, children }: Ca
   const share =
     assessment.risk === "low" ? null : (
       <ShareIncident
-        user={user}
+        partner={shareWith}
         language={language}
         segments={segments}
         assessment={assessment}

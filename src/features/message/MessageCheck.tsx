@@ -7,7 +7,7 @@ import { EXAMPLE_MESSAGES } from "../../data/exampleMessages";
 import { findOrganization, reportingEntry } from "../../lib/directory";
 import { ruleReason } from "../../lib/flagText";
 import type { Segment } from "../../lib/transcript";
-import type { DemoUser, LanguageCode } from "../../lib/types";
+import type { LanguageCode, Partner } from "../../lib/types";
 import { CallerDetails } from "../call/CallerDetails";
 import { CallerSettings } from "../call/CallerSettings";
 import { RiskAnnouncer } from "../call/RiskAnnouncer";
@@ -26,11 +26,11 @@ interface MessageResultProps {
   /** When the user asked for the check, for the latency diagnostics. */
   checkedAt: number;
   language: LanguageCode;
-  user: DemoUser;
+  shareWith: Partner;
 }
 
 /** The checked message, its warning and the sender's official contacts. Keyed per check. */
-function MessageResult({ message, checkedAt, language, user }: MessageResultProps) {
+function MessageResult({ message, checkedAt, language, shareWith }: MessageResultProps) {
   const segments = useMemo<Segment[]>(
     () => [{ id: "message", text: message, committedAt: checkedAt }],
     [message, checkedAt],
@@ -46,7 +46,7 @@ function MessageResult({ message, checkedAt, language, user }: MessageResultProp
   const share =
     assessment.risk === "low" ? null : (
       <ShareIncident
-        user={user}
+        partner={shareWith}
         language={language}
         segments={segments}
         assessment={assessment}
@@ -96,7 +96,7 @@ function MessageResult({ message, checkedAt, language, user }: MessageResultProp
  * the rules run instantly, Gemini adds context, and contacts come only from the verified directory.
  */
 export function MessageCheck() {
-  const { user, language, setUser, setLanguage } = useCaller();
+  const { partner, language, setLanguage } = useCaller();
   const [draft, setDraft] = useState("");
   const [checked, setChecked] = useState<{ text: string; id: number; at: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -150,12 +150,7 @@ export function MessageCheck() {
             )}
           </Field>
           {error && <Alert tone="error">{error}</Alert>}
-          <CallerSettings
-            user={user}
-            language={language}
-            onUserChange={setUser}
-            onLanguageChange={setLanguage}
-          />
+          <CallerSettings language={language} onLanguageChange={setLanguage} />
           <div className="call-control">
             <Button type="submit">Check message</Button>
           </div>
@@ -182,7 +177,7 @@ export function MessageCheck() {
           message={checked.text}
           checkedAt={checked.at}
           language={language}
-          user={user}
+          shareWith={partner}
         />
       )}
     </div>

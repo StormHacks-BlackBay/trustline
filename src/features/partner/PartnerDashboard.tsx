@@ -59,6 +59,8 @@ export function PartnerDashboard() {
     () => PARTNERS.find((p) => p.id === readStored(PARTNER_KEY))?.id ?? PARTNERS[0]?.id ?? "",
   );
   const partner = PARTNERS.find((p) => p.id === partnerId);
+  // The Anti-Fraud Centre receives reports itself, so it has nothing to forward to the Centre.
+  const isGovernment = partner?.kind === "government";
   const { incidents, latestId, error } = usePartnerIncidents(partnerId);
   const advisories = useAdvisories();
   const summary = summarize(incidents);
@@ -191,7 +193,7 @@ export function PartnerDashboard() {
           {incidents.length === 0 && !error && (
             <Card>
               <p className="muted">
-                No calls reported to {partner?.name} yet. When a member shares a suspicious call, it
+                No calls reported to {partner?.name} yet. When someone shares a suspicious call, it
                 appears here with personal details removed.
               </p>
             </Card>
@@ -206,22 +208,24 @@ export function PartnerDashboard() {
                     partner && (
                       <>
                         <PublishAdvisory incident={incident} publisher={partner} />
-                        <CopySheet
-                          label="Report to the Anti-Fraud Centre"
-                          title="Report to the Canadian Anti-Fraud Centre"
-                          intro="Copy this summary into the Centre's online report. The member's identity is not included."
-                          text={cafcSummary(incident, partner)}
-                          actions={
-                            <ButtonLink
-                              variant="secondary"
-                              href={CAFC_REPORT_URL}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              Open the reporting site
-                            </ButtonLink>
-                          }
-                        />
+                        {!isGovernment && (
+                          <CopySheet
+                            label="Report to the Anti-Fraud Centre"
+                            title="Report to the Canadian Anti-Fraud Centre"
+                            intro="Copy this summary into the Centre's online report. The member's identity is not included."
+                            text={cafcSummary(incident, partner)}
+                            actions={
+                              <ButtonLink
+                                variant="secondary"
+                                href={CAFC_REPORT_URL}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                Open the reporting site
+                              </ButtonLink>
+                            }
+                          />
+                        )}
                       </>
                     )
                   }

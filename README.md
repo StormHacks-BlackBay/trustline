@@ -126,7 +126,7 @@ Open `http://localhost:5173` for the home page, `/live` for the live call view a
 
 #### Use the number with the app
 
-1. On Ariel's laptop, open [the live call view](http://localhost:5173/live), select **Harpreet**, and choose the warning language (for example, Punjabi).
+1. On Ariel's laptop, open [the live call view](http://localhost:5173/live) and choose the warning language (for example, Punjabi).
 2. Wait until the call card says **“Ready: merged calls will appear on this screen.”** The app, call server, and tunnel must all be running.
 3. For a quick test, call **+1 604-373-6537** from Ariel's linked phone. TrustLine joins silently (no greeting). Speak a fictional demo script and watch for the transcript and warning in the app.
 4. For a merged-call demo, first call your teammate. On your phone, tap **Add Call**, dial **+1 604-373-6537**, then tap **Merge Calls**. Have your teammate read the scripted scam lines; keep the app open on the laptop to see the transcript and warning. Merge Calls depends on your carrier supporting conference calls.

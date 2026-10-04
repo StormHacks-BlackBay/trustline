@@ -2,7 +2,8 @@
 
 insert into partners (id, name, kind) values
   ('demo-newcomer-society', 'Demo Newcomer Society', 'community'),
-  ('demo-credit-union', 'Demo Credit Union', 'financial')
+  ('demo-credit-union', 'Demo Credit Union', 'financial'),
+  ('cafc', 'Canadian Anti-Fraud Centre', 'government')
 on conflict (id) do update set name = excluded.name, kind = excluded.kind;
 
 insert into directory_entries (id, organization, short_name, aliases, category, phone, url, guidance) values

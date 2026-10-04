@@ -18,6 +18,17 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-04: No demo user picker; call summaries share with the Anti-Fraud Centre (Rishon)
+
+- **What changed:**
+  - The live call view and message check no longer show the Harpreet/Mei picker, only the warning language. `useCaller()` always uses `DEMO_USERS[0]` (`harpreet`) and returns its `partner`.
+  - `ShareIncident` and `CallAnalysis` take the partner to share with (`partner` / `shareWith`) instead of a `DemoUser`.
+  - The call summary page (`/after-call/:id`, the after-call text's link) shares with a new partner, **Canadian Anti-Fraud Centre** (`cafc`, new `PartnerKind` `government`). It appears in the partner portal's Organization dropdown; for it, the "Report to the Anti-Fraud Centre" action is hidden.
+  - `supabase/migrations/0004_government_partner.sql` widens `partners_kind_check` and adds the row; `supabase/seed.sql` regenerated.
+- **Why:** the user picker confused people, and sending reports to the government's fraud centre strengthens the Goal 17 (public sector) story.
+- **What the other person needs to do:** nothing unless you run Supabase migrations: `supabase db push` applies `0004`. Until it is applied, sharing from the call summary page fails against Supabase (local demo mode works). Callers mapped to `mei` in `PHONE_LINKS` no longer appear on the live view.
+- **Verified:** `npm run check` passes (187 tests). Not yet clicked through in a browser.
+
 ### 2026-10-04: Call server crash fix and a public hosting guide (Ariel)
 
 - **What changed:**

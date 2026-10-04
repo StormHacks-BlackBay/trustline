@@ -27,7 +27,7 @@ export const FLAG_IDS = [
 ] as const;
 export type FlagId = (typeof FLAG_IDS)[number];
 
-export type PartnerKind = "community" | "financial";
+export type PartnerKind = "community" | "financial" | "government";
 
 export interface Partner {
   id: string;

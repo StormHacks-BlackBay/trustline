@@ -99,7 +99,7 @@ Then Ariel sets `APP_ORIGIN` on Railway to the production URL. The call server a
 
 ## Step 4: test end to end
 
-1. Open `https://<vercel production URL>/live` on a laptop, ideally in a private window to confirm there is no sign-in. Pick the demo user and the warning language. Wait for **"Ready: merged calls will appear on this screen."**
+1. Open `https://<vercel production URL>/live` on a laptop, ideally in a private window to confirm there is no sign-in. Pick the warning language. Wait for **"Ready: merged calls will appear on this screen."**
 2. From a phone, call `+1 604-373-6537` and read a fictional scam script. The transcript and warning appear on `/live`, and TrustLine speaks the warning on the call.
 3. Hang up. Within a few seconds the phone gets a text. Its link opens `/after-call/<id>` on the phone with the transcript and next steps.
 4. Try a merged call: call a teammate, **Add Call**, dial TrustLine, **Merge Calls**.

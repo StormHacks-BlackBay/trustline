@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Alert } from "../../components/Alert";
 import { Button } from "../../components/Button";
 import { Sheet } from "../../components/Sheet";
-import { PARTNERS } from "../../data/partners";
 import { flagLabel, textDirection } from "../../lib/flagText";
 import type { Assessment } from "../../lib/fusion";
 import { fill, warningText } from "../../lib/i18n/warning";
@@ -10,10 +9,11 @@ import type { ScoreSource } from "../../lib/schemas";
 import { redact } from "../../lib/redact";
 import { store } from "../../lib/store";
 import { recentWindow, type Segment } from "../../lib/transcript";
-import type { DemoUser, LanguageCode } from "../../lib/types";
+import type { LanguageCode, Partner } from "../../lib/types";
 
 interface ShareIncidentProps {
-  user: DemoUser;
+  /** The organization the report goes to. */
+  partner: Partner;
   language: LanguageCode;
   segments: Segment[];
   assessment: Assessment;
@@ -25,7 +25,7 @@ type ShareState = "idle" | "sending" | "sent" | "failed";
 
 /** Consent first: the user sees exactly what will be sent before anything leaves the device. */
 export function ShareIncident({
-  user,
+  partner,
   language,
   segments,
   assessment,
@@ -36,16 +36,15 @@ export function ShareIncident({
   const dir = textDirection(language);
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<ShareState>("idle");
-  const partner = PARTNERS.find((p) => p.id === user.partnerId);
   const excerpt = redact(recentWindow(segments, 1500));
   const claimedOrg = organizationName ?? assessment.claimedOrg;
-  const partnerName = partner?.name ?? "";
+  const partnerName = partner.name;
 
   const share = async () => {
     setState("sending");
     try {
       await store.shareIncident({
-        partnerId: user.partnerId,
+        partnerId: partner.id,
         risk: assessment.risk,
         flags: assessment.flags,
         claimedOrg,
