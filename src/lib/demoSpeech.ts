@@ -63,7 +63,8 @@ export function wordStartTimes(
       if (char === "]") inTag = false;
       return;
     }
-    const wordChar = /[A-Za-z0-9']/.test(char);
+    // A hyphen inside a word ("e-transfer", "twenty-eight") does not start a new word.
+    const wordChar = /[A-Za-z0-9']/.test(char) || (inWord && char === "-");
     if (wordChar && !inWord) starts.push(startTimes[i] ?? 0);
     inWord = wordChar;
   });

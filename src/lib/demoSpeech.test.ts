@@ -77,6 +77,10 @@ describe("wordStartTimes", () => {
     expect(timed("We'll call 4821.")).toEqual([0, 6, 11]);
   });
 
+  it("keeps hyphenated words as single words", () => {
+    expect(timed("Pay by e-transfer, twenty-eight.")).toEqual([0, 4, 7, 19]);
+  });
+
   it("returns null when the word count does not match the transcript", () => {
     expect(wordStartTimes([..."one two"], [0, 1, 2, 3, 4, 5, 6], 3)).toBeNull();
   });
