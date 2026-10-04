@@ -3,8 +3,10 @@ import { Card } from "../../components/Card";
 import { Chip, ChipList } from "../../components/Chip";
 import { RiskBadge } from "../../components/RiskBadge";
 import { FLAG_LABELS } from "../../lib/flagText";
+import { formatDollars } from "../../lib/money";
 import { timeAgo } from "../../lib/time";
 import { LANGUAGES, type Incident } from "../../lib/types";
+import { amountAsked } from "./summary";
 
 interface IncidentCardProps {
   incident: Incident;
@@ -14,6 +16,7 @@ interface IncidentCardProps {
 
 export function IncidentCard({ incident, isNew, actions }: IncidentCardProps) {
   const language = LANGUAGES.find((l) => l.code === incident.language)?.label ?? incident.language;
+  const amount = amountAsked(incident);
   return (
     <Card className={`incident stack ${isNew ? "incident--new" : ""}`}>
       <div className="row row--between">
@@ -27,6 +30,7 @@ export function IncidentCard({ incident, isNew, actions }: IncidentCardProps) {
         </p>
       </div>
       <h3>Caller claimed to be {incident.claimedOrg ?? "an unnamed official"}</h3>
+      {amount !== null && <p className="incident__amount">Asked for {formatDollars(amount)}</p>}
       <ChipList label="Warning signs" items={incident.flags.map((f) => FLAG_LABELS[f])} />
       <blockquote className="incident__excerpt">{incident.redactedExcerpt}</blockquote>
       {actions && <div className="incident__actions">{actions}</div>}
