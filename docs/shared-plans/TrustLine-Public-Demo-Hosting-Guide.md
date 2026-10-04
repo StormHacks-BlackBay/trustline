@@ -4,6 +4,30 @@ Written October 4, 2026 for team Black Bay. This guide moves TrustLine off the l
 
 Until now, phone calls only worked while Ariel's laptop ran the call server and a Cloudflare quick tunnel. A quick tunnel's address changes every time it restarts, so each restart meant updating `PUBLIC_URL`, the Twilio webhook and `APP_ORIGIN`. The after-call text also linked to `localhost`, which does not open on a phone.
 
+## Current setup (done October 4, 2026)
+
+Steps 1 to 3 below are done, all on Ariel's accounts, managed from the CLI:
+
+| Piece       | Where                                                                                                         | Notes                                                                                                                               |
+| ----------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Web app     | https://trustline-blackbay.vercel.app (Vercel project `trustline-blackbay`, team `black-bay2`, Hobby)         | Public. Deployed with `vercel deploy --prod` from a `git archive` of `main`; not connected to GitHub, so a push does not deploy     |
+| Call server | https://call-server-production-6115.up.railway.app (Railway project `trustline-calls`, service `call-server`) | Deployed with `railway up` from a `git archive` of `main`. Same: a push does not deploy                                             |
+| Twilio      | `+1 604-373-6537` → `POST https://call-server-production-6115.up.railway.app/twilio/voice`                    | Calls no longer reach the laptop. To develop locally with real calls, point the webhook back at a tunnel and set it back afterwards |
+
+**Cost:** Railway is on the free trial ($5 of credit, no card on file), so it cannot bill; when the credit runs out the server stops. Watch it with `railway usage`. Do not add a card unless the team decides to pay. Vercel Hobby is free. Twilio, ElevenLabs and Gemini usage is unchanged from local testing.
+
+**Redeploying after a change on `main`:**
+
+```bash
+git archive HEAD | tar -x -C /tmp/tl && cd /tmp/tl
+railway link   # project trustline-calls, service call-server (first time only)
+railway up --service call-server --ci
+vercel link --project trustline-blackbay --scope black-bay2   # first time only
+vercel deploy --prod --scope black-bay2
+```
+
+Railway summaries are kept in memory, so a redeploy clears them.
+
 ## What runs where
 
 ```

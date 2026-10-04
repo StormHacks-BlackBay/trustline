@@ -18,6 +18,19 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-04: TrustLine is hosted publicly: Vercel site and Railway call server (Ariel)
+
+- **What changed:**
+  - Web app: new Vercel project `trustline-blackbay` in Ariel's Hobby team `black-bay2`, public at https://trustline-blackbay.vercel.app. Production env vars: `GEMINI_API_KEY` and `ELEVENLABS_API_KEY` (sensitive), `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_TRUSTLINE_NUMBER`, `VITE_CALL_SERVER_URL`.
+  - Call server: Railway project `trustline-calls`, service `call-server`, at https://call-server-production-6115.up.railway.app, built from the `Dockerfile`, with `APP_ORIGIN` set to the Vercel site.
+  - Twilio's voice webhook for `+1 604-373-6537` now points at Railway. Calls no longer reach a laptop.
+  - Both are deployed with the CLIs from a `git archive` of `main`, so local `.env` files are never uploaded. Neither is connected to GitHub: a push does not deploy. See "Current setup" in the hosting guide.
+- **Why:** the demo had to work without Ariel's laptop and a quick tunnel, and the after-call text has to open on a phone. Rishon's Vercel project sits behind Vercel Authentication and only its owner can change it on the Hobby plan.
+- **What the other person needs to do:** Rishon, use https://trustline-blackbay.vercel.app as the demo site; step 3 of the hosting guide is no longer needed from you. Your `black-bay1` project can stay or be deleted, but let's not demo from both. To test real calls against your own laptop, you would have to repoint the Twilio webhook; tell Ariel first.
+- **Cost:** Railway is on its free trial ($5 credit, no card), so it cannot bill; it stops when the credit runs out. Vercel Hobby is free.
+- **Verified:** site pages return 200 without sign-in; `POST /api/score` returned a valid Gemini assessment; the call server answers `/health`, rejects unsigned webhooks with 403, and `/events` sends `access-control-allow-origin: https://trustline-blackbay.vercel.app`; the deployed bundle points at the Railway URL.
+- **Open questions:** a real phone call against the hosted setup still needs a manual test. Rishon, your public `trustline-gamma.vercel.app` (deployed 17:26 UTC) points its live calls at a Cloudflare quick tunnel, which stops working when that tunnel restarts, and Twilio now sends calls to Railway. The README and the repo homepage now use `trustline-blackbay.vercel.app`; let's agree on one site.
+
 ### 2026-10-04: Call server crash fix and a public hosting guide (Ariel)
 
 - **What changed:**

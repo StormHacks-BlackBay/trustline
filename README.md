@@ -10,6 +10,30 @@ After a call that triggered a warning, TrustLine texts the user a link to a **ca
 
 **UN SDGs.** Goal 8 (decent work and economic growth): 8.10, keeping newcomers' trust in banking and financial services, and 8.8, protecting migrant workers from job and LMIA fee scams. Goal 17 (partnerships): 17.17, one shared channel between civil society, credit unions and the public sector.
 
+## Live Demo 🌐
+
+| What                    | Where                                                                                                          |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------- |
+| 📞 TrustLine number     | [+1 604-373-6537](tel:+16043736537)                                                                            |
+| 🏠 Home page            | [trustline-blackbay.vercel.app](https://trustline-blackbay.vercel.app)                                         |
+| 🎙️ Live call view       | [trustline-blackbay.vercel.app/live](https://trustline-blackbay.vercel.app/live)                               |
+| 💬 Message check        | [trustline-blackbay.vercel.app/check](https://trustline-blackbay.vercel.app/check)                             |
+| 🧭 Recovery steps       | [trustline-blackbay.vercel.app/recover](https://trustline-blackbay.vercel.app/recover)                         |
+| 🏢 Partner portal       | [trustline-blackbay.vercel.app/partner](https://trustline-blackbay.vercel.app/partner)                         |
+| 📲 Call summary         | `https://trustline-blackbay.vercel.app/after-call/<id>`, sent by text after a warned call                      |
+| 🖥️ Call server (health) | [call-server-production-6115.up.railway.app/health](https://call-server-production-6115.up.railway.app/health) |
+
+The website runs on Vercel and the call server on Railway, so the demo works without anyone's laptop. Hosting details and redeploy steps: [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md).
+
+**Try it:**
+
+1. Open the [live call view](https://trustline-blackbay.vercel.app/live), select **Harpreet**, choose a warning language, and wait for **"Ready: merged calls will appear on this screen."**
+2. Call **+1 604-373-6537**. TrustLine joins silently. Read a fictional scam script and watch the transcript and warning appear, and hear TrustLine warn you on the call.
+3. For a merged call, call a teammate first, tap **Add Call**, dial **+1 604-373-6537**, then tap **Merge Calls** (your carrier must support conference calls).
+4. Hang up. After a warned call, the phone gets a text linking to the call summary.
+
+Calls from numbers not linked to a demo user show up as Harpreet, so anyone can try it. Calls end after 10 minutes. Use scripted calls only: Gemini runs on the free tier (see [PRIVACY.md](PRIVACY.md)).
+
 ## Screenshots:
 
 <div style="display: flex; justify-content: center; align-items: center;">
@@ -111,7 +135,7 @@ npm run dev
 
 Free-tier limits are per model and shown in [AI Studio](https://aistudio.google.com/rate-limit). If scoring is rate-limited or slow, the app falls back to the rules layer and says it is in basic mode. On the free tier, Google may use prompts to improve its products, so use demo calls rather than real ones until you move to a paid key (see [PRIVACY.md](PRIVACY.md)).
 
-Open `http://localhost:5173` for the home page, `/live` for the live call view and demo calls, and `/partner` for the partner portal.
+`npm run dev` serves the same routes as the [live demo](#live-demo-): `/` for the home page, `/live` for the live call view and demo calls, and `/partner` for the partner portal.
 
 | Setting                                       | Without it                                                                                                                    |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -124,17 +148,9 @@ Open `http://localhost:5173` for the home page, `/live` for the live call view a
 
 **StormHacks demo number: [+1 604-373-6537](tel:+16043736537).** This number is already provisioned; use it for the team demo.
 
-#### Use the number with the app
+The number is connected to the hosted call server; see [Live Demo](#live-demo-) to try it. To link another phone to a demo user, update `PHONE_LINKS` in the Railway service's variables.
 
-1. On Ariel's laptop, open [the live call view](http://localhost:5173/live), select **Harpreet**, and choose the warning language (for example, Punjabi).
-2. Wait until the call card says **“Ready: merged calls will appear on this screen.”** The app, call server, and tunnel must all be running.
-3. For a quick test, call **+1 604-373-6537** from Ariel's linked phone. TrustLine joins silently (no greeting). Speak a fictional demo script and watch for the transcript and warning in the app.
-4. For a merged-call demo, first call your teammate. On your phone, tap **Add Call**, dial **+1 604-373-6537**, then tap **Merge Calls**. Have your teammate read the scripted scam lines; keep the app open on the laptop to see the transcript and warning. Merge Calls depends on your carrier supporting conference calls.
-5. Hang up when finished. The server's call limit is 10 minutes.
-
-The current local setup maps Ariel's phone to Harpreet. To use another phone or demo user, update `PHONE_LINKS` in the server's ignored `.env` and restart the server. Keep the laptop awake: the demo number depends on its call server and Cloudflare tunnel. Restarting the tunnel can change its URL; update both `PUBLIC_URL` and Twilio's POST `/twilio/voice` webhook if that happens. The hosted app needs its own call-server configuration; use the local app for this setup.
-
-The number costs US$1.15/month, plus call and audio-service usage. Release it in Twilio after the event to stop monthly renewal. Automated connectivity checks passed; the real handset and merged-call flow still need a manual test. See the [Twilio phone-call guide](docs/shared-plans/TrustLine-Twilio-Phone-Call-Guide.md) for setup and troubleshooting.
+The number costs US$1.15/month, plus call and audio-service usage. Release it in Twilio after the event to stop monthly renewal. See the [Twilio phone-call guide](docs/shared-plans/TrustLine-Twilio-Phone-Call-Guide.md) for setup and troubleshooting.
 
 #### Set up a separate deployment
 
@@ -144,9 +160,9 @@ The number costs US$1.15/month, plus call and audio-service usage. Release it in
 4. Set `VITE_CALL_SERVER_URL` and `VITE_TRUSTLINE_NUMBER` for the web app and redeploy it.
 5. Call someone, tap Add Call, call the TrustLine number and tap Merge Calls.
 
-For local development, run `npm run server` and expose port 8787 with a tunnel such as `npx cloudflared tunnel --url http://localhost:8787`, then use the tunnel URL as `PUBLIC_URL`.
+To develop the call server against real calls, run `npm run server`, expose port 8787 with a tunnel (`npx cloudflared tunnel`, see the Twilio guide), use the tunnel URL as `PUBLIC_URL`, and point the Twilio webhook at it. This takes calls away from the hosted demo, so tell the team and point the webhook back at Railway afterwards.
 
-To rehearse without Twilio, run `npm run simulate:call -- ircc-scam` and open the app with `VITE_CALL_SERVER_URL=http://localhost:8787`. The simulator runs the real call server, plays a demo script as a merged call, and speaks the warning if `ELEVENLABS_API_KEY` is set.
+To rehearse without Twilio, run `npm run simulate:call -- ircc-scam` and run the app with `VITE_CALL_SERVER_URL` set to your local call server (port 8787). The simulator runs the real call server, plays a demo script as a merged call, and speaks the warning if `ELEVENLABS_API_KEY` is set.
 
 ### Supabase
 
@@ -158,7 +174,7 @@ With `ELEVENLABS_API_KEY` set, `npm run demo:agents` creates two ElevenLabs agen
 
 ### Deploying
 
-Import the repository in Vercel and add the environment variables above. `vercel.json` serves the single-page app, and the files in `api/` deploy as functions.
+The web app is on Vercel (`vercel.json` serves the single-page app, and the files in `api/` deploy as functions) and the call server is on Railway (from the `Dockerfile`). Neither redeploys on push; follow the [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md) to redeploy after changes to `main`.
 
 ## Testing 🧪
 
