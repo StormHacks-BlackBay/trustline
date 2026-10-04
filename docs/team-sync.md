@@ -18,6 +18,12 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Plain demo voices and a simpler recovery list (Rishon)
+
+- **What changed:** removed the acted `spoken` scripts (the `[sternly]`-style audio tags and pauses) from `src/data/demoCalls.ts`, because they didn't sound good. Voices now read `lines` exactly as written; the optional `spoken` field and its word-match test remain in case someone wants it later. The recovery guide's steps are a plain numbered list without tick boxes; the "What happened?" choices are unchanged.
+- **What the other person needs to do:** nothing.
+- **Verified:** CI.
+
 ### 2026-10-03: Message check, recovery guide and a suspicious link warning sign (Rishon)
 
 - **What changed:**
