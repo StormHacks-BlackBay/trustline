@@ -5,6 +5,7 @@ import "./AppShell.css";
 
 const NAV = [
   { href: "/", label: "Call check" },
+  { href: "/check", label: "Message check" },
   { href: "/partner", label: "Partner dashboard" },
 ];
 
@@ -19,8 +20,11 @@ export function AppShell({ path, title, children }: AppShellProps) {
     document.title = `${title} · TrustLine`;
   }, [title]);
 
+  // The call check is the home page and also shows for any path no other page claims.
   const current = (href: string) =>
-    href === "/" ? !path.startsWith("/partner") : path.startsWith(href);
+    href === "/"
+      ? !NAV.some((item) => item.href !== "/" && path.startsWith(item.href))
+      : path.startsWith(href);
 
   return (
     <div className="shell">
