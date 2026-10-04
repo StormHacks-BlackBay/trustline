@@ -61,7 +61,7 @@ export function HomePage() {
             </ButtonLink>
           </div>
         ) : (
-          <p>Ask your settlement agency or credit union for your TrustLine number.</p>
+          <p>TrustLine is free for anyone in Canada. The number will appear here soon.</p>
         )}
       </header>
 
