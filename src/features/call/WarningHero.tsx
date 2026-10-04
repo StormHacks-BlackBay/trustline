@@ -1,15 +1,18 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { ButtonLink } from "../../components/ButtonLink";
 import { ChipList } from "../../components/Chip";
 import { Link } from "../../components/Link";
 import { RiskBadge } from "../../components/RiskBadge";
 import { recoveryPath, situationsForFlags } from "../../data/recovery";
-import { FLAG_LABELS, ruleReason, textDirection } from "../../lib/flagText";
+import { flagLabel, ruleReason, textDirection } from "../../lib/flagText";
 import type { Assessment } from "../../lib/fusion";
+import { templateParts, warningText } from "../../lib/i18n/warning";
 import type { ScoreSource } from "../../lib/schemas";
 import type { DirectoryEntry, LanguageCode } from "../../lib/types";
 import type { LlmStatus } from "./useRiskEngine";
 import "./WarningHero.css";
+
+type WarningStrings = ReturnType<typeof warningText>;
 
 interface WarningHeroProps {
   assessment: Assessment;
@@ -24,56 +27,60 @@ interface WarningHeroProps {
 
 const telHref = (phone: string) => `tel:+1${phone.replace(/\D/g, "").replace(/^1/, "")}`;
 
-function contextNote(status: LlmStatus, context: ScoreSource): string | null {
-  if (status === "pending")
-    return context === "message" ? "Checking the message…" : "Checking the rest of the call…";
-  if (status === "unavailable") return "Basic mode: warnings come from on-device rules only.";
+function contextNote(status: LlmStatus, context: ScoreSource, t: WarningStrings): string | null {
+  if (status === "pending") return context === "message" ? t.checkingMessage : t.checkingCall;
+  if (status === "unavailable") return t.basicMode;
   return null;
+}
+
+/**
+ * A translated sentence with the organization's name and phone number filled in. The number is
+ * kept on one line and left to right, so it reads correctly in Farsi too.
+ */
+function CallSentence({ template, entry }: { template: string; entry: DirectoryEntry }) {
+  return (
+    // One text run, so the button's flex gap cannot split the sentence from the number.
+    <span>
+      {templateParts(template).map((part, i) => {
+        if (!part.placeholder) return <Fragment key={i}>{part.text}</Fragment>;
+        if (part.text === "phone") {
+          return (
+            <span key={i} className="nowrap" dir="ltr">
+              {entry.phone}
+            </span>
+          );
+        }
+        return <Fragment key={i}>{entry.shortName}</Fragment>;
+      })}
+    </span>
+  );
 }
 
 /** The one safe next step. Contact details come only from the verified directory. */
 function PrimaryAction({
   organization,
   context,
+  t,
 }: {
   organization: DirectoryEntry | null;
   context: ScoreSource;
+  t: WarningStrings;
 }) {
-  if (context === "message") {
-    if (organization?.phone) {
-      return (
-        <ButtonLink href={telHref(organization.phone)}>
-          <span>
-            Don't reply. Call {organization.shortName} at{" "}
-            <span className="nowrap">{organization.phone}</span>
-          </span>
-        </ButtonLink>
-      );
-    }
-    if (organization?.category === "bank") {
-      return (
-        <p className="warning__step">
-          Don't reply or tap any links. Call the number on the back of your card.
-        </p>
-      );
-    }
-    return <p className="warning__step">Don't reply or tap any links in this message.</p>;
-  }
+  const message = context === "message";
   if (organization?.phone) {
     return (
       <ButtonLink href={telHref(organization.phone)}>
-        {/* One text run, so the button's flex gap cannot split the sentence from the number. */}
-        <span>
-          Hang up and call {organization.shortName} at{" "}
-          <span className="nowrap">{organization.phone}</span>
-        </span>
+        <CallSentence
+          template={message ? t.messageOrganization : t.callOrganization}
+          entry={organization}
+        />
       </ButtonLink>
     );
   }
   if (organization?.category === "bank") {
-    return <p className="warning__step">Hang up and call the number on the back of your card.</p>;
+    return <p className="warning__step">{message ? t.messageCardNumber : t.callCardNumber}</p>;
   }
-  return <p className="warning__step">You can hang up at any time.</p>;
+  return <p className="warning__step">{message ? t.messageNoLinks : t.hangUpAnyTime}</p>;
 }
 
 /**
@@ -88,22 +95,24 @@ export function WarningHero({
   share,
   context = "call",
 }: WarningHeroProps) {
-  const note = contextNote(llmStatus, context);
-  const heading = context === "message" ? "Message check" : "Call check";
+  const t = warningText(language);
+  const dir = textDirection(language);
+  const note = contextNote(llmStatus, context, t);
+  const heading = context === "message" ? t.messageCheck : t.callCheck;
 
   if (assessment.risk === "low") {
     return (
-      <section className="warning warning--low" aria-labelledby="warning-heading">
+      <section
+        className="warning warning--low"
+        aria-labelledby="warning-heading"
+        lang={language}
+        dir={dir}
+      >
         <h2 id="warning-heading" className="visually-hidden">
           {heading}
         </h2>
-        <RiskBadge risk="low" />
-        <p className="muted small">
-          {note ??
-            (context === "message"
-              ? "Nothing in this message matches a known scam tactic. If you are unsure, contact the organization through its official website."
-              : "TrustLine keeps checking as the call goes on.")}
-        </p>
+        <RiskBadge risk="low" language={language} />
+        <p className="muted small">{note ?? (context === "message" ? t.lowMessage : t.lowCall)}</p>
       </section>
     );
   }
@@ -112,29 +121,33 @@ export function WarningHero({
   const english = assessment.explanationEnglish ?? ruleReason(assessment.flags, "en");
 
   return (
-    <section className={`warning warning--${assessment.risk}`} aria-labelledby="warning-heading">
+    <section
+      className={`warning warning--${assessment.risk}`}
+      aria-labelledby="warning-heading"
+      lang={language}
+      dir={dir}
+    >
       <h2 id="warning-heading" className="visually-hidden">
         {heading}
       </h2>
-      <RiskBadge risk={assessment.risk} />
-      <p className="warning__reason" lang={language} dir={textDirection(language)}>
-        {reason}
-      </p>
+      <RiskBadge risk={assessment.risk} language={language} />
+      <p className="warning__reason">{reason}</p>
       {language !== "en" && (
-        <p className="warning__english" lang="en">
+        <p className="warning__english" lang="en" dir="ltr">
           English: {english}
         </p>
       )}
-      <ChipList label="Warning signs" items={assessment.flags.map((f) => FLAG_LABELS[f])} />
+      <ChipList
+        label={t.warningSigns}
+        items={assessment.flags.map((f) => flagLabel(f, language))}
+      />
       <div className="warning__actions">
-        <PrimaryAction organization={organization} context={context} />
+        <PrimaryAction organization={organization} context={context} t={t} />
         {share}
       </div>
       {note && <p className="warning__note">{note}</p>}
       <p className="warning__recovery">
-        <Link href={recoveryPath(situationsForFlags(assessment.flags))}>
-          Already paid or shared details? See what to do now
-        </Link>
+        <Link href={recoveryPath(situationsForFlags(assessment.flags))}>{t.recovery}</Link>
       </p>
     </section>
   );

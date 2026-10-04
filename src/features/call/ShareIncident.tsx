@@ -3,8 +3,9 @@ import { Alert } from "../../components/Alert";
 import { Button } from "../../components/Button";
 import { Sheet } from "../../components/Sheet";
 import { PARTNERS } from "../../data/partners";
-import { FLAG_LABELS } from "../../lib/flagText";
+import { flagLabel, textDirection } from "../../lib/flagText";
 import type { Assessment } from "../../lib/fusion";
+import { fill, warningText } from "../../lib/i18n/warning";
 import type { ScoreSource } from "../../lib/schemas";
 import { redact } from "../../lib/redact";
 import { store } from "../../lib/store";
@@ -31,12 +32,14 @@ export function ShareIncident({
   organizationName,
   context = "call",
 }: ShareIncidentProps) {
-  const party = context === "message" ? "Sender" : "Caller";
+  const t = warningText(language);
+  const dir = textDirection(language);
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<ShareState>("idle");
   const partner = PARTNERS.find((p) => p.id === user.partnerId);
   const excerpt = redact(recentWindow(segments, 1500));
   const claimedOrg = organizationName ?? assessment.claimedOrg;
+  const partnerName = partner?.name ?? "";
 
   const share = async () => {
     setState("sending");
@@ -58,47 +61,47 @@ export function ShareIncident({
 
   if (state === "sent") {
     return (
-      <Alert tone="success" takeFocus>
-        Shared with {partner?.name}. Thank you, this helps warn others.
-      </Alert>
+      <div lang={language} dir={dir}>
+        <Alert tone="success" takeFocus>
+          {fill(t.shared, { partner: partnerName })}
+        </Alert>
+      </div>
     );
   }
 
   return (
     <>
-      <Button variant="secondary" onClick={() => setOpen(true)}>
-        Share with {partner?.name}
+      <Button variant="secondary" onClick={() => setOpen(true)} lang={language} dir={dir}>
+        {fill(t.shareButton, { partner: partnerName })}
       </Button>
-      <Sheet open={open} title={`Share with ${partner?.name}?`} onClose={() => setOpen(false)}>
-        <p>
-          This helps {partner?.name} warn other people about this scam. Only the details below are
-          sent. Names, phone numbers, emails and account numbers are removed.
-        </p>
+      <Sheet
+        open={open}
+        title={fill(t.shareTitle, { partner: partnerName })}
+        onClose={() => setOpen(false)}
+        lang={language}
+        dir={dir}
+      >
+        <p>{fill(t.shareBody, { partner: partnerName })}</p>
         <dl className="share-preview">
-          <dt>{party} claimed to be</dt>
-          <dd>{claimedOrg ?? "Not stated"}</dd>
-          <dt>Warning signs</dt>
-          <dd>{assessment.flags.map((f) => FLAG_LABELS[f]).join(", ") || "None"}</dd>
-          <dt>
-            {context === "message" ? "The message (redacted)" : "What the caller said (redacted)"}
-          </dt>
+          <dt>{context === "message" ? t.senderClaimed : t.callerClaimed}</dt>
+          <dd>{claimedOrg ?? t.notStated}</dd>
+          <dt>{t.warningSigns}</dt>
+          <dd>{assessment.flags.map((f) => flagLabel(f, language)).join(", ") || t.none}</dd>
+          <dt>{context === "message" ? t.messageRedacted : t.callerSaid}</dt>
           <dd>
-            <blockquote tabIndex={0} aria-label="Redacted excerpt">
+            {/* The caller's or sender's own words, as they will be shared: not translated. */}
+            <blockquote tabIndex={0} aria-label={t.excerptLabel} lang="en" dir="ltr">
               {excerpt}
             </blockquote>
           </dd>
         </dl>
-        {state === "failed" && (
-          <Alert tone="error">
-            Could not share right now. Check your connection and try again.
-          </Alert>
-        )}
+        {state === "failed" && <Alert tone="error">{t.shareFailed}</Alert>}
         <div className="sheet__actions">
           <Button onClick={() => void share()} disabled={state === "sending"}>
-            {state === "sending" ? "Sharing…" : "Share"}
+            {state === "sending" ? t.sharing : t.share}
           </Button>
           <Button variant="secondary" onClick={() => setOpen(false)}>
-            Don't share
+            {t.dontShare}
           </Button>
         </div>
       </Sheet>
