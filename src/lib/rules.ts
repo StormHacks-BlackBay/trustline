@@ -39,6 +39,7 @@ const PATTERNS: Record<FlagId, RegExp[]> = {
     /\b(?:[a-z0-9-]+\.)+(?:com|ca|net|org|info|xyz|top|online|site|live|link|co|io|me|ly|app|shop|support)\b(?:\/[^\s<>"]*[^\s<>".,;:!?)])?/gi,
   ],
   secrecy: [
+    /\b(do not|don'?t) tell (mom|dad|mum|my (mom|mum|dad|mother|father|parents)|your (mom|mum|dad|mother|father|parents|husband|wife))\b/gi,
     /\b((do not|don'?t) (tell|inform|speak to|talk to) (anyone|anybody|your (family|bank|friends))|keep (this|it) (confidential|secret|between us)|(do not|don'?t) hang up|stay on the line)\b/gi,
   ],
   urgency: [

@@ -99,3 +99,10 @@ describe("runRules on links", () => {
     expect(result.risk).toBe("high");
   });
 });
+
+describe("runRules on family secrecy", () => {
+  it("flags asking to keep it from a parent or partner", () => {
+    expect(runRules("Please don't tell Dad yet.").flags).toContain("secrecy");
+    expect(runRules("Do not tell your husband about this.").flags).toContain("secrecy");
+  });
+});
