@@ -43,13 +43,13 @@ export function useReplayTranscript() {
     [],
   );
 
-  const commit = (demo: DemoCall, lineIndex: number) => {
+  const commit = (demo: DemoCall, lineIndex: number, text: string) => {
     setPartial("");
     setSegments((prev) => [
       ...prev,
       {
         id: `${demo.id}-${lineIndex}`,
-        text: demo.lines[lineIndex],
+        text,
         committedAt: performance.now(),
       },
     ]);
@@ -65,7 +65,7 @@ export function useReplayTranscript() {
         timers.current.push(window.setTimeout(() => setPartial(shown), elapsed));
       });
       elapsed += LINE_PAUSE_MS;
-      timers.current.push(window.setTimeout(() => commit(demo, lineIndex), elapsed));
+      timers.current.push(window.setTimeout(() => commit(demo, lineIndex, line), elapsed));
     });
     timers.current.push(window.setTimeout(() => setStatus("ended"), elapsed + 200));
   };
@@ -74,7 +74,8 @@ export function useReplayTranscript() {
     await later(START_DELAY_MS);
     for (let lineIndex = 0; lineIndex < demo.lines.length; lineIndex++) {
       if (token !== run.current) return;
-      const words = demo.lines[lineIndex].split(" ");
+      const line = demo.lines[lineIndex] ?? "";
+      const words = line.split(" ");
       let lineDone = false;
       await speaker.speak(demo, lineIndex, (durationMs) => {
         if (lineDone || token !== run.current) return;
@@ -87,7 +88,7 @@ export function useReplayTranscript() {
       lineDone = true;
       if (token !== run.current) return;
       clearTimers();
-      commit(demo, lineIndex);
+      commit(demo, lineIndex, line);
       await later(SPOKEN_LINE_GAP_MS);
     }
     if (token === run.current) setStatus("ended");

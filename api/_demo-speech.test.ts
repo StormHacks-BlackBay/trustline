@@ -6,7 +6,8 @@ import { CALLER_VOICES, FALLBACK_VOICE, GET } from "./demo-speech";
 
 const ircc = DEMO_CALLS.find((c) => c.id === "ircc-scam")!;
 const request = (path: string) => GET(new Request(`http://local${path}`));
-const validPath = demoSpeechPath(ircc.id, 0, ircc.lines[0]);
+const firstLine = ircc.lines[0] ?? "";
+const validPath = demoSpeechPath(ircc.id, 0, firstLine);
 
 describe("GET /api/demo-speech", () => {
   const fetchMock = vi.fn<typeof fetch>();
@@ -53,9 +54,9 @@ describe("GET /api/demo-speech", () => {
     expect(response.headers.get("cache-control")).toContain("s-maxage");
     expect(new Uint8Array(await response.arrayBuffer())).toEqual(new Uint8Array([1, 2, 3]));
 
-    const [url, init] = fetchMock.mock.calls[0];
+    const [url, init] = fetchMock.mock.calls[0] ?? [];
     expect(String(url)).toContain(`/text-to-speech/${CALLER_VOICES[ircc.id]}`);
-    expect(JSON.parse(String(init?.body))).toMatchObject({ text: ircc.lines[0] });
+    expect(JSON.parse(String(init?.body))).toMatchObject({ text: firstLine });
     expect(new Headers(init?.headers).get("xi-api-key")).toBe("test-key");
   });
 
@@ -67,7 +68,7 @@ describe("GET /api/demo-speech", () => {
 
     expect(response.status).toBe(200);
     expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(String(fetchMock.mock.calls[1][0])).toContain(`/text-to-speech/${FALLBACK_VOICE}`);
+    expect(String(fetchMock.mock.calls[1]?.[0])).toContain(`/text-to-speech/${FALLBACK_VOICE}`);
   });
 
   it("maps a rejected key and rate limits without retrying", async () => {

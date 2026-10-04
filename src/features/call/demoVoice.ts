@@ -70,7 +70,7 @@ export function createDemoVoice(): DemoVoice {
 
   const clip = (call: DemoCall, line: number): Promise<string | null> => {
     if (!elevenLabsAvailable) return Promise.resolve(null);
-    const path = demoSpeechPath(call.id, line, call.lines[line]);
+    const path = demoSpeechPath(call.id, line, call.lines[line] ?? "");
     const cached = clips.get(path);
     if (cached) return cached;
     const pending = fetch(path)
@@ -170,7 +170,7 @@ export function createDemoVoice(): DemoVoice {
     },
 
     async speak(call, line, onStart) {
-      const text = call.lines[line];
+      const text = call.lines[line] ?? "";
       const current = generation;
       if (muted) return silently(text, onStart);
 
