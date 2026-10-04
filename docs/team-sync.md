@@ -18,6 +18,13 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Call server security and spending limits (Ariel)
+
+- **What changed:** the call server now rejects the Twilio media stream (WebSocket) unless it carries a valid `X-Twilio-Signature` for the exact `wss://` URL, whenever `TWILIO_AUTH_TOKEN` is set. Before, anyone who found the server could stream audio and spend ElevenLabs and Gemini credit. Calls are also cut off after `MAX_CALL_MINUTES` (default 10). `npm run simulate:call` signs its fake stream, so it exercises the same check.
+- **Twilio status:** Ariel's account is upgraded with a US$20 balance; both phones are verified caller IDs. Buying a number is blocked until Twilio approves a Trust Hub primary customer profile (error 20003; Twilio says review can take 72 hours or more). Nothing has been charged. The planned number is +1 604-337-2943 at US$1.15 a month plus US$0.0085 a minute. Until then, demo the phone flow with `npm run simulate:call`.
+- **What the other person needs to do:** pull `main`. Do not run a public tunnel to the call server without `TWILIO_AUTH_TOKEN` set.
+- **Verified:** 129 tests pass, including unsigned, wrongly signed and correctly signed streams and the length limit. The signed simulator ran end to end with paid APIs switched off.
+
 ### 2026-10-03: Demo call voices are acted with Eleven v3 audio tags (Rishon)
 
 - **What changed:** `DemoCall` has an optional `spoken` array: the same lines with Eleven v3 audio tags and pauses, e.g. `[sternly] If this is not resolved today, you will be detained... and deported.` The transcript, detection and sharing still use `lines`. The voice uses `spoken` through `spokenText()` in `src/lib/demoSpeech.ts`. `api/demo-speech.ts` now defaults to `eleven_v3` (override with `ELEVENLABS_DEMO_TTS_MODEL`) and logs ElevenLabs' error reason (for example `missing_permissions`) without the key.
