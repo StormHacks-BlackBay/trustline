@@ -61,7 +61,7 @@ export function HomePage() {
             </ButtonLink>
           </div>
         ) : (
-          <p>TrustLine is free for anyone in Canada. The number will appear here soon.</p>
+          <p>Anyone can call TrustLine, no sign-up needed. The number will appear here soon.</p>
         )}
       </header>
 
