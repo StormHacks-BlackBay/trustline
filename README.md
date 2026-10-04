@@ -81,6 +81,8 @@ Microphone ──▶ Scribe v2 Realtime ──▶ committed segments
 - 🚩 **Evidence-backed warnings**: The exact words that triggered each flag are highlighted
 - 🌐 **In-language explanations**: Warnings in English, Punjabi, Mandarin, Tagalog and Farsi, with right-to-left layout for Farsi
 - ☎️ **Verified next step**: Official contact channels instead of caller-supplied numbers
+- 💬 **Message check** (`/check`): Paste a suspicious text, email or social media message and get the same evidence-backed warning, verified contacts and sharing as a call, including a warning sign for suspicious links
+- 🧭 **Recovery steps** (`/recover`): If someone already paid or shared details, a checklist of what to do in order (freeze gift cards, call the bank, credit bureau fraud alerts, police and Canadian Anti-Fraud Centre reports), based on the CAFC's victim guidance. Warnings link to it with the right situations already ticked
 - 🤝 **Partner advisories**: Consent-based, redacted reports shared across community organizations and banks
 - 🔊 **Spoken demo calls**: Demo calls are acted out by ElevenLabs Eleven v3 voices, one per caller, with audio tags for tone (a stern fake officer, a warm real bank) (or the browser's voice without a key), with the transcript appearing in time with the speech. A checkbox turns it off
 - 📊 **Diagnostics**: Measured alert latency for the rules and LLM layers

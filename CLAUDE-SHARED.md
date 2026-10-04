@@ -26,6 +26,7 @@ How it works:
 - Gemini is asked for JSON constrained by a `responseSchema` that mirrors `RiskAssessmentSchema` in `src/lib/schemas.ts`. **If you change `RiskAssessmentSchema`, update `RESPONSE_SCHEMA` in `api/_gemini.ts` to match.** Zod still validates every response.
 - The prompt is unchanged and provider-neutral: `api/_scoring-prompt.ts`.
 - Callers: `api/score.ts` (Vercel route), `server/analysingSession.ts` (call server), `eval/run.ts` (via `/api/score`).
+- `/api/score` takes an optional `source`: `"call"` (default, `SCORING_SYSTEM_PROMPT`) or `"message"` (`MESSAGE_SYSTEM_PROMPT`, used by the message check page). Both prompts list every flag in `FLAG_IDS`, which a test enforces.
 - Error contract is unchanged: `ScoreOutcome` with `scoring_not_configured` (503), `scoring_rate_limited` (429), `scoring_aborted` (499), `scoring_unavailable` / `scoring_failed` (502/504). The browser treats 503 as "basic mode" and falls back to the rules layer.
 - 8 second timeout, and stale requests are cancelled with `AbortSignal`.
 

@@ -18,6 +18,18 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Message check, recovery guide and a suspicious link warning sign (Rishon)
+
+- **What changed:**
+  - New flag `suspicious_link` in `FLAG_IDS`. Rules catch URLs, bare domains and "click the link"; it is a request flag, so link plus pressure rates high. It has labels, an advisory tactic, `REASONS` in all five languages (non-English drafted, needs native review) and a line in both prompts. A new secrecy pattern catches "don't tell Mom/Dad/your husband". The only eval change is the grandparent scam gaining `secrecy`.
+  - `/api/score` accepts `source: "call" | "message"`, default `call`. `scoreTranscript(transcript, language, signal, source)` on both server and client, and `useRiskEngine(segments, language, source)`.
+  - `/check` (`src/features/message/MessageCheck.tsx`): paste a message to get the same warning, evidence highlights, verified contacts and consent sharing as a call. `WarningHero`, `CallerDetails` and `ShareIncident` take an optional `context` (`"call"` default) that only changes wording. There are example messages in `src/data/exampleMessages.ts`, and a test ensures the rules alone warn on the scam examples.
+  - `/recover` (`src/features/recovery/RecoveryGuide.tsx`, content in `src/data/recovery.ts`): a checklist of what to do after paying or sharing details, following the CAFC victim guidance. A test checks that phone numbers come only from `DIRECTORY`. Medium and high warnings link to it with situations preselected (`situationsForFlags`). The guide is English only, like the rest of the UI chrome.
+  - Navigation now has four items and wraps on small screens.
+  - CI runs typecheck, lint, test and build as separate steps. Lint errors and failing tests show up as annotations on the commit.
+- **What the other person needs to do:** pull `main`. If you add a flag, update both prompts (a test checks this), `REASONS`, `FLAG_LABELS`, the advisory `TACTICS` and, if relevant, `FLAG_SITUATIONS` in `src/data/recovery.ts`.
+- **Verified:** CI green (typecheck, lint, tests, build, eval). Rules checked against the eval cases and demo calls. Not yet clicked through in a browser.
+
 ### 2026-10-03: Live Twilio number and audible simulator warnings (Ariel / Codex)
 
 - **What changed:** approved Individual Trust Hub profile verified through Twilio. Provisioned **+1 604-373-6537** (the earlier planned number was unavailable). Ariel owns the account. The local ignored `.env` links Ariel's phone to Harpreet and sets the new number, local call server, public tunnel and 10-minute cap. Existing verified caller IDs were preserved.
