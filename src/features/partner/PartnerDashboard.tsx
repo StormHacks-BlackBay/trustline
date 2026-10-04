@@ -14,6 +14,7 @@ import type { Incident } from "../../lib/types";
 import { CopySheet } from "./CopySheet";
 import { IncidentCard } from "./IncidentCard";
 import { PublishAdvisory } from "./PublishAdvisory";
+import { SendToMembers } from "./SendToMembers";
 import { CAFC_REPORT_URL, cafcSummary, incidentsCsv, memberAlert } from "./partnerReports";
 import { summarize, type Count } from "./summary";
 import { usePartnerIncidents } from "./usePartnerIncidents";
@@ -169,12 +170,7 @@ export function PartnerDashboard() {
                     </p>
                     {partner && (
                       <div className="advisory-list__actions">
-                        <CopySheet
-                          label="Send to members"
-                          title="Pass this alert to your members"
-                          intro={`Send this through the text messages, email or newsletter ${partner.name} already uses. TrustLine writes the alert; it does not send messages for you.`}
-                          text={memberAlert(a, partner)}
-                        />
+                        <SendToMembers partnerName={partner.name} text={memberAlert(a, partner)} />
                       </div>
                     )}
                   </li>

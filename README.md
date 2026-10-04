@@ -30,7 +30,7 @@ After a call that triggered a warning, TrustLine texts the user a link to a **ca
 ### Frameworks
 
 - [x] **React + TypeScript (Vite)**: Mobile-first single-page app with strict TypeScript
-- [x] **Supabase Realtime**: Live incident feed and advisory banners across devices
+- [x] **Supabase Realtime**: Live incident feed and advisories across devices
 - [x] **Zod**: Validation of every risk assessment on the server and again in the browser
 - [x] **Vitest**: Unit tests for detection, fusion, redaction, directory matching and colour contrast
 
@@ -83,7 +83,7 @@ Microphone ──▶ Scribe v2 Realtime ──▶ committed segments
 
 - ☎️ **The TrustLine number** (`/`): The home page is built around the number, with a Save to contacts button and how merging works
 - 📲 **After-call text and call summary** (`/after-call/:id`): When a merged call ends after a warning, the call server texts the caller a link to the summary: transcript, evidence, amount asked for, what TrustLine said on the call, verified contact, recovery steps and one-tap reporting. Summaries are kept in memory on the call server for one day
-- 🏢 **Partner portal** (`/partner`): Redacted member reports, money at risk, trends by tactic and language, advisories with a "Send to members" message, a pre-filled Canadian Anti-Fraud Centre report per incident, and a CSV export (no transcript excerpts)
+- 🏢 **Partner portal** (`/partner`): Redacted member reports, money at risk, trends by tactic and language, advisories partners can email or text to their members (demo: nothing is sent), a pre-filled Canadian Anti-Fraud Centre report per incident, and a CSV export (no transcript excerpts)
 - 💼 **Job offer scams**: A warning sign for anyone asking for a fee to get a job, an LMIA or a work permit (Goal 8.8), with a demo call and an example message
 - 🎙️ **Live call view** (`/live`): Follow a merged call as it happens, listen to a speakerphone call on another device, or play a demo call
 - 🚩 **Evidence-backed warnings**: The exact words that triggered each flag are highlighted

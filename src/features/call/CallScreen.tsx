@@ -8,7 +8,6 @@ import { afterCallPath } from "../../lib/callSummary";
 import { navigate } from "../../lib/router";
 import { textDirection } from "../../lib/flagText";
 import { AddTrustLine } from "./AddTrustLine";
-import { AdvisoryBanner } from "./AdvisoryBanner";
 import { CallAnalysis } from "./CallAnalysis";
 import { CallerSettings } from "./CallerSettings";
 import { Diagnostics } from "./Diagnostics";
@@ -93,8 +92,6 @@ export function CallScreen() {
           another device, or play a scripted demo call.
         </p>
       </header>
-
-      <AdvisoryBanner />
 
       <CallAnalysis
         key={call.callNumber}

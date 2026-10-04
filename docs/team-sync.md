@@ -18,6 +18,13 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-04: No advisory banner on the live call view; partners email or text members (Rishon)
+
+- **What changed:** removed `AdvisoryBanner` (component and CSS) from the live call view. In the partner portal, each published advisory's "Send to members" now opens `SendToMembers` (`src/features/partner/SendToMembers.tsx`) with **Email members** and **Text members**. Both are demo only: nothing is sent, and the sheet says so. `PublishAdvisory` copy now says advisories go to every partner, who pass them on by email or text.
+- **Why:** the banner was confusing on the live view; members hear about advisories from their own organization instead.
+- **What the other person needs to do:** nothing. `useAdvisories` is still used by the partner portal.
+- **Verified:** `npm run check` passes (187 tests). Not yet clicked through in a browser.
+
 ### 2026-10-04: No demo user picker; call summaries share with the Anti-Fraud Centre (Rishon)
 
 - **What changed:**
