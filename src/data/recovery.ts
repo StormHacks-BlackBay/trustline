@@ -129,8 +129,7 @@ export const SITUATIONS: Situation[] = [
       {
         id: "watch-statements",
         title: "Check your statements for the next few months",
-        detail:
-          "Look for payments you don't recognize and report them to your bank straight away.",
+        detail: "Look for payments you don't recognize and report them to your bank straight away.",
       },
     ],
   },

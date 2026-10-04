@@ -6,6 +6,7 @@ import "./AppShell.css";
 const NAV = [
   { href: "/", label: "Call check" },
   { href: "/check", label: "Message check" },
+  { href: "/recover", label: "Already paid?" },
   { href: "/partner", label: "Partner dashboard" },
 ];
 
