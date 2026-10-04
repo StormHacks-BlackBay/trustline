@@ -57,7 +57,7 @@ export async function GET(request: Request): Promise<Response> {
     }
     const reason = await upstream
       .json()
-      .then((body: { detail?: { status?: string } }) => body.detail?.status ?? "")
+      .then((body) => (body as { detail?: { status?: string } }).detail?.status ?? "")
       .catch(() => "");
     console.error(
       `ElevenLabs text to speech error ${upstream.status}${reason ? ` (${reason})` : ""} for voice ${voice}`,
