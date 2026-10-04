@@ -36,9 +36,35 @@ export function elevenLabsTranscriber(apiKey: string): TranscriberFactory {
     connection.on(RealtimeEvents.COMMITTED_TRANSCRIPT, (data) => onCommitted(data.text));
     connection.on(RealtimeEvents.ERROR, (error) => onError(error));
     connection.on(RealtimeEvents.AUTH_ERROR, (error) => onError(error));
+    // connect() resolves before the socket opens, and send() throws until it does.
+    await new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(
+        () => reject(new Error("Scribe did not connect in time")),
+        OPEN_TIMEOUT_MS,
+      );
+      connection.on(RealtimeEvents.OPEN, () => {
+        clearTimeout(timer);
+        resolve();
+      });
+      connection.on(RealtimeEvents.CLOSE, () => {
+        clearTimeout(timer);
+        reject(new Error("Scribe closed the connection before it opened"));
+      });
+    });
+    let dropped = false;
     return {
-      sendAudio: (payload) => connection.send({ audioBase64: payload }),
+      sendAudio: (payload) => {
+        try {
+          connection.send({ audioBase64: payload });
+        } catch (error) {
+          // Report a dropped connection once instead of crashing the server on every chunk.
+          if (!dropped) onError(error);
+          dropped = true;
+        }
+      },
       close: () => connection.close(),
     };
   };
 }
+
+const OPEN_TIMEOUT_MS = 10_000;
