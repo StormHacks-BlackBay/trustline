@@ -5,6 +5,7 @@ import { Sheet } from "../../components/Sheet";
 import { PARTNERS } from "../../data/partners";
 import { FLAG_LABELS } from "../../lib/flagText";
 import type { Assessment } from "../../lib/fusion";
+import type { ScoreSource } from "../../lib/schemas";
 import { redact } from "../../lib/redact";
 import { store } from "../../lib/store";
 import { recentWindow, type Segment } from "../../lib/transcript";
@@ -16,6 +17,7 @@ interface ShareIncidentProps {
   segments: Segment[];
   assessment: Assessment;
   organizationName: string | null;
+  context?: ScoreSource;
 }
 
 type ShareState = "idle" | "sending" | "sent" | "failed";
@@ -27,7 +29,9 @@ export function ShareIncident({
   segments,
   assessment,
   organizationName,
+  context = "call",
 }: ShareIncidentProps) {
+  const party = context === "message" ? "Sender" : "Caller";
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<ShareState>("idle");
   const partner = PARTNERS.find((p) => p.id === user.partnerId);
@@ -71,11 +75,13 @@ export function ShareIncident({
           sent. Names, phone numbers, emails and account numbers are removed.
         </p>
         <dl className="share-preview">
-          <dt>Caller claimed to be</dt>
+          <dt>{party} claimed to be</dt>
           <dd>{claimedOrg ?? "Not stated"}</dd>
           <dt>Warning signs</dt>
           <dd>{assessment.flags.map((f) => FLAG_LABELS[f]).join(", ") || "None"}</dd>
-          <dt>What the caller said (redacted)</dt>
+          <dt>
+            {context === "message" ? "The message (redacted)" : "What the caller said (redacted)"}
+          </dt>
           <dd>
             <blockquote tabIndex={0} aria-label="Redacted excerpt">
               {excerpt}
