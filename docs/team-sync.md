@@ -18,6 +18,13 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-04: Live call view shares reports with the Canadian Anti-Fraud Centre (Ariel)
+
+- **What changed:** in `src/data/partners.ts`, the demo user Harpreet now belongs to the `cafc` partner instead of `demo-newcomer-society`. The live call view's consent sheet reads "Share with Canadian Anti-Fraud Centre?", matching the after-call page (`AFTER_CALL_PARTNER_ID`), and those reports show under the Canadian Anti-Fraud Centre in the partner portal. Demo Newcomer Society and Demo Credit Union stay in the partner list, and Mei still belongs to Demo Credit Union.
+- **Why:** a named, real fraud-reporting body reads as a credible next step in the demo, where "Demo Newcomer Society" did not.
+- **What the other person needs to do:** nothing. No migration: `cafc` already exists from `0004_government_partner.sql`. Reports still go to our Supabase only; nothing reaches the real CAFC.
+- **Verified:** `npm run check`.
+
 ### 2026-10-04: Repo is public; pushes to main deploy automatically (Ariel)
 
 - **What changed:** `StormHacks-BlackBay/trustline` is now public. The Vercel project `trustline-blackbay` and the Railway service `call-server` are connected to GitHub (Vercel and Railway GitHub apps installed on the org). Every push to `main` deploys the site; other branches and pull requests get Vercel preview links. New `railway.json`: the call server builds from the `Dockerfile`, redeploys only when `server/`, `api/`, `src/lib/`, `src/data/`, the `Dockerfile` or package files change, and must pass `/health` before it replaces the running server. Vercel env vars now exist for Preview as well as Production.

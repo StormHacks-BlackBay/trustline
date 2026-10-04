@@ -10,6 +10,6 @@ export const PARTNERS: Partner[] = [
 export const AFTER_CALL_PARTNER_ID = "cafc";
 
 export const DEMO_USERS: DemoUser[] = [
-  { id: "harpreet", name: "Harpreet", partnerId: "demo-newcomer-society", language: "en" },
+  { id: "harpreet", name: "Harpreet", partnerId: "cafc", language: "en" },
   { id: "mei", name: "Mei", partnerId: "demo-credit-union", language: "zh" },
 ];
