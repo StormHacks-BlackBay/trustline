@@ -18,6 +18,15 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Demo transcript synced to the voice; abandoned Gemini calls cancelled (Rishon)
+
+- **What changed:**
+  - `api/demo-speech.ts` now calls ElevenLabs `/with-timestamps` and returns JSON `{ audio, wordStarts }`, where `audio` is a base64 mp3 and `wordStarts` holds each transcript word's start time in seconds (tags skipped, see `wordStartTimes` in `src/lib/demoSpeech.ts`). If a model rejects timestamps, it returns plain audio with `wordStarts: null`. The response format is part of the URL hash (`speechHash`), so the CDN never serves the old mp3 responses.
+  - `demoVoice.ts` reveals words from `audio.currentTime` every 40 ms instead of timers, so the text cannot drift from the speech. Browser voices use `onboundary` word events. `speak()` now takes a `reveal(wordCount)` callback.
+  - `api/score.ts` passes `request.signal` to `scoreTranscript`, and the vite dev API aborts it when the browser disconnects. Before this, superseded scoring requests kept running against Gemini, piled up on the free tier and caused "Gemini request timed out after 8000 ms".
+- **What the other person needs to do:** nothing.
+- **Verified:** CI (`npm run check`, eval) on both commits. Word-timing logic checked against every demo line. Not yet listened to live after this change.
+
 ### 2026-10-03: Call server security and spending limits (Ariel)
 
 - **What changed:** the call server now rejects the Twilio media stream (WebSocket) unless it carries a valid `X-Twilio-Signature` for the exact `wss://` URL, whenever `TWILIO_AUTH_TOKEN` is set. Before, anyone who found the server could stream audio and spend ElevenLabs and Gemini credit. Calls are also cut off after `MAX_CALL_MINUTES` (default 10). `npm run simulate:call` signs its fake stream, so it exercises the same check.
