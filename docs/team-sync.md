@@ -18,6 +18,12 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Vercel functions fixed: .js import extensions (Rishon)
+
+- **What changed:** on the deployed site, every `api/` route crashed on load with `ERR_MODULE_NOT_FOUND`, because `"type": "module"` makes Node require file extensions on relative imports. Live listening ("Could not start live transcription"), the ElevenLabs demo voices (fell back to browser voices) and Gemini scoring all failed in production but worked locally. Relative imports in the 10 files the routes load now end in `.js`. TypeScript, Vite and Vitest map these to the `.ts` files. New `api/_imports.test.ts` fails CI on any extensionless runtime import in that graph. Rule added to `CLAUDE-SHARED.md`.
+- **What the other person needs to do:** use `.js` in relative imports in any file an `api/` route loads.
+- **Verified:** CI. Needs a redeploy to confirm on Vercel.
+
 ### 2026-10-03: Light theme only (Rishon)
 
 - **What changed:** removed the dark palette (`DARK` in `src/styles/tokens.ts`) and the `prefers-color-scheme: dark` switch in `theme.ts`. `color-scheme` is `light` and the browser theme colour is white. The app always uses the warm light palette from the README screenshots, even when the device is in dark mode. DESIGN.md and ACCESSIBILITY.md are updated.

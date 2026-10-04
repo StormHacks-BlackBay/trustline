@@ -33,6 +33,7 @@ How it works:
 Rules for assistants:
 
 - Do not add `@anthropic-ai/sdk` back or add another provider SDK without asking. `@google/genai` is deliberately not used; REST keeps dependencies unchanged.
+- Files loaded by `api/` routes (including `src/lib/schemas.ts`, `src/lib/types.ts`, `src/lib/demoSpeech.ts`, `src/data/demoCalls.ts`) must use `.js` extensions in relative imports, e.g. `from "./_http.js"`. Vercel runs them as native ES modules and crashes on extensionless imports. `api/_imports.test.ts` enforces this.
 - Keys stay server-side. Never prefix them with `VITE_`. `.env` is git-ignored; never commit a key.
 - Free-tier caveat: Google may use free-tier prompts to improve its products. Use scripted demo calls, not real ones, until the team moves to a paid key. This is stated in `PRIVACY.md`.
 - Free-tier rate limits are per model (see AI Studio). The rules layer must keep working when Gemini is unavailable.
