@@ -23,7 +23,7 @@ After a call that triggered a warning, TrustLine texts the user a link to a **ca
 | 📲 Call summary         | `https://trustline-blackbay.vercel.app/after-call/<id>`, sent by text after a warned call                      |
 | 🖥️ Call server (health) | [call-server-production-6115.up.railway.app/health](https://call-server-production-6115.up.railway.app/health) |
 
-The website runs on Vercel and the call server on Railway, so the demo works without anyone's laptop. Hosting details and redeploy steps: [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md).
+The website runs on Vercel and the call server on Railway, so the demo works without anyone's laptop. Every push to `main` deploys automatically. Hosting details: [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md).
 
 **Try it:**
 
@@ -174,7 +174,7 @@ With `ELEVENLABS_API_KEY` set, `npm run demo:agents` creates two ElevenLabs agen
 
 ### Deploying
 
-The web app is on Vercel (`vercel.json` serves the single-page app, and the files in `api/` deploy as functions) and the call server is on Railway (from the `Dockerfile`). Neither redeploys on push; follow the [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md) to redeploy after changes to `main`.
+The web app is on Vercel (`vercel.json` serves the single-page app, and the files in `api/` deploy as functions) and the call server is on Railway (from the `Dockerfile`). Both deploy automatically on every push to `main`; the call server only redeploys when files it uses change (see `railway.json`). Details in the [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md).
 
 ## Testing 🧪
 

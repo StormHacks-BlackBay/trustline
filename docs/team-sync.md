@@ -18,6 +18,13 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-04: Repo is public; pushes to main deploy automatically (Ariel)
+
+- **What changed:** `StormHacks-BlackBay/trustline` is now public. The Vercel project `trustline-blackbay` and the Railway service `call-server` are connected to GitHub (Vercel and Railway GitHub apps installed on the org). Every push to `main` deploys the site; other branches and pull requests get Vercel preview links. New `railway.json`: the call server builds from the `Dockerfile`, redeploys only when `server/`, `api/`, `src/lib/`, `src/data/`, the `Dockerfile` or package files change, and must pass `/health` before it replaces the running server. Vercel env vars now exist for Preview as well as Production.
+- **Why:** Vercel Hobby only deploys the owner's commits from private repos; collaboration is free on public repos. A secret scan of the full history (every branch, plus the actual `.env` values) found no keys.
+- **What the other person needs to do:** Rishon, just push to `main`; your commits deploy too. Env var changes still go through Ariel. A push touching the call server's paths restarts it and clears in-memory call summaries, so avoid those during the demo. Your email is visible on your commits now that the repo is public.
+- **Verified:** see the push that added this entry: Vercel and Railway both deployed from it.
+
 ### 2026-10-04: No advisory banner on the live call view; partners email or text members (Rishon)
 
 - **What changed:** removed `AdvisoryBanner` (component and CSS) from the live call view. In the partner portal, each published advisory's "Send to members" now opens `SendToMembers` (`src/features/partner/SendToMembers.tsx`) with **Email members** and **Text members**. Both are demo only: nothing is sent, and the sheet says so. `PublishAdvisory` copy now says advisories go to every partner, who pass them on by email or text.

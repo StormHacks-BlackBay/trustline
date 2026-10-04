@@ -6,27 +6,23 @@ Until now, phone calls only worked while Ariel's laptop ran the call server and 
 
 ## Current setup (done October 4, 2026)
 
-Steps 1 to 3 below are done, all on Ariel's accounts, managed from the CLI:
+Steps 1 to 3 below are done, all on Ariel's accounts. The repo is public and both hosts deploy automatically from `main`:
 
-| Piece       | Where                                                                                                         | Notes                                                                                                                               |
-| ----------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Web app     | https://trustline-blackbay.vercel.app (Vercel project `trustline-blackbay`, team `black-bay2`, Hobby)         | Public. Deployed with `vercel deploy --prod` from a `git archive` of `main`; not connected to GitHub, so a push does not deploy     |
-| Call server | https://call-server-production-6115.up.railway.app (Railway project `trustline-calls`, service `call-server`) | Deployed with `railway up` from a `git archive` of `main`. Same: a push does not deploy                                             |
-| Twilio      | `+1 604-373-6537` → `POST https://call-server-production-6115.up.railway.app/twilio/voice`                    | Calls no longer reach the laptop. To develop locally with real calls, point the webhook back at a tunnel and set it back afterwards |
+| Piece       | Where                                                                                                         | Notes                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Web app     | https://trustline-blackbay.vercel.app (Vercel project `trustline-blackbay`, team `black-bay2`, Hobby)         | Public. Connected to GitHub: every push to `main` deploys production, and other branches and pull requests get preview links                                               |
+| Call server | https://call-server-production-6115.up.railway.app (Railway project `trustline-calls`, service `call-server`) | Connected to GitHub: a push to `main` redeploys it only when `railway.json`'s watch paths change (`server/`, `api/`, `src/lib/`, `src/data/`, `Dockerfile`, package files) |
+| Twilio      | `+1 604-373-6537` → `POST https://call-server-production-6115.up.railway.app/twilio/voice`                    | Calls no longer reach the laptop. To develop locally with real calls, point the webhook back at a tunnel and set it back afterwards                                        |
 
 **Cost:** Railway is on the free trial ($5 of credit, no card on file), so it cannot bill; when the credit runs out the server stops. Watch it with `railway usage`. Do not add a card unless the team decides to pay. Vercel Hobby is free. Twilio, ElevenLabs and Gemini usage is unchanged from local testing.
 
-**Redeploying after a change on `main`:**
+**Deploying:** push to `main`. Anyone with push access can deploy, because Vercel Hobby allows collaborators on public repos. Watch progress in the Vercel and Railway dashboards, or with `vercel ls --scope black-bay2` and `railway service status --service call-server`. Railway checks `/health` before switching to a new build, so a broken build does not replace a working server.
 
-```bash
-git archive HEAD | tar -x -C /tmp/tl && cd /tmp/tl
-railway link   # project trustline-calls, service call-server (first time only)
-railway up --service call-server --ci
-vercel link --project trustline-blackbay --scope black-bay2   # first time only
-vercel deploy --prod --scope black-bay2
-```
+Environment variables are not in the repo. Vercel has them for Production and Preview; Railway has them on the `call-server` service. Changing one needs Ariel or Ariel's assistant (with `vercel env` or `railway variable set`), then a redeploy.
 
-Railway summaries are kept in memory, so a redeploy clears them.
+To deploy without a push (for example after changing a variable): `vercel deploy --prod --scope black-bay2` from a checkout, and `railway service redeploy --service call-server`.
+
+Call summaries are kept in the call server's memory, so a call server redeploy clears them. Avoid pushing changes under `server/`, `api/`, `src/lib/` or `src/data/` during the demo.
 
 ## What runs where
 
