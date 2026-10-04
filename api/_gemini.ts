@@ -76,7 +76,7 @@ export async function scoreTranscript(
   } catch (error) {
     if (signal?.aborted) return { ok: false, error: "scoring_aborted", status: 499 };
     if (timeout.aborted) {
-      console.error(`Gemini request timed out after ${TIMEOUT_MS} ms`);
+      console.error(`Gemini request timed out after ${TIMEOUT_MS} ms; using the rules layer`);
       return { ok: false, error: "scoring_failed", status: 504 };
     }
     console.error("Scoring failed", error);

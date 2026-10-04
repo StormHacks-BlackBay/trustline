@@ -4,7 +4,7 @@ import { defineConfig, loadEnv, type Plugin } from "vite";
 
 type Handler = (request: Request) => Promise<Response>;
 
-async function toRequest(req: IncomingMessage): Promise<Request> {
+async function toRequest(req: IncomingMessage, signal: AbortSignal): Promise<Request> {
   const chunks: Buffer[] = [];
   for await (const chunk of req) chunks.push(chunk as Buffer);
   const body = chunks.length > 0 ? Buffer.concat(chunks) : undefined;
@@ -16,6 +16,7 @@ async function toRequest(req: IncomingMessage): Promise<Request> {
     method: req.method,
     headers,
     body: req.method === "GET" || req.method === "HEAD" ? undefined : body,
+    signal,
   });
 }
 
@@ -37,7 +38,13 @@ function devApi(): Plugin {
             res.statusCode = 405;
             return res.end();
           }
-          const response = await handler(await toRequest(req));
+          // Like Vercel, abort the handler's request when the browser goes away, so a cancelled
+          // scoring request also cancels its Gemini call.
+          const disconnected = new AbortController();
+          res.on("close", () => {
+            if (!res.writableEnded) disconnected.abort();
+          });
+          const response = await handler(await toRequest(req, disconnected.signal));
           res.statusCode = response.status;
           response.headers.forEach((value, key) => res.setHeader(key, value));
           res.end(Buffer.from(await response.arrayBuffer()));
