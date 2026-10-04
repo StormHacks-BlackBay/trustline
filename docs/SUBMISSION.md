@@ -4,7 +4,7 @@ Replace every bracketed value before submitting. Numbers in this file come from 
 
 **Project name:** TrustLine
 
-**Elevator pitch (162 characters):** Merge TrustLine into a suspicious call and it warns you out loud, in your language, the moment the caller sounds like a scam. Then it alerts your whole community.
+**Elevator pitch (157 characters):** Merge TrustLine's number into a suspicious call and it warns you out loud, in your language. Then it texts you a summary and alerts your community.
 
 ## About the project
 
@@ -14,9 +14,17 @@ Canadians reported more than $638 million in fraud losses in 2024, and studies c
 
 ## What it does
 
-TrustLine listens to a call on speakerphone and transcribes it in real time. When the caller uses a known scam tactic, TrustLine highlights the exact words, explains the concern in the user's language (English, Punjabi, Mandarin, Tagalog or Farsi), and shows the official contact channel for the organization the caller claims to represent, so the user can hang up and check independently.
+**The product is a phone number, not an app.** During a suspicious call, the user taps Add Call, dials TrustLine and taps Merge, like adding a friend to a three-way call. TrustLine transcribes the call in real time. When the caller uses a known scam tactic, such as gift card payment, deportation threats, one-time code requests or a fee to get a job or work permit, TrustLine says so out loud on the call in the user's language (English, Punjabi, Mandarin, Tagalog or Farsi) and names the official contact channel for the organization the caller claims to be.
 
-With the user's consent, TrustLine sends a redacted summary of the incident to the user's community organization or credit union. The organization can publish an advisory that reaches users of every partner. This is our answer to **SDG 17.17**: a working partnership between civil society and financial institutions. Protecting newcomers' access to banking supports **SDG 8.10**.
+After the call, TrustLine texts the user a link to a call summary: the transcript with the exact words highlighted, the amount they were asked for, what TrustLine said, the verified contact, recovery steps if they already paid, and a one-tap, consent-based report to their community organization or credit union.
+
+The website is mainly for those organizations. The partner portal shows redacted reports from their members, total money at risk, scam trends by tactic and language, and lets staff publish an advisory that reaches every partner's users, copy a ready-to-send message to their members, file a pre-filled Canadian Anti-Fraud Centre report, and export the data.
+
+**How it maps to the UN Sustainable Development Goals:**
+
+- **8.10 (access to banking and financial services):** a newcomer who loses savings to a fake CRA or bank call often stops trusting banks altogether. TrustLine stops the payment during the call and connects them to their real bank afterward.
+- **8.8 (protect labour rights and migrant workers):** fake employers charge newcomers and temporary workers for jobs and LMIAs. TrustLine flags any fee for a job, LMIA or work permit, because real employers in Canada do not charge them.
+- **17.17 (public, public-private and civil society partnerships):** settlement agencies, credit unions and the Anti-Fraud Centre each see only part of the picture. TrustLine gives them one shared, consent-based channel: one member's report becomes an advisory for everyone.
 
 ## How we built it
 
@@ -36,10 +44,10 @@ With the user's consent, TrustLine sends a redacted summary of the incident to t
 
 ## Accomplishments that we're proud of
 
-- A full loop from a live call to a published community advisory on another partner's users' screens
-- On our 17-call evaluation set, the rules layer alone reaches 100% precision and 91% recall with no false positives on legitimate calls. [Add rules + LLM results from `npm run eval` with GEMINI_API_KEY set.]
+- A full loop from a merged phone call to a spoken warning, an after-call text, a member's report and a published advisory on another partner's users' screens
+- On our 18-call evaluation set, the rules layer alone reaches 100% precision and 92% recall with no false positives on legitimate calls. [Add rules + LLM results from `npm run eval` with GEMINI_API_KEY set.]
 - Median alert latency of [X] ms for rule warnings and [Y] ms for LLM explanations, measured in the app's Diagnostics panel
-- No axe-core accessibility violations across every screen, in light and dark themes
+- No axe-core accessibility violations across every screen
 
 ## What we learned
 
@@ -47,7 +55,8 @@ With the user's consent, TrustLine sends a redacted summary of the incident to t
 
 ## What's next for TrustLine
 
-- Phone-number forwarding through Twilio so TrustLine can screen calls without speakerphone
+- Call forwarding so TrustLine can screen unknown callers before the user picks up
+- Keeping call summaries in a database instead of the call server's memory, and partner sign-in for the portal
 - Pilots with settlement agencies and credit unions in Metro Vancouver
 - Native-speaker review of translations, and a larger partner-reviewed evaluation set
 

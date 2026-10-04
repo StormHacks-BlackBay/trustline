@@ -4,7 +4,11 @@
 
 ## Project Description 🚨
 
-TrustLine helps newcomers to Canada recognize scam tactics during financial phone calls. During a suspicious call, the user taps Add Call, chooses TrustLine and merges it in, the same way they would add a friend to a three-way call. TrustLine transcribes the conversation in real time, flags tactics such as gift card payment requests, deportation threats and requests for one-time codes, and explains each warning in the user's chosen language, both on the user's screen and out loud on the call. When the caller claims to represent an institution, TrustLine shows that institution's official contact channel from a verified directory so the user can hang up and check independently. With the user's consent, a redacted incident summary is shared with the user's community organization or credit union, which can publish an advisory that reaches users of every partner organization.
+TrustLine helps newcomers to Canada recognize scam tactics during financial phone calls. **The product is a phone number.** During a suspicious call, the user taps Add Call, dials TrustLine and merges it in, the same way they would add a friend to a three-way call. No app to install. TrustLine transcribes the conversation in real time, flags tactics such as gift card payment requests, deportation threats, one-time code requests and fees for jobs or work permits, and warns the user out loud on the call in their chosen language. When the caller claims to represent an institution, TrustLine names that institution's official contact channel from a verified directory so the user can hang up and check independently.
+
+After a call that triggered a warning, TrustLine texts the user a link to a **call summary page**: the transcript, the highlighted evidence, the amount the caller asked for, the verified contact, recovery steps and a one-tap consent to report it. The website is mainly a **partner portal** for settlement agencies and credit unions: redacted reports from their members, money at risk, scam trends by tactic and language, advisories they can publish to every partner and send to their members, a pre-filled Canadian Anti-Fraud Centre report, and a CSV export.
+
+**UN SDGs.** Goal 8 (decent work and economic growth): 8.10, keeping newcomers' trust in banking and financial services, and 8.8, protecting migrant workers from job and LMIA fee scams. Goal 17 (partnerships): 17.17, one shared channel between civil society, credit unions and the public sector.
 
 ## Screenshots:
 
@@ -77,7 +81,11 @@ Microphone ──▶ Scribe v2 Realtime ──▶ committed segments
 
 ## Features 🌟
 
-- 🎙️ **Live transcript**: Real-time transcription of a speakerphone call
+- ☎️ **The TrustLine number** (`/`): The home page is built around the number, with a Save to contacts button and how merging works
+- 📲 **After-call text and call summary** (`/after-call/:id`): When a merged call ends after a warning, the call server texts the caller a link to the summary: transcript, evidence, amount asked for, what TrustLine said on the call, verified contact, recovery steps and one-tap reporting. Summaries are kept in memory on the call server for one day
+- 🏢 **Partner portal** (`/partner`): Redacted member reports, money at risk, trends by tactic and language, advisories with a "Send to members" message, a pre-filled Canadian Anti-Fraud Centre report per incident, and a CSV export (no transcript excerpts)
+- 💼 **Job offer scams**: A warning sign for anyone asking for a fee to get a job, an LMIA or a work permit (Goal 8.8), with a demo call and an example message
+- 🎙️ **Live call view** (`/live`): Follow a merged call as it happens, listen to a speakerphone call on another device, or play a demo call
 - 🚩 **Evidence-backed warnings**: The exact words that triggered each flag are highlighted
 - 🌐 **In-language explanations**: Warnings in English, Punjabi, Mandarin, Tagalog and Farsi, with right-to-left layout for Farsi
 - ☎️ **Verified next step**: Official contact channels instead of caller-supplied numbers
@@ -103,7 +111,7 @@ npm run dev
 
 Free-tier limits are per model and shown in [AI Studio](https://aistudio.google.com/rate-limit). If scoring is rate-limited or slow, the app falls back to the rules layer and says it is in basic mode. On the free tier, Google may use prompts to improve its products, so use demo calls rather than real ones until you move to a paid key (see [PRIVACY.md](PRIVACY.md)).
 
-Open `http://localhost:5173` for the app and `http://localhost:5173/partner` for the partner dashboard.
+Open `http://localhost:5173` for the home page, `/live` for the live call view and demo calls, and `/partner` for the partner portal.
 
 | Setting                                       | Without it                                                                                                                    |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -118,7 +126,7 @@ Open `http://localhost:5173` for the app and `http://localhost:5173/partner` for
 
 #### Use the number with the app
 
-1. On Ariel's laptop, open [the local app](http://localhost:5173), select **Harpreet**, and choose the warning language (for example, Punjabi).
+1. On Ariel's laptop, open [the live call view](http://localhost:5173/live), select **Harpreet**, and choose the warning language (for example, Punjabi).
 2. Wait until the call card says **“Ready: merged calls will appear on this screen.”** The app, call server, and tunnel must all be running.
 3. For a quick test, call **+1 604-373-6537** from Ariel's linked phone. You should hear “TrustLine is listening.” Speak a fictional demo script and watch for the transcript and warning in the app.
 4. For a merged-call demo, first call your teammate. On your phone, tap **Add Call**, dial **+1 604-373-6537**, then tap **Merge Calls**. Have your teammate read the scripted scam lines; keep the app open on the laptop to see the transcript and warning. Merge Calls depends on your carrier supporting conference calls.
@@ -131,7 +139,7 @@ The number costs US$1.15/month, plus call and audio-service usage. Release it in
 #### Set up a separate deployment
 
 1. Buy a phone number in the Twilio console.
-2. Deploy the call server with the `Dockerfile` on an always-on host such as Railway, Fly.io or Render. Set `ELEVENLABS_API_KEY`, `GEMINI_API_KEY`, `PUBLIC_URL` (the server's https URL), `TWILIO_AUTH_TOKEN`, `APP_ORIGIN` (the web app's URL) and `PHONE_LINKS` (which demo user each of your phones belongs to).
+2. Deploy the call server with the `Dockerfile` on an always-on host such as Railway, Fly.io or Render. Set `ELEVENLABS_API_KEY`, `GEMINI_API_KEY`, `PUBLIC_URL` (the server's https URL), `TWILIO_AUTH_TOKEN`, `APP_ORIGIN` (the web app's URL) and `PHONE_LINKS` (which demo user each of your phones belongs to). For the after-call text, also set `TWILIO_ACCOUNT_SID` and `TWILIO_PHONE_NUMBER` (the number that sends it; defaults to `VITE_TRUSTLINE_NUMBER`). Without them, or with `APP_ORIGIN` unset, calls still work and the live call view still offers "Open the call summary", but no text is sent.
 3. In Twilio, set the number's "A call comes in" webhook to `POST https://<call server>/twilio/voice`.
 4. Set `VITE_CALL_SERVER_URL` and `VITE_TRUSTLINE_NUMBER` for the web app and redeploy it.
 5. Call someone, tap Add Call, call the TrustLine number and tap Merge Calls.
@@ -161,7 +169,7 @@ npm run lint
 npm run typecheck
 ```
 
-Rules-only results on the 17-case set: 100% precision and 91% recall when warning at medium risk or above, with no false positives on the 6 legitimate calls. The cases were written alongside the rules, so these numbers are optimistic. The missed case, a request for an Interac payment with no other keywords, is the kind the LLM layer is there to catch; set `GEMINI_API_KEY` to include it in the report.
+Rules-only results on the 18-case set: 100% precision and 92% recall (11 of 12 scams) when warning at medium risk or above, with no false positives on the 6 legitimate calls. The cases were written alongside the rules, so these numbers are optimistic. The missed case, a request for an Interac payment with no other keywords, is the kind the LLM layer is there to catch; set `GEMINI_API_KEY` to include it in the report.
 
 <div align="center">
 

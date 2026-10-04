@@ -51,6 +51,13 @@ Rules for assistants:
 - Browser env vars: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (holds the `sb_publishable_...` key, which is public by design). Never put the database password, a `sb_secret_...` key or `service_role` key in any `VITE_` variable.
 - The repo is linked with the Supabase CLI (`supabase/config.toml`). Apply new migrations with `supabase db push`; preview first with `supabase db push --dry-run`.
 
+### Product structure: the number first, the website for partners
+
+- The product is the TrustLine phone number. The web app's routes: `/` home page built around the number, `/after-call/:id` call summary, `/live` live call view and demo calls, `/check` message check, `/recover` recovery steps, `/partner` partner portal.
+- When a merged call ends, the call server saves a `CallSummary` (`src/lib/callSummary.ts`) in memory (`server/archive.ts`, one day, max 200), emits a `call_summary` event before `call_ended`, serves it at `GET /calls/:id`, and, if the call was warned, texts the caller the summary link (`server/sms.ts`). The text needs `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER` (or `VITE_TRUSTLINE_NUMBER`) and a real `APP_ORIGIN`; without them no text is sent and nothing else breaks.
+- SMS reverses Ariel's earlier "no SMS" decision. Confirm with him before the demo.
+- Adding a warning sign (flag): add it to `FLAG_IDS` (`src/lib/types.ts`), `FLAG_PRIORITY` (`src/lib/flagText.ts`), `FLAG_LABELS_BY_LANGUAGE` (`src/lib/i18n/warning.ts`) and `reasons.ts` in all five languages, the `FLAGS` list in `api/_scoring-prompt.ts`, `FLAG_SITUATIONS` in `src/data/recovery.ts` and, if it fits, `advisory.ts` tactics. Tests check that each list is complete. `upfront_fee` (fees for jobs, LMIAs, work permits) is the newest.
+
 ## Project conventions (quick reference)
 
 Full details are in `README.md`, `PRIVACY.md`, `ACCESSIBILITY.md` and `DESIGN.md`.

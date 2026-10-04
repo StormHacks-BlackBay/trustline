@@ -18,6 +18,24 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: The number is the product; after-call text, summary page and partner portal (Rishon)
+
+- **What changed:** the site is restructured around Goals 8 and 17.
+  - `/` is a new home page built around the TrustLine number. The old call screen moved to `/live` ("Live call view").
+  - The call server saves each merged call (`server/archive.ts`, in memory, one day), serves it at `GET /calls/:id`, emits a new `call_summary` SSE event, and texts the caller a link to `/after-call/:id` when the call was warned (`server/sms.ts`).
+  - New call summary page (`src/features/afterCall`) with the transcript, evidence, amount asked for, recovery link and one-tap reporting.
+  - The partner dashboard is now the "Partner portal": money at risk (`src/lib/money.ts`), trends by tactic and language, "Send to members", a pre-filled CAFC report, and a CSV export.
+  - New warning sign `upfront_fee` for fees for jobs, LMIAs and work permits (Goal 8.8), in rules, both Gemini prompts and five languages, plus a `job-scam` demo call, a job offer example message and an eval case.
+  - Hyphenated words now count as one word in demo voice sync.
+- **Why:** a user had no reason to visit the website. Now the phone number does the work during the call, the website is where the user lands after it, and organizations use the portal.
+- **What the other person needs to do:**
+  - Ariel: SMS reverses your earlier no-SMS decision. Say if you object.
+  - For the text to send, set `TWILIO_ACCOUNT_SID`, `TWILIO_PHONE_NUMBER` and a real `APP_ORIGIN` in the call server's `.env` on the laptop.
+  - Rishon: set `VITE_CALL_SERVER_URL` and `VITE_TRUSTLINE_NUMBER` on Vercel and redeploy.
+  - The demo now opens `/live` instead of `/`.
+- **Verified:** CI (typecheck, lint, tests including `server/afterCall.test.ts`, build). Rules output checked locally for the new demo call, example and eval case. The real SMS has not been tested on a handset.
+- **Open questions:** summaries are lost when the call server restarts. The recovery guide and home page are English only.
+
 ### 2026-10-03: Vercel functions fixed: .js import extensions (Rishon)
 
 - **What changed:** on the deployed site, every `api/` route crashed on load with `ERR_MODULE_NOT_FOUND`, because `"type": "module"` makes Node require file extensions on relative imports. Live listening ("Could not start live transcription"), the ElevenLabs demo voices (fell back to browser voices) and Gemini scoring all failed in production but worked locally. Relative imports in the 10 files the routes load now end in `.js`. TypeScript, Vite and Vitest map these to the `.ts` files. New `api/_imports.test.ts` fails CI on any extensionless runtime import in that graph. Rule added to `CLAUDE-SHARED.md`.
