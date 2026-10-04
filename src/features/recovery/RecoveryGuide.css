@@ -12,24 +12,21 @@
   font-weight: var(--weight-bold);
 }
 
-.recovery-situation,
-.recovery-step__head {
+.recovery-situation {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
   column-gap: var(--space-3);
 }
 
-.recovery-situation input,
-.recovery-step__head input {
+.recovery-situation input {
   inline-size: var(--space-6);
   block-size: var(--space-6);
   margin: 0;
   accent-color: var(--color-accent);
 }
 
-.recovery-situation label,
-.recovery-step__title {
+.recovery-situation label {
   display: flex;
   align-items: center;
   min-block-size: var(--touch);
@@ -38,34 +35,32 @@
 
 .recovery-steps {
   margin: 0;
-  padding: 0;
-  list-style: none;
+  padding-inline-start: var(--space-6);
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 
-.recovery-step__title {
+.recovery-step > * + * {
+  margin-top: var(--space-2);
+}
+
+.recovery-step::marker {
   font-weight: var(--weight-bold);
 }
 
-.recovery-step__body {
-  padding-inline-start: calc(var(--space-6) + var(--space-3));
-  display: grid;
-  gap: var(--space-2);
+.recovery-step__title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
 }
 
-.recovery-step__body p {
-  margin: 0;
+.recovery-step p {
+  margin-bottom: 0;
   max-width: var(--reading-max);
 }
 
-.recovery-step--done .recovery-step__title {
-  color: var(--color-muted-text);
-  text-decoration: line-through;
-}
-
 .recovery-contacts {
-  margin: 0;
+  margin-bottom: 0;
   padding-inline-start: var(--space-5);
   display: grid;
   gap: var(--space-1);
