@@ -5,7 +5,8 @@
  * Everything else lives here; component styles use only these variables.
  */
 :root {
-  color-scheme: light dark;
+  /* One light theme: form controls and scrollbars stay light even in the device's dark mode. */
+  color-scheme: light;
 
   /* Atkinson Hyperlegible was designed for low-vision readers. Gurmukhi, Chinese and Persian
      fall back to the platform's Noto or system fonts. */

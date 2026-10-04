@@ -24,7 +24,7 @@ All values live in tokens. Component styles use only `var(--…)`; a raw `rem`, 
 
 ### Colour (`src/styles/tokens.ts`)
 
-Colours are data, written to CSS custom properties by `src/styles/theme.ts`, with a light and a dark palette. `src/styles/tokens.test.ts` asserts that every text and background pair the UI uses meets WCAG AA (4.5:1), and that the accent meets 3:1 against surfaces for non-text use. Adding a pair to the UI means adding it to `TEXT_PAIRS`.
+Colours are data, written to CSS custom properties by `src/styles/theme.ts`, with one light palette. TrustLine does not switch to a dark theme when the device is in dark mode, so the app always looks like the screenshots. `src/styles/tokens.test.ts` asserts that every text and background pair the UI uses meets WCAG AA (4.5:1), and that the accent meets 3:1 against surfaces for non-text use. Adding a pair to the UI means adding it to `TEXT_PAIRS`.
 
 | Token                                    | Role                                                       |
 | ---------------------------------------- | ---------------------------------------------------------- |

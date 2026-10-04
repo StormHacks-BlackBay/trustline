@@ -1,11 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { contrastRatio } from "./contrast";
-import { DARK, LIGHT, TEXT_PAIRS } from "./tokens";
+import { LIGHT, TEXT_PAIRS } from "./tokens";
 
-describe.each([
-  ["light", LIGHT],
-  ["dark", DARK],
-])("%s palette", (_name, palette) => {
+describe("palette", () => {
+  const palette = LIGHT;
+
   it.each(TEXT_PAIRS)("%s on %s meets 4.5:1", (fg, bg) => {
     expect(contrastRatio(palette[fg], palette[bg])).toBeGreaterThanOrEqual(4.5);
   });

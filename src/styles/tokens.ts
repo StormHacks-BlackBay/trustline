@@ -36,24 +36,6 @@ export const LIGHT: Palette = {
   highlight: "#ffdf80",
 };
 
-export const DARK: Palette = {
-  background: "#121614",
-  surface: "#1a201e",
-  surfaceSunken: "#0e1211",
-  border: "#323b38",
-  text: "#f1efe9",
-  mutedText: "#a9b1ad",
-  accent: "#6fcfc6",
-  onAccent: "#06221f",
-  lowBackground: "#12301f",
-  lowText: "#a3e3bb",
-  mediumBackground: "#3a2c06",
-  mediumText: "#ffd57a",
-  highBackground: "#3d1410",
-  highText: "#ffb7ab",
-  highlight: "#6b5410",
-};
-
 /** Text and background pairs that appear in the UI. Each must meet WCAG AA for body text. */
 export const TEXT_PAIRS: [keyof Palette, keyof Palette][] = [
   ["text", "background"],

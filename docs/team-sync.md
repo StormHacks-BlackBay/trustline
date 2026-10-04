@@ -18,6 +18,12 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Light theme only (Rishon)
+
+- **What changed:** removed the dark palette (`DARK` in `src/styles/tokens.ts`) and the `prefers-color-scheme: dark` switch in `theme.ts`. `color-scheme` is `light` and the browser theme colour is white. The app always uses the warm light palette from the README screenshots, even when the device is in dark mode. DESIGN.md and ACCESSIBILITY.md are updated.
+- **What the other person needs to do:** nothing. Don't add dark-mode styles.
+- **Verified:** CI (contrast tests now cover the one palette).
+
 ### 2026-10-03: The warning and share flow follow the chosen language (Rishon)
 
 - **What changed:** new `src/lib/i18n/warning.ts` holds `WARNING_TEXT` (warning statuses, next-step sentences with `{org}` and `{phone}`, recovery link, share button, consent sheet, confirmation), `RISK_LABELS` and `FLAG_LABELS_BY_LANGUAGE` for all five languages. `WarningHero` and `ShareIncident` use them and set `lang` and `dir`, so Farsi is right to left. `RiskBadge` takes an optional `language`, `flagLabel(flag, language)` is in `flagText.ts`, and `Sheet` takes optional `lang` and `dir`. `FLAG_LABELS` (English) is unchanged for the partner dashboard. The English line and the quoted caller or message words stay English. The rest of the UI chrome is still English by design.
