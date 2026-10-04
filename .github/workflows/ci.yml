@@ -15,5 +15,13 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run check
+      # The same checks as `npm run check`, as separate steps so a failure names its cause.
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npx vite build
       - run: npm run eval
