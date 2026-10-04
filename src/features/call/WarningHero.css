@@ -75,3 +75,13 @@
     padding: var(--space-6) var(--space-8);
   }
 }
+
+.warning__recovery {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.warning__recovery a {
+  color: var(--color-text);
+  font-weight: var(--weight-medium);
+}

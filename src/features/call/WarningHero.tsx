@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
 import { ButtonLink } from "../../components/ButtonLink";
 import { ChipList } from "../../components/Chip";
+import { Link } from "../../components/Link";
 import { RiskBadge } from "../../components/RiskBadge";
+import { recoveryPath, situationsForFlags } from "../../data/recovery";
 import { FLAG_LABELS, ruleReason, textDirection } from "../../lib/flagText";
 import type { Assessment } from "../../lib/fusion";
 import type { ScoreSource } from "../../lib/schemas";
@@ -129,6 +131,11 @@ export function WarningHero({
         {share}
       </div>
       {note && <p className="warning__note">{note}</p>}
+      <p className="warning__recovery">
+        <Link href={recoveryPath(situationsForFlags(assessment.flags))}>
+          Already paid or shared details? See what to do now
+        </Link>
+      </p>
     </section>
   );
 }
