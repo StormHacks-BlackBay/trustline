@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import type { IncomingMessage } from "node:http";
 import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv, type Plugin } from "vite";
@@ -61,5 +62,9 @@ function devApi(): Plugin {
 export default defineConfig(({ mode }) => {
   // Server-only keys (no VITE_ prefix) are exposed to the dev API handlers, never to the bundle.
   Object.assign(process.env, loadEnv(mode, process.cwd(), ""));
-  return { plugins: [react(), devApi()] };
+  return {
+    plugins: [react(), devApi()],
+    // On GitHub Actions, failed tests also show up as annotations on the commit.
+    test: { reporters: process.env.GITHUB_ACTIONS ? ["default", "github-actions"] : ["default"] },
+  };
 });
