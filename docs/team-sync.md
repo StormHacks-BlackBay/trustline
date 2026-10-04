@@ -25,6 +25,13 @@ Add an entry when a change affects the other person: a new dependency or env var
 - **What the other person needs to do:** Rishon, just push to `main`; your commits deploy too. Env var changes still go through Ariel. A push touching the call server's paths restarts it and clears in-memory call summaries, so avoid those during the demo. Your email is visible on your commits now that the repo is public.
 - **Verified:** see the push that added this entry: Vercel and Railway both deployed from it.
 
+### 2026-10-04: English is the default warning language (Rishon)
+
+- **What changed:** the default demo user (`harpreet` in `src/data/partners.ts`) now has language `en` instead of `pa`. The live call view and message check start in English, and the call server warns in English (spoken warning and after-call text) when no `/live` page has picked a language since it started.
+- **Why:** a judge calling the number with nobody on `/live` heard a Punjabi warning and got a Punjabi text.
+- **What the other person needs to do:** redeploy the call server and site for it to take effect. Browsers that already picked a language keep it.
+- **Verified:** `npm run check` passes.
+
 ### 2026-10-04: No advisory banner on the live call view; partners email or text members (Rishon)
 
 - **What changed:** removed `AdvisoryBanner` (component and CSS) from the live call view. In the partner portal, each published advisory's "Send to members" now opens `SendToMembers` (`src/features/partner/SendToMembers.tsx`) with **Email members** and **Text members**. Both are demo only: nothing is sent, and the sheet says so. `PublishAdvisory` copy now says advisories go to every partner, who pass them on by email or text.
