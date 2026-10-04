@@ -18,6 +18,12 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-03: Demo call voices are acted with Eleven v3 audio tags (Rishon)
+
+- **What changed:** `DemoCall` has an optional `spoken` array: the same lines with Eleven v3 audio tags and pauses, e.g. `[sternly] If this is not resolved today, you will be detained... and deported.` The transcript, detection and sharing still use `lines`. The voice uses `spoken` through `spokenText()` in `src/lib/demoSpeech.ts`. `api/demo-speech.ts` now defaults to `eleven_v3` (override with `ELEVENLABS_DEMO_TTS_MODEL`) and logs ElevenLabs' error reason (for example `missing_permissions`) without the key.
+- **What the other person needs to do:** if you edit a demo line, edit its `spoken` version too. A test checks that both have the same words, so the transcript always matches the audio. The audio regenerates automatically.
+- **Verified:** CI (`npm run check`). Rishon confirmed ElevenLabs voices play locally; the v3 tagged versions are new.
+
 ### 2026-10-03: Demo calls are read aloud (Rishon)
 
 - **What changed:** demo calls now speak each line, and the transcript words appear in time with the voice. New `api/demo-speech.ts` (GET) voices a single line of `DEMO_CALLS` with ElevenLabs text to speech. It only accepts lines that exist, checked with a hash from `src/lib/demoSpeech.ts`, and it returns cacheable mp3s, so Vercel's CDN serves repeat plays without calling ElevenLabs again. Each caller has its own stock voice, and there's a fallback voice. New `src/features/call/demoVoice.ts` plays the clips; without `ELEVENLABS_API_KEY` it falls back to the browser's speech synthesis, then to silent timing. `useReplayTranscript` gained `readAloud` / `setReadAloud`, saved in localStorage as `trustline.readDemoCallsAloud`, and the Demo calls card has a "Read demo calls aloud" checkbox, on by default. New optional env var `ELEVENLABS_DEMO_TTS_MODEL` (default `eleven_multilingual_v2`).

@@ -1,5 +1,5 @@
 import type { DemoCall } from "../../data/demoCalls";
-import { demoSpeechPath } from "../../lib/demoSpeech";
+import { demoSpeechPath, spokenText } from "../../lib/demoSpeech";
 
 /** Pace used when the real length of the speech is unknown (browser voices, muted playback). */
 const MS_PER_WORD = 360;
@@ -70,7 +70,7 @@ export function createDemoVoice(): DemoVoice {
 
   const clip = (call: DemoCall, line: number): Promise<string | null> => {
     if (!elevenLabsAvailable) return Promise.resolve(null);
-    const path = demoSpeechPath(call.id, line, call.lines[line] ?? "");
+    const path = demoSpeechPath(call.id, line, spokenText(call, line));
     const cached = clips.get(path);
     if (cached) return cached;
     const pending = fetch(path)

@@ -1,10 +1,11 @@
 import { DEMO_CALLS } from "../src/data/demoCalls";
-import { lineHash } from "../src/lib/demoSpeech";
+import { lineHash, spokenText } from "../src/lib/demoSpeech";
 import { errorResponse } from "./_http";
 
 const API_BASE = "https://api.elevenlabs.io/v1/text-to-speech";
 const TIMEOUT_MS = 15_000;
-const MODEL = () => process.env.ELEVENLABS_DEMO_TTS_MODEL || "eleven_multilingual_v2";
+/** Eleven v3 performs the audio tags in the spoken scripts ([sternly], [hesitates], pauses). */
+const MODEL = () => process.env.ELEVENLABS_DEMO_TTS_MODEL || "eleven_v3";
 
 /** Stock ElevenLabs voices, one per demo caller, so each call sounds like a different person. */
 export const CALLER_VOICES: Record<string, string> = {
@@ -24,8 +25,9 @@ export async function GET(request: Request): Promise<Response> {
   const params = new URL(request.url).searchParams;
   const call = DEMO_CALLS.find((c) => c.id === params.get("call"));
   const lineParam = params.get("line") ?? "";
-  const text = call && /^\d+$/.test(lineParam) ? call.lines[Number(lineParam)] : undefined;
-  if (!call || text === undefined) return errorResponse("unknown_line", 404);
+  const line = /^\d+$/.test(lineParam) ? Number(lineParam) : -1;
+  if (!call || call.lines[line] === undefined) return errorResponse("unknown_line", 404);
+  const text = spokenText(call, line);
   if (params.get("v") !== lineHash(text)) return errorResponse("stale_line", 400);
 
   const apiKey = process.env.ELEVENLABS_API_KEY;

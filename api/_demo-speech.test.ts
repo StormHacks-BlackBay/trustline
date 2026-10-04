@@ -1,12 +1,12 @@
 // Prefixed with an underscore so Vercel does not deploy this test as a function.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DEMO_CALLS } from "../src/data/demoCalls";
-import { demoSpeechPath } from "../src/lib/demoSpeech";
+import { demoSpeechPath, spokenText } from "../src/lib/demoSpeech";
 import { CALLER_VOICES, FALLBACK_VOICE, GET } from "./demo-speech";
 
 const ircc = DEMO_CALLS.find((c) => c.id === "ircc-scam")!;
 const request = (path: string) => GET(new Request(`http://local${path}`));
-const firstLine = ircc.lines[0] ?? "";
+const firstLine = spokenText(ircc, 0);
 const validPath = demoSpeechPath(ircc.id, 0, firstLine);
 
 describe("GET /api/demo-speech", () => {
