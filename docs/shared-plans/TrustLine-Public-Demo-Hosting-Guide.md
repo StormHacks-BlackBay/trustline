@@ -4,7 +4,17 @@ Written October 4, 2026 for team Black Bay. This guide moves TrustLine off the l
 
 Until now, phone calls only worked while Ariel's laptop ran the call server and a Cloudflare quick tunnel. A quick tunnel's address changes every time it restarts, so each restart meant updating `PUBLIC_URL`, the Twilio webhook and `APP_ORIGIN`. The after-call text also linked to `localhost`, which does not open on a phone.
 
-## Current setup (done October 4, 2026)
+## Shut down after StormHacks (October 5, 2026)
+
+To stop all charges, the hosted demo was taken down:
+
+- **Twilio:** the number +1 604-373-6537 was released. The account has no numbers.
+- **Railway:** the `trustline-calls` project was deleted (final removal on October 7).
+- **Vercel:** `GEMINI_API_KEY`, `ELEVENLABS_API_KEY`, `VITE_CALL_SERVER_URL` and `VITE_TRUSTLINE_NUMBER` were removed from Production and Preview. The site at https://trustline-blackbay.vercel.app stays up for free in basic mode (rules only, browser voice, no phone calls). Only the public Supabase values remain.
+
+To bring it back, follow steps 1 to 4 below with new keys and a new Twilio number. The section after this one records how it was set up during the event.
+
+## Setup during the event (October 4, 2026)
 
 Steps 1 to 3 below are done, all on Ariel's accounts. The repo is public and both hosts deploy automatically from `main`:
 

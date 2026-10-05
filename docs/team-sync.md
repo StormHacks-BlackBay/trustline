@@ -18,6 +18,13 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-05: Hosted demo shut down to stop charges (Ariel)
+
+- **What changed:** released the Twilio number +1 604-373-6537 (the account has no numbers left), deleted the Railway project `trustline-calls`, and removed `GEMINI_API_KEY`, `ELEVENLABS_API_KEY`, `VITE_CALL_SERVER_URL` and `VITE_TRUSTLINE_NUMBER` from the Vercel project (Production and Preview). The site stays up in basic mode: rules-only warnings, browser voice for demo calls, no phone calls. README, the hosting guide and `CLAUDE-SHARED.md` say the demo has ended.
+- **Why:** the number renews monthly, and the public site and call server could spend ElevenLabs and Gemini credit for anyone who visited or called.
+- **What the other person needs to do:** Rishon, check your own accounts: the `trustline-gamma` Vercel project and any Twilio, ElevenLabs, Gemini or Cloudflare resources you created. Remove keys from anything public.
+- **Verified:** Twilio lists 0 numbers; the call server URL returns 404; Vercel lists only the Supabase variables.
+
 ### 2026-10-04: Live call view shares reports with the Canadian Anti-Fraud Centre (Ariel)
 
 - **What changed:** in `src/data/partners.ts`, the demo user Harpreet now belongs to the `cafc` partner instead of `demo-newcomer-society`. The live call view's consent sheet reads "Share with Canadian Anti-Fraud Centre?", matching the after-call page (`AFTER_CALL_PARTNER_ID`), and those reports show under the Canadian Anti-Fraud Centre in the partner portal. Demo Newcomer Society and Demo Credit Union stay in the partner list, and Mei still belongs to Demo Credit Union.

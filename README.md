@@ -12,27 +12,17 @@ After a call that triggered a warning, TrustLine texts the user a link to a **ca
 
 ## Live Demo 🌐
 
-| What                    | Where                                                                                                          |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------- |
-| 📞 TrustLine number     | [+1 604-373-6537](tel:+16043736537)                                                                            |
-| 🏠 Home page            | [trustline-blackbay.vercel.app](https://trustline-blackbay.vercel.app)                                         |
-| 🎙️ Live call view       | [trustline-blackbay.vercel.app/live](https://trustline-blackbay.vercel.app/live)                               |
-| 💬 Message check        | [trustline-blackbay.vercel.app/check](https://trustline-blackbay.vercel.app/check)                             |
-| 🧭 Recovery steps       | [trustline-blackbay.vercel.app/recover](https://trustline-blackbay.vercel.app/recover)                         |
-| 🏢 Partner portal       | [trustline-blackbay.vercel.app/partner](https://trustline-blackbay.vercel.app/partner)                         |
-| 📲 Call summary         | `https://trustline-blackbay.vercel.app/after-call/<id>`, sent by text after a warned call                      |
-| 🖥️ Call server (health) | [call-server-production-6115.up.railway.app/health](https://call-server-production-6115.up.railway.app/health) |
+**The hackathon demo has ended.** The TrustLine number (+1 604-373-6537) has been released and the hosted call server shut down, so phone calls no longer work. The website is still online in a reduced mode:
 
-The website runs on Vercel and the call server on Railway, so the demo works without anyone's laptop. Every push to `main` deploys automatically. Hosting details: [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md).
+| What              | Where                                                                                  |
+| ----------------- | -------------------------------------------------------------------------------------- |
+| 🏠 Home page      | [trustline-blackbay.vercel.app](https://trustline-blackbay.vercel.app)                 |
+| 🎙️ Demo calls     | [trustline-blackbay.vercel.app/live](https://trustline-blackbay.vercel.app/live)       |
+| 💬 Message check  | [trustline-blackbay.vercel.app/check](https://trustline-blackbay.vercel.app/check)     |
+| 🧭 Recovery steps | [trustline-blackbay.vercel.app/recover](https://trustline-blackbay.vercel.app/recover) |
+| 🏢 Partner portal | [trustline-blackbay.vercel.app/partner](https://trustline-blackbay.vercel.app/partner) |
 
-**Try it:**
-
-1. Open the [live call view](https://trustline-blackbay.vercel.app/live), choose a warning language, and wait for **"Ready: merged calls will appear on this screen."**
-2. Call **+1 604-373-6537**. TrustLine joins silently. Read a fictional scam script and watch the transcript and warning appear, and hear TrustLine warn you on the call.
-3. For a merged call, call a teammate first, tap **Add Call**, dial **+1 604-373-6537**, then tap **Merge Calls** (your carrier must support conference calls).
-4. Hang up. After a warned call, the phone gets a text linking to the call summary.
-
-Calls from any number show up on the live call view, so anyone can try it. Calls end after 10 minutes. Use scripted calls only: Gemini runs on the free tier (see [PRIVACY.md](PRIVACY.md)).
+Without API keys, warnings come from the rules layer only ("basic mode"), and demo calls are read by the browser's voice instead of ElevenLabs. To run the full system, including phone calls, follow [Getting Started](#getting-started-) with your own keys and the [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md).
 
 ## Screenshots:
 
@@ -146,11 +136,7 @@ Free-tier limits are per model and shown in [AI Studio](https://aistudio.google.
 
 ### Phone calls (merge TrustLine into a call)
 
-**StormHacks demo number: [+1 604-373-6537](tel:+16043736537).** This number is already provisioned; use it for the team demo.
-
-The number is connected to the hosted call server; see [Live Demo](#live-demo-) to try it. To link another phone to a demo user, update `PHONE_LINKS` in the Railway service's variables.
-
-The number costs US$1.15/month, plus call and audio-service usage. Release it in Twilio after the event to stop monthly renewal. See the [Twilio phone-call guide](docs/shared-plans/TrustLine-Twilio-Phone-Call-Guide.md) for setup and troubleshooting.
+The StormHacks demo number (+1 604-373-6537) was released after the event. To try phone calls, set up your own number with the steps below.
 
 #### Set up a separate deployment
 
@@ -174,7 +160,7 @@ With `ELEVENLABS_API_KEY` set, `npm run demo:agents` creates two ElevenLabs agen
 
 ### Deploying
 
-The web app is on Vercel (`vercel.json` serves the single-page app, and the files in `api/` deploy as functions) and the call server is on Railway (from the `Dockerfile`). Both deploy automatically on every push to `main`; the call server only redeploys when files it uses change (see `railway.json`). Details in the [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md).
+The web app deploys to Vercel (`vercel.json` serves the single-page app, and the files in `api/` deploy as functions); the public site redeploys on every push to `main`. The call server runs anywhere that can hold a WebSocket open, from the `Dockerfile` (`railway.json` configures Railway). The hosted call server was shut down after StormHacks; the [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md) explains how to set it up again.
 
 ## Testing 🧪
 
