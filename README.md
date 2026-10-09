@@ -16,13 +16,21 @@
 [![WCAG](https://img.shields.io/badge/WCAG_2.2-AA-0D5C5A)](ACCESSIBILITY.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
-[Live site](https://trustline-blackbay.vercel.app) · [Demo video](https://trustline-blackbay.vercel.app/demo/trustline-demo.mp4) · [How it works](#how-it-works) · [Run it locally](#getting-started)
+[Live site](https://trustline-blackbay.vercel.app) · [Real call video](https://www.youtube.com/shorts/sm245cWq8DM) · [App walkthrough](https://trustline-blackbay.vercel.app/demo/trustline-demo.mp4) · [How it works](#how-it-works) · [Run it locally](#getting-started)
 
 Built in 36 hours at **StormHacks 2026** by [Ariel Tyson](https://github.com/arieltyson) and [Rishon Ghosh](https://github.com/rishon-g).
 
 </div>
 
 ## Demo
+
+### A real phone call
+
+<a href="https://www.youtube.com/shorts/sm245cWq8DM"><img src="docs/demo/real-call-poster.png" alt="Rishon on a real phone call with TrustLine merged in; play the video on YouTube" width="100%"></a>
+
+**[▶ Watch on YouTube](https://www.youtube.com/shorts/sm245cWq8DM)**: Rishon takes a phone call, adds TrustLine to it, and TrustLine detects the scam during the call.
+
+### Walkthrough of the app
 
 <a href="https://trustline-blackbay.vercel.app/demo/trustline-demo.mp4"><img src="docs/demo/trustline-demo-preview.gif" alt="A scripted IRCC scam call: the transcript appears, TrustLine flags the threats and shows the official IRCC number" width="100%"></a>
 

@@ -23,6 +23,7 @@ Add an entry when a change affects the other person: a new dependency or env var
 - **What changed:** `README.md` now leads with a hero image, badges, a demo GIF, the problem, engineering highlights, screenshots, architecture, a features table and the tech stack; the setup and testing sections are unchanged. The seven old screenshots in `docs/screenshots/` were replaced (they showed the demo user picker, "Share with Demo Newcomer Society" and a placeholder number) with new desktop and phone captures plus two composites (`hero.png`, `phones.png`). Added `public/demo/trustline-demo.mp4` (95 s, captioned, no audio; served by the site at `/demo/trustline-demo.mp4` because GitHub cannot play MP4s in the README) and `docs/demo/trustline-demo-preview.gif`.
 - **Why:** to present the project to employers.
 - **What the other person needs to do:** nothing. All captures come from a local run in basic mode (no API keys), so nothing used paid services.
+- The Demo section also links Rishon's real phone call on YouTube (https://www.youtube.com/shorts/sm245cWq8DM) through a poster image, `docs/demo/real-call-poster.png`, made from the video's thumbnail.
 - **Verified:** README rendered through GitHub's markdown API; every local image and link resolves. Rules-only eval rerun: precision 100%, recall 92%, 0/6 false positives; 187 tests pass.
 
 ### 2026-10-05: Hosted demo shut down to stop charges (Ariel)
