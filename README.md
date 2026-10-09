@@ -42,7 +42,7 @@ Newcomers are frequent targets of phone scams: callers pose as immigration (IRCC
 
 ## What TrustLine does
 
-TrustLine was designed with newcomers in mind, but it works on any scam call, from fake immigration officers to fake retailers offering a refund for your card number.
+TrustLine was designed with newcomers in mind, but the tactics it listens for show up in scams aimed at anyone, from fake immigration officers to a fake retailer offering a refund in exchange for your card number.
 
 **The product is a phone number.** During a suspicious call, the user taps Add Call, dials TrustLine and merges it in, the same way they would add a friend to a three-way call. There is no app to install.
 
