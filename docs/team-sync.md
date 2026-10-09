@@ -18,6 +18,13 @@ Add an entry when a change affects the other person: a new dependency or env var
 
 ---
 
+### 2026-10-08: README rewritten for a portfolio audience, new screenshots and a demo video (Rishon)
+
+- **What changed:** `README.md` now leads with a hero image, badges, a demo GIF, the problem, engineering highlights, screenshots, architecture, a features table and the tech stack; the setup and testing sections are unchanged. The seven old screenshots in `docs/screenshots/` were replaced (they showed the demo user picker, "Share with Demo Newcomer Society" and a placeholder number) with new desktop and phone captures plus two composites (`hero.png`, `phones.png`). Added `docs/demo/trustline-demo.mp4` (95 s, captioned, no audio) and `docs/demo/trustline-demo-preview.gif`.
+- **Why:** to present the project to employers.
+- **What the other person needs to do:** nothing. All captures come from a local run in basic mode (no API keys), so nothing used paid services.
+- **Verified:** README rendered through GitHub's markdown API; every local image and link resolves. Rules-only eval rerun: precision 100%, recall 92%, 0/6 false positives; 187 tests pass.
+
 ### 2026-10-05: Hosted demo shut down to stop charges (Ariel)
 
 - **What changed:** released the Twilio number +1 604-373-6537 (the account has no numbers left), deleted the Railway project `trustline-calls`, and removed `GEMINI_API_KEY`, `ELEVENLABS_API_KEY`, `VITE_CALL_SERVER_URL` and `VITE_TRUSTLINE_NUMBER` from the Vercel project (Production and Preview). The site stays up in basic mode: rules-only warnings, browser voice for demo calls, no phone calls. README, the hosting guide and `CLAUDE-SHARED.md` say the demo has ended.

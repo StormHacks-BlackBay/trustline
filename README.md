@@ -1,78 +1,74 @@
 <div align="center">
 
-# TrustLine 📞
+<img src="docs/screenshots/hero.png" alt="TrustLine: a live call view on a laptop and a Punjabi scam warning on a phone" width="100%">
 
-## Project Description 🚨
+# TrustLine
 
-TrustLine helps newcomers to Canada recognize scam tactics during financial phone calls. **The product is a phone number.** During a suspicious call, the user taps Add Call, dials TrustLine and merges it in, the same way they would add a friend to a three-way call. No app to install. TrustLine transcribes the conversation in real time, flags tactics such as gift card payment requests, deportation threats, one-time code requests and fees for jobs or work permits, and warns the user out loud on the call in their chosen language. When the caller claims to represent an institution, TrustLine names that institution's official contact channel from a verified directory so the user can hang up and check independently.
+**Real-time, in-language scam call warnings for newcomers to Canada, with a shared advisory network between community organizations, credit unions and the Canadian Anti-Fraud Centre.**
 
-After a call that triggered a warning, TrustLine texts the user a link to a **call summary page**: the transcript, the highlighted evidence, the amount the caller asked for, the verified contact, recovery steps and a one-tap consent to report it. The website is mainly a **partner portal** for settlement agencies and credit unions: redacted reports from their members, money at risk, scam trends by tactic and language, advisories they can publish to every partner and send to their members, a pre-filled Canadian Anti-Fraud Centre report, and a CSV export.
+[![React](https://img.shields.io/badge/React_19-20232A?logo=react&logoColor=61DAFB)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Twilio](https://img.shields.io/badge/Twilio-Media_Streams-F22F46?logo=twilio&logoColor=white)](https://www.twilio.com/docs/voice/media-streams)
+[![ElevenLabs](https://img.shields.io/badge/ElevenLabs-Scribe_+_TTS-000000)](https://elevenlabs.io)
+[![Gemini](https://img.shields.io/badge/Google_Gemini-REST-4285F4?logo=googlegemini&logoColor=white)](https://ai.google.dev)
+[![Supabase](https://img.shields.io/badge/Supabase-Realtime-3FCF8E?logo=supabase&logoColor=white)](https://supabase.com)
+[![Tests](https://img.shields.io/badge/tests-187_passing-2EA44F)](#testing)
+[![WCAG](https://img.shields.io/badge/WCAG_2.2-AA-0D5C5A)](ACCESSIBILITY.md)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
-**UN SDGs.** Goal 8 (decent work and economic growth): 8.10, keeping newcomers' trust in banking and financial services, and 8.8, protecting migrant workers from job and LMIA fee scams. Goal 17 (partnerships): 17.17, one shared channel between civil society, credit unions and the public sector.
+[Live site](https://trustline-blackbay.vercel.app) · [Demo video](docs/demo/trustline-demo.mp4) · [How it works](#how-it-works) · [Run it locally](#getting-started)
 
-## Live Demo 🌐
-
-**The hackathon demo has ended.** The TrustLine number (+1 604-373-6537) has been released and the hosted call server shut down, so phone calls no longer work. The website is still online in a reduced mode:
-
-| What              | Where                                                                                  |
-| ----------------- | -------------------------------------------------------------------------------------- |
-| 🏠 Home page      | [trustline-blackbay.vercel.app](https://trustline-blackbay.vercel.app)                 |
-| 🎙️ Demo calls     | [trustline-blackbay.vercel.app/live](https://trustline-blackbay.vercel.app/live)       |
-| 💬 Message check  | [trustline-blackbay.vercel.app/check](https://trustline-blackbay.vercel.app/check)     |
-| 🧭 Recovery steps | [trustline-blackbay.vercel.app/recover](https://trustline-blackbay.vercel.app/recover) |
-| 🏢 Partner portal | [trustline-blackbay.vercel.app/partner](https://trustline-blackbay.vercel.app/partner) |
-
-Without API keys, warnings come from the rules layer only ("basic mode"), and demo calls are read by the browser's voice instead of ElevenLabs. To run the full system, including phone calls, follow [Getting Started](#getting-started-) with your own keys and the [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md).
-
-## Screenshots:
-
-<div style="display: flex; justify-content: center; align-items: center;">
-    <kbd><img src="docs/screenshots/add-trustline.png" alt="Steps to add TrustLine to a call" width="200"></kbd>
-    <kbd><img src="docs/screenshots/phone-call.png" alt="A merged phone call with TrustLine's spoken warning in Punjabi" width="200"></kbd>
-    <kbd><img src="docs/screenshots/warning.png" alt="Scam warning with the official number as the next step" width="200"></kbd>
-    <kbd><img src="docs/screenshots/consent.png" alt="Consent sheet showing the redacted report" width="200"></kbd>
-    <kbd><img src="docs/screenshots/advisory.png" alt="Community advisory shown to a credit union member" width="200"></kbd>
-</div>
-
-<div align="center">
-    <kbd><img src="docs/screenshots/call-desktop.png" alt="Call check on a desktop screen" width="800"></kbd>
-    <kbd><img src="docs/screenshots/partner-dashboard.png" alt="Partner dashboard on a desktop screen" width="800"></kbd>
-</div>
-
-## Technologies Used 💻
-
-### Frameworks
-
-- [x] **React + TypeScript (Vite)**: Mobile-first single-page app with strict TypeScript
-- [x] **Supabase Realtime**: Live incident feed and advisories across devices
-- [x] **Zod**: Validation of every risk assessment on the server and again in the browser
-- [x] **Vitest**: Unit tests for detection, fusion, redaction, directory matching and colour contrast
-
-### APIs & Web Services
-
-- [x] **ElevenLabs Scribe v2 Realtime**: Streaming speech-to-text from the microphone
-- [x] **ElevenLabs Text to Speech (Eleven v3)**: Spoken warnings in all five languages, generated as phone audio
-- [x] **ElevenLabs Agents**: Scripted scam and legitimate callers for testing and the demo
-- [x] **Twilio Programmable Voice**: The TrustLine phone number and bidirectional Media Streams
-- [x] **Google Gemini API (free tier, `gemini-3.5-flash-lite` by default)**: Structured risk scoring and translated explanations, called over REST with no extra SDK
-- [x] **Vercel**: Hosting and serverless API routes
-
-### Data Sources
-
-- [x] **Verified directory**: Official contact channels for IRCC, CRA, CBSA, Service Canada, police and major banks (demo data, see `src/data/directory.ts`)
-- [x] **Evaluation set**: 17 labelled scam and legitimate call transcripts in `eval/cases.ts`
+Built at **StormHacks 2026** by [Ariel Tyson](https://github.com/arieltyson) and [Rishon Ghosh](https://github.com/rishon-g).
 
 </div>
 
-## Architecture 🏗️
+## Demo
 
-- **Pattern**: Feature folders (`src/features/call`, `src/features/partner`) with shared logic in `src/lib`
-- **Detection**: A rules layer flags known tactics in about 0.01 ms per transcript. Gemini reads the recent transcript and returns schema-constrained JSON (validated again with Zod) with flags, the claimed organization, exact evidence quotes and an explanation in the listener's language. Rules can raise risk immediately; only the LLM can lower it, and never when the rules found gift cards, crypto, one-time codes or remote access.
-- **Input**: Neither iOS nor Android lets third-party apps read cellular call audio. Instead, the user merges the TrustLine number into the call. A call server receives the audio from Twilio, sends it to Scribe (which accepts Twilio's 8 kHz mu-law directly), scores it, speaks a warning back into the call on the first high-risk moment, and streams the call to the user's app over Server-Sent Events. The app can also listen through the microphone of a second device, and scripted demo calls run through the same pipeline.
-- **State**: React state and hooks; one `CallAnalysis` component per call, keyed so state resets between calls
-- **Data**: `DataStore` interface with a Supabase implementation and a local implementation (localStorage + BroadcastChannel) used when Supabase is not configured
-- **Security**: API keys stay on the server. The browser receives single-use transcription tokens. Incidents are redacted on the device before they are sent.
-- **Target**: Current mobile Safari and Chrome; Node 20+
+<a href="docs/demo/trustline-demo.mp4"><img src="docs/demo/trustline-demo-preview.gif" alt="A scripted IRCC scam call: the transcript appears, TrustLine flags the threats and shows the official IRCC number" width="100%"></a>
+
+**[▶ Watch the full 95-second walkthrough](docs/demo/trustline-demo.mp4)** (captioned, no audio): a scripted scam call, the live warning, consent-based reporting to the Canadian Anti-Fraud Centre, the partner portal, a published advisory, and the message check.
+
+## The problem
+
+Newcomers are frequent targets of phone scams: callers pose as immigration (IRCC), the CRA or a bank, threaten deportation or arrest, and demand gift cards or crypto within the hour. The warning signs are well known to settlement workers, but the person on the phone has to recognize them alone, under pressure, often in their second or third language.
+
+## What TrustLine does
+
+**The product is a phone number.** During a suspicious call, the user taps Add Call, dials TrustLine and merges it in, the same way they would add a friend to a three-way call. There is no app to install.
+
+1. **Listens in real time.** The call audio streams to TrustLine, which transcribes it and checks every sentence for scam tactics: gift card or crypto payment, deportation and arrest threats, one-time code requests, remote access, secrecy, and fees for jobs, LMIAs or work permits.
+2. **Warns out loud, in the user's language.** On the first high-risk moment, TrustLine speaks a warning into the call in English, Punjabi, Mandarin, Tagalog or Farsi, and names the official number for the organization the caller claimed to be, from a verified directory.
+3. **Follows up by text.** After a warned call, the user gets a link to a call summary: the transcript with the evidence highlighted, the amount the caller asked for, the official contact, and recovery steps if they already paid.
+4. **Turns one call into a warning for everyone.** With one tap and an on-screen preview, the user shares a redacted report with the Canadian Anti-Fraud Centre. Partners see reports in a live portal, publish advisories to every partner, and pass them on to their members by email or text.
+
+## Engineering highlights
+
+- **A real-time voice pipeline.** Twilio Media Streams send 8 kHz mu-law audio over a WebSocket to a Node call server, which forwards it to ElevenLabs Scribe v2 Realtime, scores each committed segment, speaks the warning back into the call with ElevenLabs TTS, and streams events to the web app over Server-Sent Events.
+- **Two detection layers, fused for safety.** A rules layer flags known tactics in about 0.02 ms per transcript. Gemini reads the recent transcript and returns schema-constrained JSON (median 1.1 s, p90 1.4 s), validated with Zod on the server and again in the browser. Rules can raise the risk immediately; the LLM can lower it, but never when the rules found gift cards, crypto, one-time codes or remote access.
+- **Degrades gracefully.** If Gemini is rate-limited, slow or unconfigured, the app says so and keeps warning from the rules layer ("basic mode"). The public site runs that way today, with no paid API keys.
+- **Evidence, not vibes.** Every warning quotes the exact words that triggered it, and the transcript highlights them.
+- **Privacy by design.** API keys stay on the server, the browser gets single-use transcription tokens, and reports are redacted on the device (names, phone numbers, emails, account numbers) before the user sees and approves exactly what is sent.
+- **Accessible and multilingual.** WCAG 2.2 AA as a requirement: axe-core clean in light and dark themes, full keyboard support, focus management for confirmations, and right-to-left layout for Farsi.
+- **Measured.** 187 unit tests (detection, fusion, redaction, directory matching, colour contrast, and the call server against a fake Twilio stream), plus an evaluation harness over 18 labelled calls run in CI on every push.
+
+## Screenshots
+
+<img src="docs/screenshots/phones.png" alt="Five phone screens: a Punjabi warning, a right-to-left Farsi warning, the consent sheet, a partner texting an alert to members, and recovery steps" width="100%">
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><img src="docs/screenshots/live-call-desktop.png" alt="Live call view with a scam warning, highlighted transcript and IRCC's official contact"><br><sub><b>Live call view.</b> Warning, evidence and the official IRCC number.</sub></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/partner-portal-desktop.png" alt="Partner portal for the Canadian Anti-Fraud Centre with reported calls, money at risk and trends"><br><sub><b>Partner portal.</b> Redacted reports, money at risk and trends.</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><img src="docs/screenshots/message-check-desktop.png" alt="Message check flagging a job offer that asks for an LMIA fee"><br><sub><b>Message check.</b> The same detection for texts and job offers.</sub></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/home-desktop.png" alt="TrustLine home page explaining how to add TrustLine to a call"><br><sub><b>Home.</b> Built around the number: add it to any call.</sub></td>
+  </tr>
+</table>
+
+## How it works
+
+Neither iOS nor Android lets third-party apps read cellular call audio, so TrustLine joins the call as a participant instead.
 
 ```
 Phone call ──merge──▶ Twilio number ──media stream──▶ call server (server/)
@@ -90,26 +86,44 @@ Microphone ──▶ Scribe v2 Realtime ──▶ committed segments
                          fuse() ──▶ warning, evidence, verified contact
                                       │ (consent)
                                       ▼
-              redact() ──▶ incidents ──▶ partner dashboard ──▶ advisories ──▶ every partner's users
+              redact() ──▶ incidents ──▶ partner portal ──▶ advisories ──▶ every partner's members
 ```
 
-## Features 🌟
+- **Structure**: feature folders (`src/features/call`, `src/features/partner`, …) with shared logic in `src/lib`, serverless routes in `api/`, and the long-running call server in `server/`
+- **State**: React state and hooks; one `CallAnalysis` component per call, keyed so state resets between calls
+- **Data**: a `DataStore` interface with a Supabase implementation (Postgres, row-level security, Realtime) and a local one (localStorage + BroadcastChannel) used when Supabase is not configured
+- **Target**: current mobile Safari and Chrome; Node 20+
 
-- ☎️ **The TrustLine number** (`/`): The home page is built around the number, with a Save to contacts button and how merging works
-- 📲 **After-call text and call summary** (`/after-call/:id`): When a merged call ends after a warning, the call server texts the caller a link to the summary: transcript, evidence, amount asked for, what TrustLine said on the call, verified contact, recovery steps and one-tap reporting. Summaries are kept in memory on the call server for one day
-- 🏢 **Partner portal** (`/partner`): Redacted member reports, money at risk, trends by tactic and language, advisories partners can email or text to their members (demo: nothing is sent), a pre-filled Canadian Anti-Fraud Centre report per incident, and a CSV export (no transcript excerpts)
-- 💼 **Job offer scams**: A warning sign for anyone asking for a fee to get a job, an LMIA or a work permit (Goal 8.8), with a demo call and an example message
-- 🎙️ **Live call view** (`/live`): Follow a merged call as it happens, listen to a speakerphone call on another device, or play a demo call
-- 🚩 **Evidence-backed warnings**: The exact words that triggered each flag are highlighted
-- 🌐 **In-language explanations**: Warnings in English, Punjabi, Mandarin, Tagalog and Farsi, with right-to-left layout for Farsi
-- ☎️ **Verified next step**: Official contact channels instead of caller-supplied numbers
-- 💬 **Message check** (`/check`): Paste a suspicious text, email or social media message and get the same evidence-backed warning, verified contacts and sharing as a call, including a warning sign for suspicious links
-- 🧭 **Recovery steps** (`/recover`): If someone already paid or shared details, a checklist of what to do in order (freeze gift cards, call the bank, credit bureau fraud alerts, police and Canadian Anti-Fraud Centre reports), based on the CAFC's victim guidance. Warnings link to it with the right situations already ticked
-- 🤝 **Partner advisories**: Consent-based, redacted reports shared across community organizations and banks
-- 🔊 **Spoken demo calls**: Demo calls are acted out by ElevenLabs Eleven v3 voices, one per caller, with audio tags for tone (a stern fake officer, a warm real bank) (or the browser's voice without a key), with the transcript appearing in time with the speech. A checkbox turns it off
-- 📊 **Diagnostics**: Measured alert latency for the rules and LLM layers
+## Features
 
-## Getting Started 🚀
+| Route             | What it does                                                                                                                                                                                                      |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`               | Home page built around the TrustLine number, with Save to contacts and how merging works                                                                                                                          |
+| `/live`           | Follow a merged call as it happens, listen to a speakerphone call on another device, or play a scripted demo call                                                                                                 |
+| `/after-call/:id` | The call summary the after-call text links to: transcript, evidence, amount asked for, what TrustLine said, verified contact, recovery steps and one-tap reporting                                                |
+| `/check`          | Paste a suspicious text, email or job offer and get the same evidence-backed warning                                                                                                                              |
+| `/recover`        | If someone already paid or shared details: what to do, in order, based on the Canadian Anti-Fraud Centre's victim guidance                                                                                        |
+| `/partner`        | Partner portal: redacted reports, money at risk, trends by tactic and language, advisories partners can email or text to members (demo: nothing is sent), a pre-filled Anti-Fraud Centre report, and a CSV export |
+
+**UN Sustainable Development Goals.** Goal 8 (decent work and economic growth): 8.10, keeping newcomers' trust in banking and financial services, and 8.8, protecting migrant workers from job and LMIA fee scams. Goal 17 (partnerships): 17.17, one shared channel between civil society, credit unions and the public sector.
+
+## Tech stack
+
+| Layer        | Technology                                                                                                                         |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Web app      | React 19, TypeScript (strict), Vite, Zod                                                                                           |
+| Call server  | Node, `ws`, Twilio Programmable Voice and Media Streams, Docker                                                                    |
+| Speech       | ElevenLabs Scribe v2 Realtime (speech to text), Eleven v3 (spoken warnings and demo callers), ElevenLabs Agents (scripted callers) |
+| Risk scoring | Google Gemini (`gemini-3.5-flash-lite` by default) over REST with a response schema; no SDK                                        |
+| Data         | Supabase Postgres, row-level security and Realtime                                                                                 |
+| Hosting      | Vercel (site and serverless API routes); Railway or any Docker host (call server)                                                  |
+| Quality      | Vitest, ESLint, Prettier, GitHub Actions CI, axe-core                                                                              |
+
+## Live demo
+
+**The hackathon demo has ended.** The TrustLine number (+1 604-373-6537) has been released and the hosted call server shut down, so phone calls no longer work. The website is still online at **[trustline-blackbay.vercel.app](https://trustline-blackbay.vercel.app)** in basic mode: warnings come from the rules layer only, and demo calls are read by the browser's voice instead of ElevenLabs. Try the [demo calls](https://trustline-blackbay.vercel.app/live), the [message check](https://trustline-blackbay.vercel.app/check) and the [partner portal](https://trustline-blackbay.vercel.app/partner). To run the full system, including phone calls, follow [Getting started](#getting-started) with your own keys.
+
+## Getting started
 
 ```bash
 npm install
@@ -125,7 +139,7 @@ npm run dev
 
 Free-tier limits are per model and shown in [AI Studio](https://aistudio.google.com/rate-limit). If scoring is rate-limited or slow, the app falls back to the rules layer and says it is in basic mode. On the free tier, Google may use prompts to improve its products, so use demo calls rather than real ones until you move to a paid key (see [PRIVACY.md](PRIVACY.md)).
 
-`npm run dev` serves the same routes as the [live demo](#live-demo-): `/` for the home page, `/live` for the live call view and demo calls, and `/partner` for the partner portal.
+`npm run dev` serves the same routes as the [live demo](#live-demo): `/` for the home page, `/live` for the live call view and demo calls, and `/partner` for the partner portal.
 
 | Setting                                       | Without it                                                                                                                    |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -162,7 +176,7 @@ With `ELEVENLABS_API_KEY` set, `npm run demo:agents` creates two ElevenLabs agen
 
 The web app deploys to Vercel (`vercel.json` serves the single-page app, and the files in `api/` deploy as functions); the public site redeploys on every push to `main`. The call server runs anywhere that can hold a WebSocket open, from the `Dockerfile` (`railway.json` configures Railway). The hosted call server was shut down after StormHacks; the [public hosting guide](docs/shared-plans/TrustLine-Public-Demo-Hosting-Guide.md) explains how to set it up again.
 
-## Testing 🧪
+## Testing
 
 ```bash
 npm test         # unit tests, including the call server with a fake Twilio stream
@@ -173,14 +187,15 @@ npm run typecheck
 
 Rules-only results on the 18-case set: 100% precision and 92% recall (11 of 12 scams) when warning at medium risk or above, with no false positives on the 6 legitimate calls. The cases were written alongside the rules, so these numbers are optimistic. The missed case, a request for an Interac payment with no other keywords, is the kind the LLM layer is there to catch; set `GEMINI_API_KEY` to include it in the report.
 
-<div align="center">
+## Team
 
-## Contributing ⚙️
+Built at StormHacks 2026 by team Black Bay:
 
-Contributions are welcome. Fork the repository, create a feature branch, and open a pull request describing the change and how you tested it. Please open an issue first for larger changes.
+- **Ariel Tyson** ([@arieltyson](https://github.com/arieltyson))
+- **Rishon Ghosh** ([@rishon-g](https://github.com/rishon-g))
 
-## License 🪪
+Partners and contacts in the app are demo data. Verify official contacts before real-world use.
 
-Released under the MIT License. See `LICENSE` for details.
+## License
 
-</div>
+Released under the MIT License. See [`LICENSE`](LICENSE).
