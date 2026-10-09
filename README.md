@@ -16,17 +16,17 @@
 [![WCAG](https://img.shields.io/badge/WCAG_2.2-AA-0D5C5A)](ACCESSIBILITY.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
-[Live site](https://trustline-blackbay.vercel.app) · [Demo video](docs/demo/trustline-demo.mp4) · [How it works](#how-it-works) · [Run it locally](#getting-started)
+[Live site](https://trustline-blackbay.vercel.app) · [Demo video](https://trustline-blackbay.vercel.app/demo/trustline-demo.mp4) · [How it works](#how-it-works) · [Run it locally](#getting-started)
 
-Built at **StormHacks 2026** by [Ariel Tyson](https://github.com/arieltyson) and [Rishon Ghosh](https://github.com/rishon-g).
+Built in 36 hours at **StormHacks 2026** by [Ariel Tyson](https://github.com/arieltyson) and [Rishon Ghosh](https://github.com/rishon-g).
 
 </div>
 
 ## Demo
 
-<a href="docs/demo/trustline-demo.mp4"><img src="docs/demo/trustline-demo-preview.gif" alt="A scripted IRCC scam call: the transcript appears, TrustLine flags the threats and shows the official IRCC number" width="100%"></a>
+<a href="https://trustline-blackbay.vercel.app/demo/trustline-demo.mp4"><img src="docs/demo/trustline-demo-preview.gif" alt="A scripted IRCC scam call: the transcript appears, TrustLine flags the threats and shows the official IRCC number" width="100%"></a>
 
-**[▶ Watch the full 95-second walkthrough](docs/demo/trustline-demo.mp4)** (captioned, no audio): a scripted scam call, the live warning, consent-based reporting to the Canadian Anti-Fraud Centre, the partner portal, a published advisory, and the message check.
+**[▶ Watch the full 95-second walkthrough](https://trustline-blackbay.vercel.app/demo/trustline-demo.mp4)** (captioned, no audio): a scripted scam call, the live warning, consent-based reporting to the Canadian Anti-Fraud Centre, the partner portal, a published advisory, and the message check.
 
 ## The problem
 
@@ -189,7 +189,7 @@ Rules-only results on the 18-case set: 100% precision and 92% recall (11 of 12 s
 
 ## Team
 
-Built at StormHacks 2026 by team Black Bay:
+Built in 36 hours at StormHacks 2026 by team Black Bay:
 
 - **Ariel Tyson** ([@arieltyson](https://github.com/arieltyson))
 - **Rishon Ghosh** ([@rishon-g](https://github.com/rishon-g))
