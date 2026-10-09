@@ -26,9 +26,9 @@ Built in 36 hours at **StormHacks 2026** by [Ariel Tyson](https://github.com/ari
 
 ### A real phone call
 
-<a href="https://www.youtube.com/shorts/sm245cWq8DM"><img src="docs/demo/real-call-poster.png" alt="Rishon on a real phone call with TrustLine merged in; play the video on YouTube" width="100%"></a>
+<a href="https://www.youtube.com/shorts/sm245cWq8DM"><img src="docs/demo/real-call-poster.png" alt="Rishon on a real phone call with TrustLine merged in, catching a fake Walmart refund scam; play the video on YouTube" width="100%"></a>
 
-**[▶ Watch on YouTube](https://www.youtube.com/shorts/sm245cWq8DM)**: Rishon takes a phone call, adds TrustLine to it, and TrustLine detects the scam during the call.
+**[▶ Watch on YouTube](https://www.youtube.com/shorts/sm245cWq8DM)**: Ariel calls Rishon pretending to be Walmart: a washing machine delivery was delayed, and they want to refund him, but only if he reads out his credit card number. Rishon adds TrustLine to the call, and it detects the scam while the call is still going.
 
 ### Walkthrough of the app
 
@@ -41,6 +41,8 @@ Built in 36 hours at **StormHacks 2026** by [Ariel Tyson](https://github.com/ari
 Newcomers are frequent targets of phone scams: callers pose as immigration (IRCC), the CRA or a bank, threaten deportation or arrest, and demand gift cards or crypto within the hour. The warning signs are well known to settlement workers, but the person on the phone has to recognize them alone, under pressure, often in their second or third language.
 
 ## What TrustLine does
+
+TrustLine was designed with newcomers in mind, but it works on any scam call, from fake immigration officers to fake retailers offering a refund for your card number.
 
 **The product is a phone number.** During a suspicious call, the user taps Add Call, dials TrustLine and merges it in, the same way they would add a friend to a three-way call. There is no app to install.
 
